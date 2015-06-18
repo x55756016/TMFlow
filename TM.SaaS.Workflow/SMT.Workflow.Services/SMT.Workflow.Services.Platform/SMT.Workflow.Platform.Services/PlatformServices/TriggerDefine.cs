@@ -10,7 +10,7 @@ using SMT.Workflow.Common.Model.FlowEngine;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : ITriggerDefine
+    public partial class WFPlatformServices : ITriggerDefine
     {
         TriggerDefineBLL FlowTriggerBll = new TriggerDefineBLL();
         //定时触发查询

@@ -9,7 +9,7 @@ using SMT.Workflow.Common.Model.FlowEngine;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : ICuostomFlowsDefine
+    public partial class WFPlatformServices : ICuostomFlowsDefine
     {
         CuostomFlowsDefineBLL CuostomFlowBll = new CuostomFlowsDefineBLL();
         //自动发起流程查询

@@ -18,7 +18,7 @@ namespace SMT.Workflow.Platform.Services
     /// <summary>
     /// 流程定义服务
     /// </summary>
-    public partial class PlatformServices : IFlowDefine
+    public partial class WFPlatformServices : IFlowDefine
     {
         FlowDefineBLL flowBLL = new FlowDefineBLL();
 

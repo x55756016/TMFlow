@@ -10,7 +10,7 @@ using SMT.Workflow.Common.Model.Views;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : IFlowEvent
+    public partial class WFPlatformServices : IFlowEvent
     {
         FlowEventBLL FlowEventBll = new FlowEventBLL();
         //引擎添加、修改方法

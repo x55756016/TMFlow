@@ -9,7 +9,7 @@ using SMT.Workflow.Common.Model.FlowEngine;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : IEngine
+    public partial class WFPlatformServices : IEngine
     {
         #region  默认消息增、删、改、查方法
         EngineBLL FlowMsgBll = new EngineBLL();

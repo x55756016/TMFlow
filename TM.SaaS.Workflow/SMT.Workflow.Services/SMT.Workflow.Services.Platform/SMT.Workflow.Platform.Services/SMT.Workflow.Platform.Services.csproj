@@ -25,6 +25,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,7 +71,7 @@
   <ItemGroup>
     <Content Include="BOSystemList.xml" />
     <Content Include="clientaccesspolicy.xml" />
-    <Content Include="PlatformServices.svc" />
+    <Content Include="WFPlatformServices.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -92,8 +96,8 @@
     <Compile Include="PlatformInterface\IMessageBodyDefine.cs" />
     <Compile Include="PlatformInterface\ITimingTrigger.cs" />
     <Compile Include="PlatformInterface\ITriggerDefine.cs" />
-    <Compile Include="PlatformServices.svc.cs">
-      <DependentUpon>PlatformServices.svc</DependentUpon>
+    <Compile Include="WFPlatformServices.svc.cs">
+      <DependentUpon>WFPlatformServices.svc</DependentUpon>
     </Compile>
     <Compile Include="PlatformServices\CuostomFlowsDefine.cs" />
     <Compile Include="PlatformServices\DefaultMessageService.cs" />
@@ -127,6 +131,9 @@
       <Name>SMT.Workflow.Platform.BLL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\WF.pubxml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -149,7 +156,6 @@
           <CustomServerUrl>
           </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-          <EnableWcfTestClientForSVCDefaultValue>True</EnableWcfTestClientForSVCDefaultValue>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

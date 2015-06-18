@@ -14,7 +14,7 @@ namespace SMT.Workflow.Platform.Services
     /// <summary>
     /// 模块定义服务
     /// </summary>
-    public partial class PlatformServices : IFlow_ModelDefine
+    public partial class WFPlatformServices : IFlow_ModelDefine
     {
         FlowModelDefineBLL FlowModelBll = new FlowModelDefineBLL();
         #region 模块定义调整的新接口

@@ -1,3 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="SMT.Workflow.Platform.Services.PlatformServices" CodeBehind="PlatformServices.svc.cs" %>
-
-

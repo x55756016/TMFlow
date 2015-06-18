@@ -10,7 +10,7 @@ using SMT.Workflow.Common.Model.Views;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : IFlowTrigger
+    public partial class WFPlatformServices : IFlowTrigger
     {
         #region 触发规则定义增、删、改、查
         FlowTriggerBLL FlowsTriggerBll = new FlowTriggerBLL();

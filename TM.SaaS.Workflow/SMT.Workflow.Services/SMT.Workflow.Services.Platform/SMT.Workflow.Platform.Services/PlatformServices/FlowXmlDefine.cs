@@ -10,7 +10,7 @@ using System.IO;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : IFlowXmlDefine
+    public partial class WFPlatformServices : IFlowXmlDefine
     {
         #region  读取Xml
         public List<AppSystem> ListSystem()

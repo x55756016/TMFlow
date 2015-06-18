@@ -13,7 +13,7 @@ namespace SMT.Workflow.Platform.Services
     /// </summary>  
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
-    public partial class PlatformServices
+    public partial class WFPlatformServices
     {
     }  
 }

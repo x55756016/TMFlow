@@ -18,7 +18,7 @@ using SMT.Workflow.Common.Model;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class PlatformServices : IFlowCategory
+    public partial class WFPlatformServices : IFlowCategory
     {
         FlowCategoryBLL flowcategory = new FlowCategoryBLL();
 
