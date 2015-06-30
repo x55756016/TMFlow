@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©   2011    
 	 * 文件名：FlowCategory.cs  
-	 * 创建者： 亢晓方
+	 * 创建者： 向寒咏
 	 * 创建日期：2011/11/9 10:03:06   
 	 * CLR版本： 4.0.30319.239  
 	 * 命名空间：SMT.Workflow.Platform.Services.PlatformServices 
@@ -18,7 +18,7 @@ using SMT.Workflow.Common.Model;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class WFPlatformServices : IFlowCategory
+    public partial class PlatformServices : IFlowCategory
     {
         FlowCategoryBLL flowcategory = new FlowCategoryBLL();
 

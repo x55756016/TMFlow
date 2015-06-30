@@ -49,6 +49,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SMT.Foundation.Log, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Server\SMT.Foundation.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="SMT.SaaS.BLLCommonServices">
+      <HintPath>..\..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Server\SMT.SaaS.BLLCommonServices.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -71,7 +78,7 @@
   <ItemGroup>
     <Content Include="BOSystemList.xml" />
     <Content Include="clientaccesspolicy.xml" />
-    <Content Include="WFPlatformServices.svc" />
+    <Content Include="PlatformServices.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -96,8 +103,8 @@
     <Compile Include="PlatformInterface\IMessageBodyDefine.cs" />
     <Compile Include="PlatformInterface\ITimingTrigger.cs" />
     <Compile Include="PlatformInterface\ITriggerDefine.cs" />
-    <Compile Include="WFPlatformServices.svc.cs">
-      <DependentUpon>WFPlatformServices.svc</DependentUpon>
+    <Compile Include="PlatformServices.svc.cs">
+      <DependentUpon>PlatformServices.svc</DependentUpon>
     </Compile>
     <Compile Include="PlatformServices\CuostomFlowsDefine.cs" />
     <Compile Include="PlatformServices\DefaultMessageService.cs" />
@@ -118,10 +125,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SMT.Workflow.Common\SMT.Workflow.Common.DataAccess\SMT.Workflow.Common.DataAccess.csproj">
-      <Project>{D080370C-EE36-4E5A-B761-FAE6A078C7E4}</Project>
-      <Name>SMT.Workflow.Common.DataAccess</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\SMT.Workflow.Common\SMT.Workflow.Common.Model\SMT.Workflow.Common.Model.csproj">
       <Project>{AA1B3B25-A276-4B58-A255-79B71B01B048}</Project>
       <Name>SMT.Workflow.Common.Model</Name>
@@ -130,9 +133,6 @@
       <Project>{6424D743-8F3C-48D1-8969-B7D382C84017}</Project>
       <Name>SMT.Workflow.Platform.BLL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\PublishProfiles\WF.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

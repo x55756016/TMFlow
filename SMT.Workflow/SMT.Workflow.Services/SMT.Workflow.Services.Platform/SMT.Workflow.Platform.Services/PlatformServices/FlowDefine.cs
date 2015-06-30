@@ -11,14 +11,14 @@ using System.ServiceModel;
 using SMT.Workflow.Common.Model;
 using SMT.Workflow.Common.Model.Views;
 using SMT.Workflow.Platform.BLL;
-using SMT.Workflow.Common.DataAccess;
+using SMT.Foundation.Log;
 
 namespace SMT.Workflow.Platform.Services
 {
     /// <summary>
     /// 流程定义服务
     /// </summary>
-    public partial class WFPlatformServices : IFlowDefine
+    public partial class PlatformServices : IFlowDefine
     {
         FlowDefineBLL flowBLL = new FlowDefineBLL();
 
@@ -39,7 +39,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("获取流程列表义出错：" + ex.Message);
+                Tracer.Debug("获取流程列表义出错：" + ex.Message);
                 return null;
             }
         }
@@ -61,7 +61,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("新建流程出错：" + ex.Message + "   公司ID:" + flow.ModelRelation.COMPANYID);
+                Tracer.Debug("新建流程出错：" + ex.Message + "   公司ID:" + flow.ModelRelation.COMPANYID);
                 return ex.Message;
             }
         }
@@ -78,7 +78,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("根据FlowCode取流程出错：" + ex.Message + "   flowCode:" + flowCode);
+                Tracer.Debug("根据FlowCode取流程出错：" + ex.Message + "   flowCode:" + flowCode);
                 return null;                
             }
         }
@@ -100,7 +100,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("删除流程出错：" + ex.Message + "   flowCodeList[0]:" + flowCodeList[0]);
+                Tracer.Debug("删除流程出错：" + ex.Message + "   flowCodeList[0]:" + flowCodeList[0]);
                 return ex.Message;
             }
         }

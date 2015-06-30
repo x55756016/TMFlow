@@ -9,7 +9,7 @@ using SMT.Workflow.Common.Model.FlowEngine;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class WFPlatformServices : IDoTaskRule
+    public partial class PlatformServices : IDoTaskRule
     {
 
         private DoTaskRuleBLL doTaskbll = new DoTaskRuleBLL();

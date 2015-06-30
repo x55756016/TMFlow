@@ -8,13 +8,13 @@ using SMT.Workflow.Common.Model;
 using SMT.Workflow.Platform.BLL;
 using SMT.Workflow.Common.Model.FlowXml;
 using SMT.Workflow.Common.Model.Views;
-using SMT.Workflow.Common.DataAccess;
+using SMT.Foundation.Log;
 namespace SMT.Workflow.Platform.Services
 {
     /// <summary>
     /// 模块定义服务
     /// </summary>
-    public partial class WFPlatformServices : IFlow_ModelDefine
+    public partial class PlatformServices : IFlow_ModelDefine
     {
         FlowModelDefineBLL FlowModelBll = new FlowModelDefineBLL();
         #region 模块定义调整的新接口
@@ -34,7 +34,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {                
-                LogHelper.WriteLog("查询模块定义出错：" + ex.Message);
+                Tracer.Debug("查询模块定义出错：" + ex.Message);
                 return null;
             }
         }
@@ -51,7 +51,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("新增模块定义出错：" + ex.Message);
+                Tracer.Debug("新增模块定义出错：" + ex.Message);
                 return "0";
             }
         }
@@ -70,7 +70,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("修改模块定义出错：" + ex.Message);
+                Tracer.Debug("修改模块定义出错：" + ex.Message);
                 return "0";
             }
         }
@@ -87,7 +87,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("删除模块定义出错：" + ex.Message);
+                Tracer.Debug("删除模块定义出错：" + ex.Message);
                 return "0";
             }
         }
@@ -103,7 +103,7 @@ namespace SMT.Workflow.Platform.Services
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLog("获取所有的系统代码模块代码出错：" + ex.Message);
+                Tracer.Debug("获取所有的系统代码模块代码出错：" + ex.Message);
                 return null;
             }
         }

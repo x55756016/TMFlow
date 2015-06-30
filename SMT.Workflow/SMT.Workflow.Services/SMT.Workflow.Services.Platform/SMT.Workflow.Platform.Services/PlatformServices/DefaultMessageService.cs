@@ -8,7 +8,7 @@ using SMT.Workflow.Common.Model;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class WFPlatformServices : IDefaultMessage
+    public partial class PlatformServices : IDefaultMessage
     {
         DefaultMessageBLL bll = new DefaultMessageBLL();
 

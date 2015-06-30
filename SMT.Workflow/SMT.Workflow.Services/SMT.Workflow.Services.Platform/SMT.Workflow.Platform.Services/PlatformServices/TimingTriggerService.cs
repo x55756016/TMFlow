@@ -9,7 +9,7 @@ using SMT.Workflow.Common.Model.FlowEngine;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class WFPlatformServices : ITimingTrigger
+    public partial class PlatformServices : ITimingTrigger
     {
 
         private TimingTriggerBLL timingbll = new TimingTriggerBLL();

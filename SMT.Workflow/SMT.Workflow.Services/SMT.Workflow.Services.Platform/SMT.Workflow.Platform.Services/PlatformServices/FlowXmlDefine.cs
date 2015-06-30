@@ -6,11 +6,12 @@ using SMT.Workflow.Platform.Services.PlatformInterface;
 using SMT.Workflow.Common.Model.FlowXml;
 using System.Xml.Linq;
 using System.IO;
+using SMT.Foundation.Log;
 
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class WFPlatformServices : IFlowXmlDefine
+    public partial class PlatformServices : IFlowXmlDefine
     {
         #region  读取Xml
         public List<AppSystem> ListSystem()
@@ -68,7 +69,7 @@ namespace SMT.Workflow.Platform.Services
             {
                 string Path = System.Web.Hosting.HostingEnvironment.MapPath("~/BusinessObjects/" + item + "/BOList.xml");
                 //D:\smt2010\SMT.Workflow\SourceCode\SMT.Workflow\SMT.Workflow.Services\SMT.Workflow.Services.Platform\SMT.Workflow.Platform.Services\BusinessObjects\EDM\BOList.xml
-                //SMT.Workflow.Common.DataAccess.LogHelper.WriteLog("获取业务对象路径:" + Path);
+                //SMT.Workflow.Common.DataAccess.Tracer.Debug("获取业务对象路径:" + Path);
                 if (File.Exists(Path))
                 {
                     XDocument xdoc = XDocument.Load(Path);
@@ -120,13 +121,13 @@ namespace SMT.Workflow.Platform.Services
                         sys.Address = v.Attribute("Address").Value;
                         sys.Binding = v.Attribute("Binding").Value;
                         sys.SplitChar = v.Attribute("SplitChar").Value;
-                        List<Parameter> ListParam = new List<Parameter>();
+                        List<WcfParameter> ListParam = new List<WcfParameter>();
                         var param = v.Descendants("ParaStr").Descendants<XElement>("Para");
                         if (param.Count() > 0)
                         {
                             foreach (var p in param)
                             {
-                                Parameter para = new Parameter();
+                                WcfParameter para = new WcfParameter();
                                 para.Description = p.Attribute("Description").Value.CvtString();
                                 para.Name = p.Attribute("Name").Value.CvtString();
                                 para.Value = p.Attribute("Value").Value.CvtString();
@@ -208,13 +209,13 @@ namespace SMT.Workflow.Platform.Services
                         sys.Address = v.Attribute("Address").Value;
                         sys.Binding = v.Attribute("Binding").Value;
                         sys.SplitChar = v.Attribute("SplitChar").Value;
-                        List<Parameter> ListParam = new List<Parameter>();
+                        List<WcfParameter> ListParam = new List<WcfParameter>();
                         var param = v.Descendants("ParaStr").Descendants<XElement>("Para");
                         if (param.Count() > 0)
                         {
                             foreach (var p in param)
                             {
-                                Parameter para = new Parameter();
+                                WcfParameter para = new WcfParameter();
                                 para.Description = p.Attribute("Description").Value.CvtString();
                                 para.Name = p.Attribute("Name").Value.CvtString();
                                 para.Value = p.Attribute("Value").Value.CvtString();
@@ -264,7 +265,7 @@ namespace SMT.Workflow.Platform.Services
             string path = System.Web.Hosting.HostingEnvironment.MapPath("~/BusinessObjects/" + folderName + "/" + objectName + ".xml");
             if (!System.IO.File.Exists(path))
             {
-                SMT.Workflow.Common.DataAccess.LogHelper.WriteLog("获取条件时找不到路径:"+path);
+                Tracer.Debug("获取条件时找不到路径:"+path);
                 return null; 
             }
             XElement doc = XElement.Load(path);

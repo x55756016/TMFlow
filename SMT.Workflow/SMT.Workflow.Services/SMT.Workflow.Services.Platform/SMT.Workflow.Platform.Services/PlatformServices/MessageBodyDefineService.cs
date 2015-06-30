@@ -8,7 +8,7 @@ using SMT.Workflow.Common.Model.FlowEngine;
 
 namespace SMT.Workflow.Platform.Services
 {
-    public partial class WFPlatformServices : IMessageBodyDefine
+    public partial class PlatformServices : IMessageBodyDefine
     {
 
         private MessageBodyDefineBLL messagebll = new MessageBodyDefineBLL();
