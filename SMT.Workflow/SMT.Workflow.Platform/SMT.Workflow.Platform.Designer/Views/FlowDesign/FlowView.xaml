@@ -10,7 +10,7 @@
     xmlns:Designer="clr-namespace:SMT.Workflow.Platform.Designer.DesignerView"
     >
 
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Grid x:Name="LayoutRoot" Background="White" Loaded="LayoutRoot_Loaded">
         <Grid x:Name="grdMain">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" MaxWidth="300"/>

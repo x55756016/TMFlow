@@ -44,19 +44,24 @@ namespace SMT.Workflow.Platform.DAL
                 }
                 int number = pageIndex <= 1 ? 1 : ((pageIndex - 1) * pageSize) + 1;
                 ////OracleConnection conn = MicrosoftOracle.CreateOracleConnection(ConnectionString);
-                string countSql = @"SELECT count(1)  from FLOW_MODELDEFINE_T where (1=1)";
+                string countSql = @"SELECT count(1)  from FLOW_MODELDEFINE_T where 1=1";
                 if (!string.IsNullOrWhiteSpace(filterString))
                 {
                     countSql += filterString + " ";
                 }
-                string sql = "SELECT * FROM (SELECT A.*, ROWNUM Page FROM (select * from FLOW_MODELDEFINE_T  order by CREATEDATE DESC ) A WHERE (1=1) AND ROWNUM<= " + pageIndex * pageSize + " ";
+                //oracle
+                //string sql = "SELECT * FROM (SELECT A.*, ROWNUM Page FROM (select * from FLOW_MODELDEFINE_T  order by CREATEDATE DESC ) A WHERE (1=1) AND ROWNUM<= " + pageIndex * pageSize + " ";
+               //mysql
+                string sql = "select * from FLOW_MODELDEFINE_T where 1=1 ";
+                
                 if (!string.IsNullOrWhiteSpace(filterString))
                 {
                     sql += filterString + " ";
                 }
-                sql += ") WHERE  Page >= " + number + " ";
-                DataTable dt = dao.GetDataTable( sql);// dao.GetDataTable(sql);              
-                pageCount = Convert.ToInt32(dao.ExecuteNonQuery(countSql));            
+                sql+=" order by CREATEDATE DESC  LIMIT " + (pageIndex-1) * pageSize + ", " + pageIndex * pageSize;
+                //sql += ") WHERE  Page >= " + number + " ";
+                DataTable dt =  dao.GetDataTable(sql);// dao.GetDataTable(sql);              
+                pageCount = Convert.ToInt32(dao.ExecuteScalar(countSql));            
                 pageCount = (pageCount / pageSize) + ((pageCount % pageSize) > 0 ? 1 : 0);
                 //MicrosoftOracle.Close(conn);
                 return ToList<FLOW_MODELDEFINE_T>(dt);  

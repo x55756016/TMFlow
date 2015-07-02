@@ -34,8 +34,7 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
 
         public void EngineInit()
         {              
-            RegisterCompletedEvent();
-            client.GetSystemCodeModelCodeListAsync();        
+            RegisterCompletedEvent();    
         }
         /// <summary>
         /// 注册WCF完成事件
@@ -170,6 +169,11 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
             {
                 ComfirmWindow.ConfirmationBox("提示信息", "系统代码加载错误！", "确定");
             }
+        }
+
+        private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            client.GetSystemCodeModelCodeListAsync();    
         }
      
 

@@ -8,7 +8,7 @@
     xmlns:Engine="clr-namespace:SMT.Workflow.Platform.Designer.Views.Engine"
     xmlns:Control="clr-namespace:SMT.Workflow.Platform.Designer.UControls">
 
-    <Grid x:Name="LayoutRoot" Background="White">
+    <Grid x:Name="LayoutRoot" Background="White" Loaded="LayoutRoot_Loaded">
         <Grid>
             <Grid.ColumnDefinitions>               
                 <ColumnDefinition Width="*"/>

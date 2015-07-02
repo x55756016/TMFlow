@@ -181,7 +181,7 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             }
             else
             {
-                ComfirmWindow.ConfirmationBox("提示信息", "异常信息：" + e.Error.Message, "确定");
+                MessageBox.Show( "异常信息：" + e.Error.Message);
             }
         }
 

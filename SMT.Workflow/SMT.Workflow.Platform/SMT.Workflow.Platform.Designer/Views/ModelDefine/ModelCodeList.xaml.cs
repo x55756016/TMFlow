@@ -40,8 +40,6 @@ namespace SMT.Workflow.Platform.Designer.Views.ModelDefine
             ToolBarMinor.ButtonSearch.Visibility = System.Windows.Visibility.Collapsed;
             ToolBarMinor.ButtonSave.Visibility = System.Windows.Visibility.Collapsed;
             RegisterServices();
-            pBar.Start();
-            clientXml.ListSystemAsync();
         }
 
       
@@ -288,6 +286,12 @@ namespace SMT.Workflow.Platform.Designer.Views.ModelDefine
 
         }
         #endregion
+
+        private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            pBar.Start();
+            clientXml.ListSystemAsync();
+        }
 
 
     }

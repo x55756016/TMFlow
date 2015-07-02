@@ -57,13 +57,7 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             modelClient = new Flow_ModelDefineClient(); //实例化流程模块            
             RegisterEvents(); 
             tvFlow.OnSelectionChanged += new TreeControl.SelectionChanged(tvFlow_SelectionChanged);  //树形选择事件
-            if (WfUtils.StateList == null)
-            {
-                permissionClient.GetSysRoleInfosAsync("", "");
-            }
 
-            modelClient.GetSystemCodeModelCodeListAsync();//绑定树
-            ucFlowlist.BindFlowList("", "");//绑定列表
 
           
         }
@@ -404,6 +398,17 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             ucDesigner.SaveFlow();          
         }
         #endregion
+
+        private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (WfUtils.StateList == null)
+            {
+                permissionClient.GetSysRoleInfosAsync("", "");
+            }
+
+            modelClient.GetSystemCodeModelCodeListAsync();//绑定树
+            ucFlowlist.BindFlowList("", "");//绑定列表
+        }
 
      
 
