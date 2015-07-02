@@ -153,7 +153,7 @@
     <Compile Include="Tracking\Entity\SerialisableWorkflowTrackingRecord.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OA\源码\SMT.Foundation.NewCore\SMT.Foundation.Core.csproj">
+    <ProjectReference Include="..\..\..\..\..\OA\源码\SMT.Foundation.NewCore\SMT.Foundation.Core.csproj">
       <Project>{9d2f51e2-9710-4c91-a66b-823eb72437fd}</Project>
       <Name>SMT.Foundation.Core</Name>
     </ProjectReference>
@@ -162,7 +162,7 @@
       <Name>WFTools.Resources</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\WFTools.Utilities.csproj">
-      <Project>{CB650825-DA70-4B89-9F00-CC5FEA845E26}</Project>
+      <Project>{cb650825-da70-4b89-9f00-cc5fea845e26}</Project>
       <Name>WFTools.Utilities</Name>
     </ProjectReference>
   </ItemGroup>

@@ -2696,7 +2696,7 @@ namespace SMT.FlowWFService
                 GetUserByFlow2(submitData.ApprovalUser.CompanyID, flowDefine.XOML, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref msg);
                 DateTime end = DateTime.Now;
                 msg += " 获取下一状态数据完成" + DateTime.Now.ToString() + "\r\n";
-                string str = Service2.DateDiff(end, star);
+                //string str = Service2.DateDiff(end, star);
                 if (dataResult.FlowResult == FlowResult.FAIL)
                 {
                     return dataResult;

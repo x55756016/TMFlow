@@ -82,16 +82,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Services\WFTools.Services.csproj">
-      <Project>{AFDBD4BB-BC33-421E-8086-68BD23AC90A2}</Project>
-      <Name>WFTools.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Utilities\WFTools.Utilities.csproj">
-      <Project>{CB650825-DA70-4B89-9F00-CC5FEA845E26}</Project>
-      <Name>WFTools.Utilities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="SequentialWorkFlow.rules">
       <DependentUpon>SequentialWorkFlow.xoml</DependentUpon>
     </EmbeddedResource>

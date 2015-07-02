@@ -24,7 +24,7 @@
     <TestPageFileName>SMT.Workflow.Platform.DesignerTestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
-    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <EnableOutOfBrowser>true</EnableOutOfBrowser>
     <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
@@ -705,7 +705,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\DataSources\SMT.Saas.Tools.EngineWS.T_FLOW_CUSTOMFLOWDEFINE.datasource" />
-    <None Include="Service References\PlatformService\PlatformServices6.xsd">
+    <None Include="Service References\PlatformService\PlatformServices1.wsdl" />
+    <None Include="Service References\PlatformService\PlatformServices7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlatformService\PlatformServices71.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlatformService\PlatformServices72.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlatformService\PlatformServices73.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlatformService\PlatformServices74.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlatformService\PlatformServices75.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlatformService\PlatformServices76.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PlatformService\SMT.Workflow.Platform.Designer.PlatformService.AppFunc.datasource">
@@ -770,13 +789,14 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Properties\AppManifest.xml" />
-    <None Include="Service References\PlatformService\PlatformServices.disco" />
     <None Include="Service References\PlatformService\configuration91.svcinfo" />
     <None Include="Service References\PlatformService\configuration.svcinfo" />
     <None Include="Service References\PlatformService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\PlatformService\PlatformServices1.disco" />
+    <None Include="Properties\OutOfBrowserSettings.xml" />
     <Content Include="ServiceReferences.ClientConfig">
       <SubType>Designer</SubType>
     </Content>
@@ -809,27 +829,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\PlatformService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\PlatformService\PlatformServices.wsdl" />
-    <None Include="Service References\PlatformService\PlatformServices.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PlatformService\PlatformServices1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PlatformService\PlatformServices2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PlatformService\PlatformServices3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PlatformService\PlatformServices4.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\PlatformService\PlatformServices5.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

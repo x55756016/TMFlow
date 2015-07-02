@@ -161,7 +161,7 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
                     app.Binding = "";
                     app.FuncName = "";
                     app.Language = "请选择.......";
-                    app.Parameter = new System.Collections.ObjectModel.ObservableCollection<Parameter>();
+                    app.Parameter = new System.Collections.ObjectModel.ObservableCollection<WcfParameter>();
                     app.SplitChar = "";
                     ListFunc.Add(app);
                     if (e.Result != null)
@@ -242,7 +242,7 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
             if (cmbFunc.SelectedIndex > 0 && cmbParameter.SelectedItem != null)
             {
               //  listpatrm = ParamOperate.Init();
-                Parameter param = this.cmbParameter.SelectedItem as Parameter;
+                WcfParameter param = this.cmbParameter.SelectedItem as WcfParameter;
                 Param paramClass = new Param();
                 paramClass.ParamName = param.Description;
                 paramClass.ParamID = param.Name;

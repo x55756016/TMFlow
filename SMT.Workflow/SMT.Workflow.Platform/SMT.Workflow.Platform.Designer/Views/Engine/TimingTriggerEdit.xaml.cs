@@ -26,7 +26,7 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
         private ObservableCollection<Param> listpatrm = new ObservableCollection<Param>();
         PlatformService.FlowXmlDefineClient flowXmlClient = new FlowXmlDefineClient();
         PlatformService.TimingTriggerClient triggerClient = new TimingTriggerClient();
-        public Parameter paramet = new Parameter();//功能参数
+        public WcfParameter paramet = new WcfParameter();//功能参数
         public ObservableCollection<Cycle> ListCycle = null; //周期
         public FlowXmlDefineClient XmlClient = null; //xml实例化
         private string MsgOpen = string.Empty;//消息链接定义     
@@ -167,7 +167,7 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
                 app.Binding = "";
                 app.FuncName = "";
                 app.Language = "请选择.......";
-                app.Parameter = new System.Collections.ObjectModel.ObservableCollection<Parameter>();
+                app.Parameter = new System.Collections.ObjectModel.ObservableCollection<WcfParameter>();
                 app.SplitChar = "";
                 ListFunc.Add(app);
                 if (e.Result != null)
@@ -314,7 +314,7 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
             if (this.txtValue.Text.Trim() != "" && cmbFunc.SelectedIndex > 0)
             {
                 listpatrm = ParamOperate.Init();
-                Parameter param = this.cmbParameter.SelectedItem as Parameter;
+                WcfParameter param = this.cmbParameter.SelectedItem as WcfParameter;
                 Param paramClass = new Param();
                 paramClass.ParamName = param.Description;
                 paramClass.ParamID = param.Name;

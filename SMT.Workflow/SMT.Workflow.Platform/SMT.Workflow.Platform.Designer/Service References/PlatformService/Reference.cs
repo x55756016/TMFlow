@@ -1868,7 +1868,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Param> PARAMCOLLECTIONField;
         
-        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> PARAMETERField;
+        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> PARAMETERField;
         
         private string PARAMETERVALUEField;
         
@@ -1880,7 +1880,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private SMT.Workflow.Platform.Designer.PlatformService.AppModel SELECTAPPMODELField;
         
-        private SMT.Workflow.Platform.Designer.PlatformService.Parameter SELECTPARAMETERField;
+        private SMT.Workflow.Platform.Designer.PlatformService.WcfParameter SELECTPARAMETERField;
         
         private SMT.Workflow.Platform.Designer.PlatformService.AppSystem SELECTSYSTEMCODEField;
         
@@ -2008,7 +2008,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> PARAMETER {
+        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> PARAMETER {
             get {
                 return this.PARAMETERField;
             }
@@ -2086,7 +2086,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public SMT.Workflow.Platform.Designer.PlatformService.Parameter SELECTPARAMETER {
+        public SMT.Workflow.Platform.Designer.PlatformService.WcfParameter SELECTPARAMETER {
             get {
                 return this.SELECTPARAMETERField;
             }
@@ -2173,7 +2173,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private string LanguageField;
         
-        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> ParameterField;
+        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> ParameterField;
         
         private string SplitCharField;
         
@@ -2230,7 +2230,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> Parameter {
+        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> Parameter {
             get {
                 return this.ParameterField;
             }
@@ -2327,8 +2327,8 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="Parameter", Namespace="http://schemas.datacontract.org/2004/07/SMT.Workflow.Common.Model.FlowXml")]
-    public partial class Parameter : object, System.ComponentModel.INotifyPropertyChanged {
+    [System.Runtime.Serialization.DataContractAttribute(Name="WcfParameter", Namespace="http://schemas.datacontract.org/2004/07/SMT.Workflow.Common.Model.FlowXml")]
+    public partial class WcfParameter : object, System.ComponentModel.INotifyPropertyChanged {
         
         private string DescriptionField;
         
@@ -4177,7 +4177,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Param> PARAMCOLLECTIONField;
         
-        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> PARAMETERField;
+        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> PARAMETERField;
         
         private string PARAMETERVALUEField;
         
@@ -4193,7 +4193,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private SMT.Workflow.Platform.Designer.PlatformService.AppModel SELECTMODELField;
         
-        private SMT.Workflow.Platform.Designer.PlatformService.Parameter SELECTPARAMETERField;
+        private SMT.Workflow.Platform.Designer.PlatformService.WcfParameter SELECTPARAMETERField;
         
         private SMT.Workflow.Platform.Designer.PlatformService.AppSystem SELECTSYSTEMCODEField;
         
@@ -4418,7 +4418,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> PARAMETER {
+        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> PARAMETER {
             get {
                 return this.PARAMETERField;
             }
@@ -4522,7 +4522,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public SMT.Workflow.Platform.Designer.PlatformService.Parameter SELECTPARAMETER {
+        public SMT.Workflow.Platform.Designer.PlatformService.WcfParameter SELECTPARAMETER {
             get {
                 return this.SELECTPARAMETERField;
             }
@@ -4650,7 +4650,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Param> PARAMCOLLECTIONField;
         
-        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> PARAMETERField;
+        private System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> PARAMETERField;
         
         private string PARAMETERVALUEField;
         
@@ -4664,7 +4664,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         
         private SMT.Workflow.Platform.Designer.PlatformService.Cycle SELECTCYCLETYPEField;
         
-        private SMT.Workflow.Platform.Designer.PlatformService.Parameter SELECTPARAMETERField;
+        private SMT.Workflow.Platform.Designer.PlatformService.WcfParameter SELECTPARAMETERField;
         
         private SMT.Workflow.Platform.Designer.PlatformService.AppSystem SELECTSYSTEMCODEField;
         
@@ -4750,7 +4750,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.Parameter> PARAMETER {
+        public System.Collections.ObjectModel.ObservableCollection<SMT.Workflow.Platform.Designer.PlatformService.WcfParameter> PARAMETER {
             get {
                 return this.PARAMETERField;
             }
@@ -4841,7 +4841,7 @@ namespace SMT.Workflow.Platform.Designer.PlatformService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public SMT.Workflow.Platform.Designer.PlatformService.Parameter SELECTPARAMETER {
+        public SMT.Workflow.Platform.Designer.PlatformService.WcfParameter SELECTPARAMETER {
             get {
                 return this.SELECTPARAMETERField;
             }

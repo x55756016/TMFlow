@@ -155,28 +155,34 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
 
         void client_GetFlowDefineListCompleted(object sender, GetFlowDefineListCompletedEventArgs e)
         {
+            pBar.Stop();
             if (e.Error == null)
             {
-                if (!isPager)
+                if (e.Result != null)
                 {
-                    if (e.Result.Count == 1)
+                    if (!isPager)
                     {
-                        if (SelectFlow != null) SelectFlow(e.Result[0].FlowCode, true);
+                        if (e.Result.Count == 1)
+                        {
+                            if (SelectFlow != null) SelectFlow(e.Result[0].FlowCode, true);
+                        }
+                        if (e.Result.Count > 1)
+                        {
+                            if (SelectFlow != null) SelectFlow(e.Result[0].FlowCode, false);
+                        }
                     }
-                    if (e.Result.Count > 1)
-                    {
-                        if (SelectFlow != null) SelectFlow(e.Result[0].FlowCode, false);
-                    }
+                    isPager = false;
+                    dgrFlows.ItemsSource = e.Result;
+                    dataPager1.PageCount = e.pageCount;
+                }else
+                {
+                    MessageBox.Show("获取的流程定义数据为空，请联系管理员");
                 }
-                isPager = false;
-                dgrFlows.ItemsSource = e.Result;
-                dataPager1.PageCount = e.pageCount;             
             }
             else
             {
                 ComfirmWindow.ConfirmationBox("提示信息", "异常信息：" + e.Error.Message, "确定");
             }
-            pBar.Stop();
         }
 
         /// <summary>
