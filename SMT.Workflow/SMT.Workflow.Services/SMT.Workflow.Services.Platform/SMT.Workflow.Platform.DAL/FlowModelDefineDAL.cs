@@ -1,9 +1,9 @@
 ﻿/****************************************************************
- * 作者：    向寒咏
+ * 作者：    提莫科技
  * 书写时间：2012/9/4 16:19:19 
  * 内容概要： 
  *  ------------------------------------------------------
- * 修改：向寒咏    2012/9/4 16:19:19 
+ * 修改：提莫科技    2012/9/4 16:19:19 
 ****************************************************************/
 using System;
 using System.Collections.Generic;
@@ -300,7 +300,7 @@ namespace SMT.Workflow.Platform.DAL
             try
             {
                 ////OracleConnection conn = MicrosoftOracle.CreateOracleConnection(ConnectionString);
-                string sql = @"SELECT SYSTEMCODE，SYSTEMNAME，MODELCODE，DESCRIPTION  from FLOW_MODELDEFINE_T where (1=1)";
+                string sql = @"SELECT SYSTEMCODE,SYSTEMNAME,MODELCODE,DESCRIPTION  from FLOW_MODELDEFINE_T where (1=1)";
                 DataTable dt = dao.GetDataTable( sql);
                 //MicrosoftOracle.Close(conn);
                 return ToList<FLOW_MODELDEFINE_T>(dt);        

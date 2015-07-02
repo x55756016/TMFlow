@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©   2011    
 	 * 文件名：ContainerPM.cs  
-	 * 创建者： 向寒咏
+	 * 创建者： 提莫科技
 	 * 创建日期：2011/11/17 9:27:27   
 	 * CLR版本： 4.0.30319.239  
 	 * 命名空间：SMT.Workflow.Platform.Designer.DesignerView 
@@ -41,7 +41,7 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
         /// 提示信息
         /// </summary>
         string alertMsg = "修改";
-        #region 事件的定义（向寒咏）
+        #region 事件的定义（提莫科技）
         /// <summary>
         ///  改变树控件的流程数据事件（新增、更新、删除）
         /// </summary>
@@ -510,15 +510,15 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
                 if (e.Result == "1")
                 {
 
-                    ComfirmWindow.ConfirmationBox("提示信息", alertMsg + "成功!\r\n", "确定");
+                    MessageBox.Show("新增流程定义成功!");
                     newtag = 1;//新增成功后变成修改
                     pBar.Stop();
                     alertMsg = "修改";
                 }
                 else
                 {
-                    //MessageBox.Show(alertMsg+"失败！"+e.failMessage, "提示！", MessageBoxButton.OK);
-                    ComfirmWindow.ConfirmationBox("提示信息", alertMsg + "失败!" + e.Result, "确定");
+                    MessageBox.Show(alertMsg + "失败！" + e.Result, "提示！", MessageBoxButton.OK);
+                    //ComfirmWindow.ConfirmationBox("提示信息", alertMsg + "失败!" + e.Result, "确定");
                     if (alertMsg == "新增")
                     {
                         alertMsg = "新增";
@@ -780,7 +780,7 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
                     int.TryParse(SMTElementes.Attribute(XName.Get("ZIndex")).Value, out zIndex);
                     string UniqueID = SMTElementes.Attribute(XName.Get("UniqueID")).Value;
                     string name = SMTElementes.Attribute(XName.Get("Title")).Value;//元素名称               
-                    this.CreateElement(UniqueID, name, SMTType, left, top, zIndex);//向寒咏增加
+                    this.CreateElement(UniqueID, name, SMTType, left, top, zIndex);//提莫科技增加
                 }
             }
             else

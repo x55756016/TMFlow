@@ -583,7 +583,7 @@ namespace SMT.FlowWFService.NewFlow
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
                         #endregion
-                        #region 更新审核主表的审核人(向寒咏新增)
+                        #region 更新审核主表的审核人(提莫科技新增)
                         entity.FLOW_FLOWRECORDMASTER_T.CHECKSTATE = "1"; 
                         if (entity.EDITDATE == entity.AGENTEDITDATE)  
                         {

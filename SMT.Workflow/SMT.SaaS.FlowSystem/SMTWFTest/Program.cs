@@ -60,7 +60,7 @@ namespace SMTWFTest
             //return tableName;
             //return t.GetType().BaseType.ToString ();
         //   }
-        #region 向寒咏测试ADO事务
+        #region 提莫科技测试ADO事务
         #region 对象
         /// <summary>
         /// [测试表]

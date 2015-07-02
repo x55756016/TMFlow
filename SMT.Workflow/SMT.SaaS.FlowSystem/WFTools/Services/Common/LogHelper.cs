@@ -20,7 +20,7 @@ namespace WFTools.Services
     /// </summary>
     public class WfLogHelper
     {      
-        #region 日志（向寒咏新增）
+        #region 日志（提莫科技新增）
         private static string currentDir = Environment.CurrentDirectory;
         //string str = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
         private static string hostDir = System.AppDomain.CurrentDomain.BaseDirectory + "Logs\\" + DateTime.Now.ToString("yyyy-MM-dd") + "\\";

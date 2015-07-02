@@ -92,7 +92,7 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
         }
 
     
-        #region 向寒咏新增
+        #region 提莫科技新增
         /// <summary>
         /// 所有的流程节点放在一个列表里
         /// </summary>
@@ -113,6 +113,8 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
                     ListBindTree(e.Result);
                 }
             }
+
+            ucFlowlist.BindFlowList("", "");//绑定列表
         }
 
         public void ListBindTree(ObservableCollection<FLOW_MODELDEFINE_T> list)
@@ -407,7 +409,6 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             }
 
             modelClient.GetSystemCodeModelCodeListAsync();//绑定树
-            ucFlowlist.BindFlowList("", "");//绑定列表
         }
 
      

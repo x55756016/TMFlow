@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©   2011    
 	 * 文件名：EnginFlowBLL.cs  
-	 * 创建者： 向寒咏
+	 * 创建者： 提莫科技
 	 * 创建日期：2011/12/12 9:58:33   
 	 * CLR版本： 4.0.30319.239  
 	 * 命名空间：SMT.FlowWFService 
@@ -29,7 +29,7 @@ namespace SMT.FlowWFService
 {
     public class EnginFlowBLL
     {
-        #region 向寒咏新增
+        #region 提莫科技新增
         /// <summary>
         /// 流程触发
         /// </summary>
@@ -62,7 +62,7 @@ namespace SMT.FlowWFService
                     //Tracer.Debug("strFlow:\r\n" + strFlow);
                     //Tracer.Debug("strBusiness:\r\n" + strBusiness);
                     Tracer.Debug("开始消息解析");
-                    #region 向寒咏新增
+                    #region 提莫科技新增
                     #region XmlReader
                     #region strFlow
                     //Byte[] BytebFlow = System.Text.UTF8Encoding.UTF8.GetBytes(strFlow);

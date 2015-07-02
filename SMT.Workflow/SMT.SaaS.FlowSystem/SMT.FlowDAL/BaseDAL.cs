@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©   2011    
 	 * 文件名：BaseDAL.cs  
-	 * 创建者： 向寒咏
+	 * 创建者： 提莫科技
 	 * 创建日期：2011/12/12 9:52:20   
 	 * CLR版本： 4.0.30319.239  
 	 * 命名空间：SMT.FlowDAL 
@@ -53,7 +53,7 @@ namespace SMT.FlowDAL
             }
             return oblist;
         }
-        #region 向寒咏新增
+        #region 提莫科技新增
         /// <summary>
         /// 如果value值为null则返回""字符串,否则返回value值。
         /// </summary>

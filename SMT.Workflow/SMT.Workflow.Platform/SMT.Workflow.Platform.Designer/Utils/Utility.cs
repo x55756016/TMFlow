@@ -294,7 +294,7 @@ namespace SMT.Workflow.Platform.Designer.Utils
     }
     #endregion
 
-    #region 缓存类，向寒咏新增
+    #region 缓存类，提莫科技新增
     public class SLCache
     {
         /// <summary>

@@ -15,7 +15,7 @@ namespace SMT.FLOWDAL.ADO
     /// </summary>
     public class FLOW_FLOWDEFINE_TDAL:BaseFlowDAL
     {
-        #region 向寒咏新增
+        #region 提莫科技新增
         /// <summary>
         /// 流程模型定义
         /// </summary>

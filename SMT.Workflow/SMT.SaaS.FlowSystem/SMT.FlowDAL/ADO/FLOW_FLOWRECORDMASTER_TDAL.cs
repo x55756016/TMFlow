@@ -17,7 +17,7 @@ namespace SMT.FLOWDAL.ADO
     /// </summary>
     public class FLOW_FLOWRECORDMASTER_TDAL:BaseFlowDAL
     {
-        #region 向寒咏新增
+        #region 提莫科技新增
         /// <summary>
         /// 新增：[流程审批实例表]
         /// </summary>

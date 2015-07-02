@@ -114,9 +114,9 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
                     //triggerList.cbModelCode.ItemsSource = e.Result;
                     //triggerList.cbModelCode.SelectedIndex = 0;
 
-                    //MessageList.appModel = e.Result;//向寒咏新增      
-                    //RuleList.appModel = e.Result;//向寒咏新增    
-                    //triggerList.appModel = e.Result;//向寒咏新增    
+                    //MessageList.appModel = e.Result;//提莫科技新增      
+                    //RuleList.appModel = e.Result;//提莫科技新增    
+                    //triggerList.appModel = e.Result;//提莫科技新增    
                     //#region 开始连动
                     //MessageList.cbSystemCode.SelectedIndex = 0;
                     //RuleList.cbSystemCode.SelectedIndex = 0;
@@ -156,9 +156,9 @@ namespace SMT.Workflow.Platform.Designer.Views.Engine
                     //triggerList.cbSystemCode.ItemsSource = appSystem;
 
 
-                    //MessageList.appSystem = appSystem;//向寒咏新增 
-                    //RuleList.appSystem = appSystem;//向寒咏新增         
-                    //triggerList.appSystem = appSystem;//向寒咏新增         
+                    //MessageList.appSystem = appSystem;//提莫科技新增 
+                    //RuleList.appSystem = appSystem;//提莫科技新增         
+                    //triggerList.appSystem = appSystem;//提莫科技新增         
                     //MessageList.BindDefaultGridData();//首次进入时加载
                     //RuleList.BindRuleData();//首次进入时加载
                     //triggerList.BindTriggerData();//首次进入时加载

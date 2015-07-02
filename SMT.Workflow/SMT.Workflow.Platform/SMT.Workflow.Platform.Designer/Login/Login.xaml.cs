@@ -27,7 +27,7 @@ namespace SMT.Workflow.Platform.Designer.Login
     public partial class Login : UserControl
     {
         //PermissionServiceClient client = new PermissionServiceClient();
-        #region 向寒咏
+        #region 提莫科技
         SMT.Saas.Tools.PermissionWS.PermissionServiceClient client = new Saas.Tools.PermissionWS.PermissionServiceClient();
         //用户登录类
         UserLogin login;
@@ -83,7 +83,7 @@ namespace SMT.Workflow.Platform.Designer.Login
 
                 btnLogin.IsEnabled = false;
                 pBar.Start();
-                #region 向寒咏
+                #region 提莫科技
                 login = new UserLogin(txtUserId.Text.Trim(), txtPassword.Password.Trim());
                 login.LoginedClick += (obj, ev) =>
                 {

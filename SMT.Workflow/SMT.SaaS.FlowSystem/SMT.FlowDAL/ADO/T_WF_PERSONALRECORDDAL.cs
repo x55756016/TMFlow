@@ -14,7 +14,7 @@ namespace SMT.FLOWDAL.ADO
     /// </summary>
     public class T_WF_PERSONALRECORDDAL:BaseFlowDAL
     {
-        #region 向寒咏新增
+        #region 提莫科技新增
         /// <summary>
         /// 根据ID获取我的单据实体
         /// </summary>

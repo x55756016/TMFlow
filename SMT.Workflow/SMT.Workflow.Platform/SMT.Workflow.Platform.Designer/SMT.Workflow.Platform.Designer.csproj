@@ -99,8 +99,9 @@
     <Reference Include="SMT.SAAS.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SaaS.FrameworkUI">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SaaS.FrameworkUI.dll</HintPath>
+    <Reference Include="SMT.SaaS.FrameworkUI, Version=1.1.1.1218, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.FrameworkUI.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SaaS.Globalization">
       <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SaaS.Globalization.dll</HintPath>

@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©   2011    
 	 * 文件名：Container.cs  
-	 * 创建者： 向寒咏
+	 * 创建者： 提莫科技
 	 * 创建日期：2011/11/15 10:21:56   
 	 * CLR版本： 4.0.30319.239  
 	 * 命名空间：SMT.Workflow.Platform.Designer.DesignerView 
@@ -370,7 +370,7 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
             if (SMTElement != null)
             {
                 if (!string.IsNullOrEmpty(UniqueID))
-                {//加载已有活动使用(向寒咏)
+                {//加载已有活动使用(提莫科技)
                     ((IControlBase)SMTElement).UniqueID = UniqueID;
                     ((IControlBase)SMTElement).Title = name;
                 }
@@ -399,7 +399,7 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
                         points.Add(location);
                     }
                     if (!string.IsNullOrEmpty(UniqueID))
-                    {//加载已有连线使用(向寒咏)
+                    {//加载已有连线使用(提莫科技)
                         ((LineControl)SMTElement).UniqueID = UniqueID;
                     }
                     ((LineControl)SMTElement).ShowShadow(points);

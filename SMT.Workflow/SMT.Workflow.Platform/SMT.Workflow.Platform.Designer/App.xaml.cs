@@ -79,8 +79,7 @@ namespace SMT.Workflow.Platform.Designer
             // 异常机制报告该异常。在 IE 上，将在状态栏中用一个 
             // 黄色警报图标来显示该异常，而 Firefox 则会显示一个脚本错误。
 
-            ComfirmWindow.ConfirmationBox("提示信息", e.ExceptionObject.Message, "确定");
-
+            
             if (e.ExceptionObject != null)
             {
                 MessageBox.Show((e.ExceptionObject).Message);
