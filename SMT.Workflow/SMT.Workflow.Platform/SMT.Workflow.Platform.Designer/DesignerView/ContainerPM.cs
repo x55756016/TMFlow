@@ -344,7 +344,8 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
                             return;
                         }
                     }
-                    if ((role.IsSpecifyCompany == true && role.OtherCompanyId.Trim() == "") || (role.IsSpecifyCompany == false && role.OtherCompanyId.Trim() != ""))
+                    if ((role.IsSpecifyCompany == true && string.IsNullOrEmpty(role.OtherCompanyId))
+                        || (role.IsSpecifyCompany == false && !string.IsNullOrEmpty(role.OtherCompanyId) ))
                     {
                         ComfirmWindow.ConfirmationBox("提示信息", "【" + role.Remark + "】指定了公司【" + role .OtherCompanyName+ "】，但没有钩选中，请重新钩选！", "确定");
                         return;
@@ -474,7 +475,12 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
             }
             catch (Exception e)
             {
-                ComfirmWindow.ConfirmationBox("提示信息", "出错信息如下：\r\n" + e.ToString(), "确定");
+                try{
+                    ComfirmWindow.ConfirmationBox("提示信息", "出错信息如下：\r\n" + e.ToString(), "确定");
+                }catch(Exception ex)
+                {
+                    MessageBox.Show("保存流程出错，出错信息如下：\r\n" + e.ToString());
+                }
             }
         }
       
@@ -505,6 +511,7 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
         #region 新建流程定义完成事件
         void clientFlow_AddFlowDefineCompleted(object sender, AddFlowDefineCompletedEventArgs e)
         {
+            pBar.Stop();
             if (e.Error == null)
             {
                 if (e.Result == "1")
@@ -523,7 +530,6 @@ namespace SMT.Workflow.Platform.Designer.DesignerView
                     {
                         alertMsg = "新增";
                     }
-                    pBar.Stop();
                 }
             }
             tipMsg = "";//清空提示信息

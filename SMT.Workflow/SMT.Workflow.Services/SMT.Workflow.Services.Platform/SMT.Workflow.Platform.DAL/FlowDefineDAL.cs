@@ -207,33 +207,38 @@ namespace SMT.Workflow.Platform.DAL
         {
             try
             {
+//                string insSql = @"INSERT INTO FLOW_FLOWDEFINE_T (FLOWDEFINEID,FLOWCODE,DESCRIPTION,XOML,RULES,LAYOUT,FLOWTYPE,
+//                            CREATEUSERID,CREATEUSERNAME,CREATECOMPANYID,CREATEDEPARTMENTID,CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,
+//                            EDITDATE,SYSTEMCODE,BUSINESSOBJECT,WFLAYOUT) VALUES (FLOWDEFINEID,FLOWCODE,DESCRIPTION,XOML,RULES,LAYOUT,
+//                            FLOWTYPE,CREATEUSERID,CREATEUSERNAME,CREATECOMPANYID,CREATEDEPARTMENTID,CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,
+//                            EDITDATE,SYSTEMCODE,BUSINESSOBJECT,WFLAYOUT)";
                 string insSql = @"INSERT INTO FLOW_FLOWDEFINE_T (FLOWDEFINEID,FLOWCODE,DESCRIPTION,XOML,RULES,LAYOUT,FLOWTYPE,
                             CREATEUSERID,CREATEUSERNAME,CREATECOMPANYID,CREATEDEPARTMENTID,CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,
-                            EDITDATE,SYSTEMCODE,BUSINESSOBJECT,WFLAYOUT) VALUES (FLOWDEFINEID,FLOWCODE,DESCRIPTION,XOML,RULES,LAYOUT,
-                            FLOWTYPE,CREATEUSERID,CREATEUSERNAME,CREATECOMPANYID,CREATEDEPARTMENTID,CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,
-                            EDITDATE,SYSTEMCODE,BUSINESSOBJECT,WFLAYOUT)";
+                            EDITDATE,SYSTEMCODE,BUSINESSOBJECT,WFLAYOUT) VALUES (@FLOWDEFINEID,@FLOWCODE,@DESCRIPTION,@XOML,@RULES,@LAYOUT,
+                            @FLOWTYPE,@CREATEUSERID,@CREATEUSERNAME,@CREATECOMPANYID,@CREATEDEPARTMENTID,@CREATEPOSTID,@CREATEDATE,@EDITUSERID,@EDITUSERNAME,
+                            @EDITDATE,@SYSTEMCODE,@BUSINESSOBJECT,@WFLAYOUT)";
                 Parameter[] pageparm =
                                     {               
                                     #region  参数
-                                    new Parameter("FLOWDEFINEID",null), 
-                                    new Parameter("FLOWCODE",null), 
-                                    new Parameter("DESCRIPTION",null), 
-                                    new Parameter("XOML",null), 
-                                    new Parameter("RULES",null), 
-                                    new Parameter("LAYOUT",null), 
-                                    new Parameter("FLOWTYPE",null), 
-                                    new Parameter("CREATEUSERID",null), 
-                                    new Parameter("CREATEUSERNAME",null), 
-                                    new Parameter("CREATECOMPANYID",null), 
-                                    new Parameter("CREATEDEPARTMENTID",null), 
-                                    new Parameter("CREATEPOSTID",null), 
-                                    new Parameter("CREATEDATE",null), 
-                                    new Parameter("EDITUSERID",null), 
-                                    new Parameter("EDITUSERNAME",null), 
-                                    new Parameter("EDITDATE",null), 
-                                    new Parameter("SYSTEMCODE",null), 
-                                    new Parameter("BUSINESSOBJECT",null), 
-                                    new Parameter("WFLAYOUT",null)                                  
+                                    new Parameter("@FLOWDEFINEID",null), 
+                                    new Parameter("@FLOWCODE",null), 
+                                    new Parameter("@DESCRIPTION",null), 
+                                    new Parameter("@XOML",null), 
+                                    new Parameter("@RULES",null), 
+                                    new Parameter("@LAYOUT",null), 
+                                    new Parameter("@FLOWTYPE",null), 
+                                    new Parameter("@CREATEUSERID",null), 
+                                    new Parameter("@CREATEUSERNAME",null), 
+                                    new Parameter("@CREATECOMPANYID",null), 
+                                    new Parameter("@CREATEDEPARTMENTID",null), 
+                                    new Parameter("@CREATEPOSTID",null), 
+                                    new Parameter("@CREATEDATE",null), 
+                                    new Parameter("@EDITUSERID",null), 
+                                    new Parameter("@EDITUSERNAME",null), 
+                                    new Parameter("@EDITDATE",null), 
+                                    new Parameter("@SYSTEMCODE",null), 
+                                    new Parameter("@BUSINESSOBJECT",null), 
+                                    new Parameter("@WFLAYOUT",null)                                  
                                     #endregion
                                 };
                 pageparm[0].ParameterValue = GetValue(Guid.NewGuid().ToString().Replace("-", string.Empty));//流程定义ID
@@ -286,33 +291,37 @@ namespace SMT.Workflow.Platform.DAL
         {
             try
             {
-                string relationSql = @"SET FOREIGN_KEY_CHECKS = 0;
-                        INSERT INTO FLOW_MODELFLOWRELATION_T (MODELFLOWRELATIONID,COMPANYID,DEPARTMENTID,COMPANYNAME,DEPARTMENTNAME,
+//                string relationSql = @"INSERT INTO FLOW_MODELFLOWRELATION_T (MODELFLOWRELATIONID,COMPANYID,DEPARTMENTID,COMPANYNAME,DEPARTMENTNAME,
+//                        SYSTEMCODE,MODELCODE,FLOWCODE,FLAG,FLOWTYPE,CREATEUSERID,CREATEUSERNAME,CREATECOMPANYID,CREATEDEPARTMENTID,
+//                        CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,EDITDATE) VALUES (MODELFLOWRELATIONID,COMPANYID,DEPARTMENTID,
+//                        COMPANYNAME,DEPARTMENTNAME,SYSTEMCODE,MODELCODE,FLOWCODE,FLAG,FLOWTYPE,CREATEUSERID,CREATEUSERNAME,
+//                        CREATECOMPANYID,CREATEDEPARTMENTID,CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,EDITDATE)";
+                string relationSql = @"INSERT INTO FLOW_MODELFLOWRELATION_T (MODELFLOWRELATIONID,COMPANYID,DEPARTMENTID,COMPANYNAME,DEPARTMENTNAME,
                         SYSTEMCODE,MODELCODE,FLOWCODE,FLAG,FLOWTYPE,CREATEUSERID,CREATEUSERNAME,CREATECOMPANYID,CREATEDEPARTMENTID,
-                        CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,EDITDATE) VALUES (MODELFLOWRELATIONID,COMPANYID,DEPARTMENTID,
-                        COMPANYNAME,DEPARTMENTNAME,SYSTEMCODE,MODELCODE,FLOWCODE,FLAG,FLOWTYPE,CREATEUSERID,CREATEUSERNAME,
-                        CREATECOMPANYID,CREATEDEPARTMENTID,CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,EDITDATE)";
+                        CREATEPOSTID,CREATEDATE,EDITUSERID,EDITUSERNAME,EDITDATE) VALUES (@MODELFLOWRELATIONID,@COMPANYID,@DEPARTMENTID,
+                        @COMPANYNAME,@DEPARTMENTNAME,@SYSTEMCODE,@MODELCODE,@FLOWCODE,@FLAG,@FLOWTYPE,@CREATEUSERID,@CREATEUSERNAME,
+                        @CREATECOMPANYID,@CREATEDEPARTMENTID,@CREATEPOSTID,@CREATEDATE,@EDITUSERID,@EDITUSERNAME,@EDITDATE)";
                 Parameter[] relationParm =
                                 {   
-                            new Parameter("MODELFLOWRELATIONID",null), 
-                            new Parameter("COMPANYID",null), 
-                            new Parameter("DEPARTMENTID",null), 
-                            new Parameter("COMPANYNAME",null), 
-                            new Parameter("DEPARTMENTNAME",null), 
-                            new Parameter("SYSTEMCODE",null), 
-                            new Parameter("MODELCODE",null), 
-                            new Parameter("FLOWCODE",null), 
-                            new Parameter("FLAG",null), 
-                            new Parameter("FLOWTYPE",null), 
-                            new Parameter("CREATEUSERID",null), 
-                            new Parameter("CREATEUSERNAME",null), 
-                            new Parameter("CREATECOMPANYID",null), 
-                            new Parameter("CREATEDEPARTMENTID",null), 
-                            new Parameter("CREATEPOSTID",null), 
-                            new Parameter("CREATEDATE",null), 
-                            new Parameter("EDITUSERID",null), 
-                            new Parameter("EDITUSERNAME",null), 
-                            new Parameter("EDITDATE",null)                          
+                            new Parameter("@MODELFLOWRELATIONID",null), 
+                            new Parameter("@COMPANYID",null), 
+                            new Parameter("@DEPARTMENTID",null), 
+                            new Parameter("@COMPANYNAME",null), 
+                            new Parameter("@DEPARTMENTNAME",null), 
+                            new Parameter("@SYSTEMCODE",null), 
+                            new Parameter("@MODELCODE",null), 
+                            new Parameter("@FLOWCODE",null), 
+                            new Parameter("@FLAG",null), 
+                            new Parameter("@FLOWTYPE",null), 
+                            new Parameter("@CREATEUSERID",null), 
+                            new Parameter("@CREATEUSERNAME",null), 
+                            new Parameter("@CREATECOMPANYID",null), 
+                            new Parameter("@CREATEDEPARTMENTID",null), 
+                            new Parameter("@CREATEPOSTID",null), 
+                            new Parameter("@CREATEDATE",null), 
+                            new Parameter("@EDITUSERID",null), 
+                            new Parameter("@EDITUSERNAME",null), 
+                            new Parameter("@EDITDATE",null)                          
                                 };
                 relationParm[0].ParameterValue = Guid.NewGuid().ToString();//关联ID
                 relationParm[1].ParameterValue = GetValue(relation.COMPANYID);//公司ID
