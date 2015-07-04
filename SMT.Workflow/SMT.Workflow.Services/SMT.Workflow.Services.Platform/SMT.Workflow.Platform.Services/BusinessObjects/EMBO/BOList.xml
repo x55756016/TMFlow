@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<System Name="EM">
+  <ObjectList>
+    <Object Name="T_EM_SCOREREPORT" Description="考试成绩审核"></Object>   
+    <Object Name="T_EM_EXAMPAPER" Description="试卷审核"></Object> 
+  </ObjectList>
+</System>
+

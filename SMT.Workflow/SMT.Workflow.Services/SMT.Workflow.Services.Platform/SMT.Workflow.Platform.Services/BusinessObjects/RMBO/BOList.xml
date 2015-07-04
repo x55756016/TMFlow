@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<System Name="RM">
+  <ObjectList>
+    <Object Name="Require" Description="需求"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="Notify" Description="通知"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="Publish" Description="发布"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="Employ" Description="录用"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="Record" Description="记录"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="Classified" Description="分类"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="Deliver" Description="投递"></Object>
+  </ObjectList>
+</System>
+

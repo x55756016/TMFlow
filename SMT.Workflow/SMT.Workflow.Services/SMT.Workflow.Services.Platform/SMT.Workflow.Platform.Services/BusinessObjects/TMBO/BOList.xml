@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<System Name="TM">
+  <ObjectList>
+    <Object Name="TrainingPlan" Description="培训计划"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="TrainingPlanStartup" Description="培训报告"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="TrainingProject" Description="培训项目"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="TrainingCourse" Description="培训课程"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="TmReport" Description="培训报告审核"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="TmSendNotify" Description="培训证书发放"></Object>
+  </ObjectList>
+<ObjectList>
+    <Object Name="NotifYfeedback" Description="培训通知1"></Object>
+  </ObjectList>
+<ObjectList>
+    <Object Name="Blacklist" Description="培训黑名单"></Object>
+  </ObjectList>
+<ObjectList>
+    <Object Name="Attendance" Description="考勤记录"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="ASSESSMENT" Description="培训发起考核"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="EXAM" Description="培训考试通知"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="TraineeSummary" Description="培训心得报告"></Object>
+  </ObjectList>
+  <ObjectList>
+    <Object Name="deductions" Description="培训扣款"></Object>
+  </ObjectList>
+
+  <ObjectList>
+    <Object Name="Feedback" Description="调查结果"></Object>
+  </ObjectList>
+
+  <ObjectList>
+    <Object Name="TrainOrganinzation" Description="培训机构"></Object>
+  </ObjectList>
+
+  <ObjectList>
+    <Object Name="RegisTer" Description="培训报名"></Object>
+  </ObjectList>
+
+  <ObjectList>
+    <Object Name="LecturerInform" Description="讲师通知"></Object>
+  </ObjectList>
+
+</System>
+

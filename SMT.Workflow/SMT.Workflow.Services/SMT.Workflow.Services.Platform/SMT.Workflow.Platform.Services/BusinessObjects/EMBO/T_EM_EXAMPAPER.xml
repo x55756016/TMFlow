@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<System>
+  <Name>EM</Name>
+  <System>
+    <Function Description="T_EDM_APPLYFORMASTERFlow" Address="EngineService.svc"   FuncName="CallApplicationService"  Binding="customBinding" SplitChar="Г">
+      <ParaStr>
+        <Para TableName="T_HR_COMPANY" Name="COMPANYID" Description="公司ID" Value=""></Para>
+      </ParaStr>
+    </Function>
+  </System>
+  <MsgOpen>
+    <AssemblyName>SMT.EM.UI</AssemblyName>
+    <PublicClass>SMT.EM.UI.Class.Utility</PublicClass>
+    <ProcessName>CreateFormFromEngine</ProcessName>
+    <PageParameter>SMT.EM.UI.UserControls.ExamPaperManage.ExamPaperEdit</PageParameter>
+    <ApplicationOrder>{EXAMPAPERID}</ApplicationOrder>
+    <FormTypes>Edit</FormTypes>
+  </MsgOpen>
+    <Object Name="T_EM_EXAMPAPER" Description="试卷">
+  
+    <Attribute Name="EXAMPAPERID" Description="试卷ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="GRADEID" Description="试卷等级ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="EXAMPAPERTYPEID" Description="试卷分类ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="NAME" Description="名称" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="SCORE" Description="总分" DataType="DATE" DataValue=""></Attribute>
+   
+    <Attribute Name="TITLENUMBER" Description="题目数" DataType="DATE" DataValue=""></Attribute>
+   
+    <Attribute Name="AUDITSTATUS" Description="审核状态" DataType="DATE" DataValue=""></Attribute>
+   
+    <Attribute Name="AUDITUSER" Description="试卷审核人" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="AUDITDATE" Description="试卷审核时间" DataType="DateTime" DataValue=""></Attribute>
+   
+    <Attribute Name="REMARK" Description="备注" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="SORTING" Description="排序号" DataType="DATE" DataValue=""></Attribute>
+   
+    <Attribute Name="OWNERID" Description="所属用户ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="OWNERNAME" Description="所属用户名称" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="OWNERCOMPANYID" Description="所属公司" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="OWNERDEPARTMENTID" Description="所属部门" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="OWNERPOSTID" Description="所属岗位" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="CREATEUSERID" Description="创建人ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="CREATEUSERNAME" Description="创建人名" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="CREATECOMPANYID" Description="创建公司ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="CREATEDEPARTMENTID" Description="创建部门ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="CREATEPOSTID" Description="创建岗位ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+    <Attribute Name="CREATEDATE" Description="创建日期" DataType="DateTime" DataValue=""></Attribute>
+   
+    <Attribute Name="UPDATEDATE" Description="修改日期" DataType="DateTime" DataValue=""></Attribute>
+   
+    <Attribute Name="UPDATEUSERID" Description="修改人ID" DataType="NVARCHAR2 " DataValue=""></Attribute>
+   
+   </Object>
+</System>

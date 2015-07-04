@@ -284,7 +284,7 @@ namespace SMT.Workflow.Platform.Services
 
         private string GetObjectFolderName(string sysName)
         {
-            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/BOSystemList.xml");
+            string path = System.Web.Hosting.HostingEnvironment.MapPath("~/BusinessObjects/BOSystemList.xml");
             XDocument xdoc = XDocument.Load(path);
 
             var item = (from c in xdoc.Descendants("System")

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<System>
+  <Name>EM</Name>
+  <System>
+    <Function Description="T_EDM_APPLYFORMASTERFlow" Address="EngineService.svc"   FuncName="CallApplicationService"  Binding="customBinding" SplitChar="Г">
+      <ParaStr>
+        <Para TableName="T_HR_COMPANY" Name="COMPANYID" Description="公司ID" Value=""></Para>
+      </ParaStr>
+    </Function>
+  </System>
+  <MsgOpen>
+    <AssemblyName>SMT.EM.UI</AssemblyName>
+    <PublicClass>SMT.EM.UI.Class.Utility</PublicClass>
+    <ProcessName>CreateFormFromEngine</ProcessName>
+    <PageParameter>SMT.EM.UI.UserControls.ExamineeManage.ScoreReportAuditExamPaper</PageParameter>
+    <ApplicationOrder>{SCOREREPORTID}</ApplicationOrder>
+    <FormTypes>Edit</FormTypes>
+  </MsgOpen>
+  <Object Name="T_EM_SCOREREPORT" Description="T_EM_SCOREREPORT">
+    
+   <Attribute Name="SCOREREPORTID" Description="表单ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="EXAMID" Description="考试ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="NAME" Description="试卷名称" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="EXAMINATIONPAPERTYPENAME" Description="试卷类型" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="GRADENAME" Description="试卷等级名称" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="SCORE" Description="考生得分" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="TITLENUMBER" Description="题目数量" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="AUDITSTATUS" Description="审核状态" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="AUDITUSER" Description="审核人员" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="AUDITDATE" Description="试卷审核时间" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="REMARK" Description="备注" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="BEGINDATE" Description="开始答题时间" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="ENDDATE" Description="交卷时间" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="STATUS" Description="试卷状态:0保存，1交卷" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="SEESTATUS" Description="查看状态：0未查看，1已查看" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="NOTESTATUES" Description="通知状态:0不需要通知，1需要将结果通知考生和（待办任务）" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="USERID" Description="孝生ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="USERNAME" Description="考生姓名" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="OWNERID" Description="所属用户ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="OWNERNAME" Description="所属用户名称" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="OWNERCOMPANYID" Description="所属公司" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="OWNERDEPARTMENTID" Description="所属部门" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="OWNERPOSTID" Description="所属岗位" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="CREATEUSERID" Description="创建人ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="CREATEUSERNAME" Description="创建人名" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="CREATECOMPANYID" Description="创建公司ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="CREATEDEPARTMENTID" Description="创建部门ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="CREATEPOSTID" Description="创建岗位ID" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="CREATEDATE" Description="创建日期" DataType="NVARCHAR2" DataValue=""></Attribute>   
+    <Attribute Name="EXAMNAME" Description="考试名称" DataType="NVARCHAR2" DataValue=""></Attribute> 
+  </Object>
+</System>
