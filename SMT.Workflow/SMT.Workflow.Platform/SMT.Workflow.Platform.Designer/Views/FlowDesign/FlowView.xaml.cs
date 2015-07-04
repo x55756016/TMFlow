@@ -278,6 +278,19 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             btnDeleteFlow.Visibility = Visibility.Collapsed;
             btnClear.Visibility = Visibility.Collapsed;
             btnSave.Visibility = Visibility.Collapsed;
+
+            btnCLoseFlow.Visibility = Visibility.Visible;
+        }
+        private void ShowButtons()
+        {
+
+            btnAddFlow.Visibility = Visibility.Visible;
+            btnEditFlow.Visibility = Visibility.Visible;
+            btnDeleteFlow.Visibility = Visibility.Visible;
+
+
+            btnClear.Visibility = Visibility.Collapsed;
+            btnSave.Visibility = Visibility.Collapsed;
         }
         #region 加载流程定义
         /// <summary>
@@ -409,6 +422,13 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             }
 
             modelClient.GetSystemCodeModelCodeListAsync();//绑定树
+        }
+
+        private void btnCLoseFlow_Click(object sender, RoutedEventArgs e)
+        {
+            ucDesigner.Visibility = Visibility.Collapsed;
+            ucFlowlist.Visibility = Visibility.Visible;
+            ShowButtons();
         }
 
      

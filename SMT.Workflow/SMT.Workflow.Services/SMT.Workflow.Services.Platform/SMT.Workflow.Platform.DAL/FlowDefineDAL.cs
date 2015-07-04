@@ -57,13 +57,13 @@ namespace SMT.Workflow.Platform.DAL
                 {
                     countSql += strFilter + " ";
                 }
-                string sql = @"SELECT * FROM (SELECT A.*, ROWNUM Page FROM (select a.createdate, a.flowcode,a.description,b.companyid,
+                string sql = @"SELECT A.* FROM (select a.createdate, a.flowcode,a.description,b.companyid,
                                     b.departmentid,b.companyname,b.departmentname, 
                                     c.systemcode,c.modelcode,c.description modelname ,c.systemname from flow_flowdefine_t a
                                     inner join flow_modelflowrelation_t b on a.flowcode=b.flowcode
                                     inner join flow_modeldefine_t c on c.modelcode=b.modelcode
-                                    WHERE (1=1)  " + strFilter + "  order by   " + strOrderBy + " ) A WHERE (1=1) AND ROWNUM<= " + pageIndex * pageSize + " ";             
-                sql += ") WHERE  Page >= " + number + " ";
+                                    WHERE (1=1)  " + strFilter + "  order by   " + strOrderBy + " ) A WHERE (1=1)  LIMIT " + (pageIndex - 1) * pageSize + ", " + pageIndex * pageSize;              
+                //sql += ") WHERE  Page >= " + number + " ";
                 DataTable dt = dao.GetDataTable(sql);
                 Tracer.Debug("查找到的流程SQL"+sql);
                 pageCount = Convert.ToInt32(dao.ExecuteScalar(countSql));       

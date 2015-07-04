@@ -40,6 +40,8 @@
                     <control:ImgButton Content="删除" x:Name="btnDeleteFlow" Icon="/SMT.Workflow.Platform.Designer;component/Images/Toolbar/16_delete.png" Foreground="White" Click="btnDeleteFlow_Click" />
                     <control:ImgButton Content="清除" x:Name="btnClear" Visibility="Collapsed" Icon="/SMT.Workflow.Platform.Designer;component/Images/Toolbar/18_clear.png" Foreground="White" Click="btnClear_Click" />
                     <control:ImgButton Content="保存" x:Name="btnSave" Visibility="Collapsed" Icon="/SMT.Workflow.Platform.Designer;component/Images/Toolbar/16_save.png" Foreground="White" Click="btnSave_Click" />
+
+                    <control:ImgButton Content="关闭" x:Name="btnCLoseFlow"  Visibility="Collapsed" Icon="/SMT.Workflow.Platform.Designer;component/Images/Toolbar/16_delete.png" Foreground="White" Click="btnCLoseFlow_Click" />
                 </StackPanel>
 
                 <!--Designer Container-->
