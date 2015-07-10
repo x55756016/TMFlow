@@ -2,22 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Workflow.Runtime;
-using System.Workflow.Activities;
-using System.Workflow.ComponentModel.Compiler;
 using System.Configuration;
 using SMT.WFLib;
-using WFTools.Services.Persistence.Ado;
-using WFTools.Services.Tracking.Ado;
-using WFTools.Services.Batching.Ado;
 using System.Xml;
 using System.IO;
-using System.Workflow.Activities.Rules;
-using System.Workflow.ComponentModel.Serialization;
 using SMT.FlowWFService.PublicClass;
-
-using System.Workflow.Runtime.Hosting;
 using SMT.Foundation.Log;
+using SMT.FlowWFService.XmlFlowManager;
 
 namespace SMT.FlowWFService.NewFlow
 {
@@ -36,28 +27,28 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
+               // WorkflowRuntime WfRuntime = new WorkflowRuntime();
                 WorkflowRuntime WfRuntime = new WorkflowRuntime();
 
+                //if (IsPer)
+                //{
+                //    ConnectionStringSettings defaultConnectionString = ConfigurationManager.ConnectionStrings["//OracleConnection"];
+                //    WfRuntime.AddService(new AdoPersistenceService(defaultConnectionString, true, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)));
+                //    WfRuntime.AddService(new AdoTrackingService(defaultConnectionString));
+                //    WfRuntime.AddService(new AdoWorkBatchService());
+                //}
 
-                if (IsPer)
-                {
-                    ConnectionStringSettings defaultConnectionString = ConfigurationManager.ConnectionStrings["//OracleConnection"];
-                    WfRuntime.AddService(new AdoPersistenceService(defaultConnectionString, true, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)));
-                    WfRuntime.AddService(new AdoTrackingService(defaultConnectionString));
-                    WfRuntime.AddService(new AdoWorkBatchService());
-                }
+                //FlowEvent ExternalEvent = new FlowEvent();
+                //ExternalDataExchangeService objService = new ExternalDataExchangeService();
+                //WfRuntime.AddService(objService);
+                //objService.AddService(ExternalEvent);
 
-                FlowEvent ExternalEvent = new FlowEvent();
-                ExternalDataExchangeService objService = new ExternalDataExchangeService();
-                WfRuntime.AddService(objService);
-                objService.AddService(ExternalEvent);
+                //ManualWorkflowSchedulerService scheduleService = new ManualWorkflowSchedulerService();
+                //WfRuntime.AddService(scheduleService);
 
-                ManualWorkflowSchedulerService scheduleService = new ManualWorkflowSchedulerService();
-                WfRuntime.AddService(scheduleService);
-
-                TypeProvider typeProvider = new TypeProvider(null);
-                WfRuntime.AddService(typeProvider);
-                WfRuntime.StartRuntime();
+                //TypeProvider typeProvider = new TypeProvider(null);
+                //WfRuntime.AddService(typeProvider);
+                //WfRuntime.StartRuntime();
                 return WfRuntime;
             }
             catch (Exception ex)
@@ -73,17 +64,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="WfRuntime"></param>
         public static void ColseWorkFlowRuntime(WorkflowRuntime WfRuntime)
         {
-            //try
-            //{
-            //    if (WfRuntime != null && WfRuntime.IsStarted)
-            //    {
-            //        WfRuntime.Dispose();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Tracer.Debug("ColseWorkFlowRuntime异常信息 ：" + ex.ToString());
-            //}
+            
         }
 
         /// <summary>
@@ -107,31 +88,16 @@ namespace SMT.FlowWFService.NewFlow
 
                 //  WorkflowRuntime workflowRuntime = SMTWorkFlowManage.StarWorkFlowRuntime(true);
                 if (Rules == null || Rules=="")
-                    instance = WfRuntime.CreateWorkflow(readerxoml);
+                    instance =new WorkflowInstance();
                 else
-                    instance = WfRuntime.CreateWorkflow(readerxoml, readerule, null);
+                    instance = new WorkflowInstance();
 
-                instance.Start();
+                //instance.Start();
                 return instance;
-            }
-
-            catch (WorkflowValidationFailedException exp)
+            }catch(Exception ex)
             {
-
-                StringBuilder errors = new StringBuilder();
-
-                foreach (ValidationError error in exp.Errors)
-                {
-
-                    errors.AppendLine(error.ToString());
-
-                }
-
-                throw new Exception(errors.ToString());
-
+                throw ex;
             }
-
-
 
         }
         /// <summary>
@@ -144,11 +110,8 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
-                WorkflowInstance instance;
-                string Xml = AppDomain.CurrentDomain.BaseDirectory + "\\" + xmlFileName;
-                XmlReader reader = XmlReader.Create(Xml);
-                instance = WfRuntime.CreateWorkflow(reader);
-                instance.Start();
+                WorkflowInstance instance = new WorkflowInstance();
+
                 return instance;
             }
             catch (Exception ex)
@@ -168,17 +131,7 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
-                if (!WfRuntime.IsStarted)
-                {
-                    WfRuntime.StartRuntime();
-                }
-                WorkflowInstance instance = WfRuntime.GetWorkflow(new Guid(INSTANCEID));
-
-                //WfRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
-                //{
-                //    instance = null;
-
-                //};
+                WorkflowInstance instance = new WorkflowInstance();
                 return instance;
             }
             catch (Exception ex)
@@ -198,42 +151,9 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
-                if (!WfRuntimeClone.IsStarted)
-                {
-                    WfRuntimeClone.StartRuntime();
-                }
-                StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(WfRuntimeClone, instanceClone.InstanceId);
 
-                System.Workflow.Activities.StateMachineWorkflowActivity smworkflow = new StateMachineWorkflowActivity();
-                smworkflow = workflowinstance.StateMachineWorkflow;
-                RuleDefinitions ruleDefinitions = smworkflow.GetValue(RuleDefinitions.RuleDefinitionsProperty) as RuleDefinitions;
-                WorkflowMarkupSerializer markupSerializer = new WorkflowMarkupSerializer();
-
-                StringBuilder xoml = new StringBuilder();
-                StringBuilder rule = new StringBuilder();
-                XmlWriter xmlWriter = XmlWriter.Create(xoml);
-                XmlWriter ruleWriter = XmlWriter.Create(rule);
-                markupSerializer.Serialize(xmlWriter, smworkflow);
-
-                if (ruleDefinitions != null)
-                    markupSerializer.Serialize(ruleWriter, ruleDefinitions);
-
-                xmlWriter.Close();
-                ruleWriter.Close();
-
-                StringReader readxoml = new StringReader(xoml.ToString());
-                XmlReader readerxoml = XmlReader.Create(readxoml);
-                WorkflowInstance instance;
-                if (ruleDefinitions == null)
-                    instance = WfRuntime.CreateWorkflow(readerxoml);
-                else
-                {
-                    StringReader readrule = new StringReader(rule.ToString());
-                    XmlReader readerrule = XmlReader.Create(readrule);
-                    instance = WfRuntime.CreateWorkflow(readerxoml, readerrule, null);
-                }
-
-                instance.Start();
+                WorkflowInstance instance = new WorkflowInstance();
+             
                 return instance;
             }
             catch (Exception ex)
@@ -255,7 +175,7 @@ namespace SMT.FlowWFService.NewFlow
             try
             {
                 string StateName = CurrentStateName;
-                Tracer.Debug("循环获取当前实例的状态代码  （开始）instance＝" + (instance != null ? instance.InstanceId.ToString() : "null") + " StateName＝" + StateName);
+                //Tracer.Debug("循环获取当前实例的状态代码  （开始）instance＝" + (instance != null ? instance.InstanceId.ToString() : "null") + " StateName＝" + StateName);
                 while (StateName == CurrentStateName)
                 {
                     if (instance == null)
@@ -263,10 +183,9 @@ namespace SMT.FlowWFService.NewFlow
                         StateName = "EndFlow";
                         return StateName;
                     }
-                    StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(WfRuntime, instance.InstanceId);
-                    StateName = workflowinstance.CurrentStateName;
+                    //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(WfRuntime, instance.InstanceId);
+                    StateName ="CurrentStateName";
                 }
-                Tracer.Debug("循环获取当前实例的状态代码  （结束）instance＝" + (instance != null ? instance.InstanceId.ToString() : "null") + " StateName＝" + StateName);
                 return StateName;
             }
             catch (Exception ex)
@@ -285,52 +204,18 @@ namespace SMT.FlowWFService.NewFlow
         /// <returns></returns>
         public static string GetNextStateByEvent(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName, string xml)
         {
+            string NextNode = string.Empty;
             try
             {
-                if (!WfRuntime.IsStarted)
-                {
-                    WfRuntime.StartRuntime();
-                }
-                WfRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
-                {
-                    instance = null;
-
-                };
-                StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(WfRuntime, instance.InstanceId);
-
-                ManualWorkflowSchedulerService scheduleService = WfRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
-                scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                workflowinstance.SetState(CurrentStateName);
-
-                FlowDataType.FlowData FlowData = new FlowDataType.FlowData();
-                FlowData.xml = xml;
-
-                scheduleService.RunWorkflow(instance.InstanceId);
-               WfRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData);//激发流程引擎流转到下一状态
-               scheduleService.RunWorkflow(instance.InstanceId);
-               //while (true)
-                //{
-                //    string stateName = workflowinstance.CurrentStateName;
-
-                //    if (stateName != null && stateName.ToUpper().IndexOf("START") == -1)
-                //    {
-                //        break;
-                //    }
-                //}
-                //System.Threading.Thread.Sleep(1000);
-               if (instance == null)
-               {
-                   return "EndFlow";
-               }
-               StateMachineWorkflowInstance workflowinstance1 = new StateMachineWorkflowInstance(WfRuntime, instance.InstanceId);
-               return  workflowinstance1.CurrentStateName;
-               //return GetNextState(WfRuntime, instance, CurrentStateName);
+                string FlowDefineXml=string.Empty;
+                NextNode= FlowManager.GetNextNode(FlowDefineXml, CurrentStateName, xml);
             }
             catch (Exception ex)
             {
                 Tracer.Debug("GetNextStateByEvent异常信息 ：" + ex.ToString());
                 throw new Exception(ex.Message);
             }
+            return NextNode;
         }
     }
 }

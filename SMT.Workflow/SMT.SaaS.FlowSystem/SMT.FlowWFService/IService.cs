@@ -241,30 +241,6 @@ namespace SMT.FlowWFService
             set;
         }
 
-        ///// <summary>
-        ///// 代理
-        ///// </summary>
-        //[DataMember]
-        //public Dictionary<Role_UserType, List<UserInfo>> DictAgentUserInfo
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //[DataMember]
-        //public bool IsCountersign
-        //{
-        //    get;
-        //    set;
-        //}
-
-        //[DataMember]
-        //public string CountersignType
-        //{
-        //    get;
-        //    set;
-        //}
-
         #endregion
 
         #region 提交人的身份信息

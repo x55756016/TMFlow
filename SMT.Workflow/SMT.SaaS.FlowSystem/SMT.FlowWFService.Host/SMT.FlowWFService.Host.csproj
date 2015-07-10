@@ -78,9 +78,6 @@
     <Content Include="clientaccesspolicy.xml" />
     <Content Include="crossdomain.xml" />
     <Content Include="FlowWFService.svc" />
-    <Content Include="FreeFlow.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="SMT.FlowWFService.Service.svc" />
     <Content Include="TestEngineUpdateCheckState.aspx" />
     <Content Include="Web.config">

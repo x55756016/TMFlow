@@ -341,7 +341,7 @@ namespace SMT.Workflow.Engine.Services.BLL
              return dal.GetPersonalRecordList(Config.pageSize, filter, pageIndex, strOrderBy, ref  pageCount);
         }
         /// <summary>
-        /// 返回我的单据实体列表[longkc]
+        /// 返回我的单据实体列表[提莫科技]
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="strOrderBy"></param>

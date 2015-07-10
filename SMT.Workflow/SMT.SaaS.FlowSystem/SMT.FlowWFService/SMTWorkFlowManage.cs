@@ -7,9 +7,9 @@ using System.Workflow.Activities;
 using System.Workflow.ComponentModel.Compiler;
 using System.Configuration;
 using SMT.WFLib;
-using WFTools.Services.Persistence.Ado;
-using WFTools.Services.Tracking.Ado;
-using WFTools.Services.Batching.Ado;
+
+
+
 using System.Xml;
 using System.IO;
 using System.Workflow.Activities.Rules;
@@ -288,7 +288,7 @@ namespace SMT.FlowWFService
             {
                 Tracer.Debug("CloneWorkflowInstance异常信息 ：" + ex.ToString());
                 throw new Exception(ex.Message);
-            }
+            }   
 
         }
        /// <summary>

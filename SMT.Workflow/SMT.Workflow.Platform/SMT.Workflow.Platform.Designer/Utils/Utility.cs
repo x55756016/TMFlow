@@ -505,7 +505,7 @@ namespace SMT.Workflow.Platform.Designer.Utils
            try
            {
                //string path = "silverlightcache\\t_hr_company.txt";
-               //实际位置：C:\Users\longkc\AppData\LocalLow\Microsoft\Silverlight\is\5qkvd2vt.kdf\ngv1qcai.xbm\1\s\4nhtt330ofuzh0pwkcqvwnecnu2bejhgref3w4wo5cz02n5f0haaaaga\f\silverlightcache\t_hr_company.txt
+               //实际位置：C:\Users\提莫科技\AppData\LocalLow\Microsoft\Silverlight\is\5qkvd2vt.kdf\ngv1qcai.xbm\1\s\4nhtt330ofuzh0pwkcqvwnecnu2bejhgref3w4wo5cz02n5f0haaaaga\f\silverlightcache\t_hr_company.txt
              //  var company = SLCache.GetCache<ObservableCollection<SMT.Saas.Tools.OrganizationWS.T_HR_COMPANY>>(path);
                string path = "silverlightcache\\"+Utility.CurrentUser.EMPLOYEEID+".txt";
                var company = SLCache.GetCache<ObservableCollection<SMT.Saas.Tools.OrganizationWS.V_COMPANY>>(path, 2);

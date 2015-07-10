@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©  SmtOnline  2011    
 	 * 文件名：FlowBLL.cs  
-	 * 创建者：LONGKC   
+	 * 创建者：提莫科技   
 	 * 创建日期：2011/12/15 08:51:55   
 	 * CLR版本： 4.0.30319.1  
 	 * 命名空间：SMT.FlowWFService
@@ -12,11 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Workflow.Runtime;
-
 using SMT.FLOWDAL;
 using System.Collections.ObjectModel;
-using System.Workflow.Activities;
 using SMT.WFLib;
 using System.Xml;
 using System.IO;
@@ -35,11 +32,11 @@ using SMT.SaaS.BLLCommonServices.OrganizationWS;
 using SMT.SaaS.BLLCommonServices.PersonnelWS;
 using SMT.Workflow.Common.Model.FlowEngine;
 using System.Collections;
-using System.Workflow.Runtime.Hosting;
-using SMT.Workflow.Common.Model;
 using SMT.Foundation.Core;
 using System.Data;
 using SMT.Workflow.SMTCache;
+using SMT.Workflow.Common.Model;
+using SMT.FlowWFService.XmlFlowManager;
 
 namespace SMT.FlowWFService.NewFlow
 {
@@ -1330,8 +1327,8 @@ namespace SMT.FlowWFService.NewFlow
 
             while (StateName == CurrentStateName)
             {
-                StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
-                StateName = workflowinstance.CurrentStateName;
+                //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
+                //StateName = workflowinstance.CurrentStateName;
 
                 StateName = StateName == null ? "EndFlow" : StateName;
             }
@@ -2741,8 +2738,6 @@ namespace SMT.FlowWFService.NewFlow
                         }
 
                     }
-
-
                 }
                 CheckFlowResult.Flag = 1;
                 return CheckFlowResult;
@@ -2762,9 +2757,8 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="ApprovalData"></param>
         /// <param name="APPDataResult"></param>
         /// <returns></returns>
-        public CheckResult CheckFlow2( SubmitData ApprovalData, DataResult APPDataResult)
+        public CheckResult CheckFlowIsApproved( SubmitData ApprovalData, DataResult APPDataResult)
         {
-
             CheckResult CheckFlowResult = new CheckResult();
             try
             {
@@ -2860,7 +2854,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="ApprovalData"></param>
         /// <param name="APPDataResult"></param>
         /// <returns></returns>    
-        public DataResult AddFlow2( SubmitData submitData, DataResult dataResult, ref FlowUser user)
+        public DataResult AddFlow( SubmitData submitData, DataResult dataResult, ref FlowUser user)
         {
             // WorkflowRuntime workflowRuntime = null;
             WorkflowInstance instance = null;
@@ -2899,11 +2893,11 @@ namespace SMT.FlowWFService.NewFlow
                 workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
                 instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.XOML, flowDefine.RULES);
                 Tracer.Debug("新增 FormID=" + user.FormID + " 流程名称＝" + flowDefine.DESCRIPTION + "("+flowDefine.FLOWCODE+") 提交人＝" + user.UserName + " 公司名称＝" + user.CompayName + " 部门名称＝" + user.DepartmentName + " 岗位名称＝" + user.PostName + "  WorkflowInstance ID=" + instance.InstanceId.ToString());
-                workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
-                {
-                    instance = null;
+                //workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
+                //{
+                //    instance = null;
 
-                };
+                //};
                 #region master赋值
                 FLOW_FLOWRECORDMASTER_T master = new FLOW_FLOWRECORDMASTER_T();
                 master.INSTANCEID = instance.InstanceId.ToString();
@@ -3071,20 +3065,20 @@ namespace SMT.FlowWFService.NewFlow
                 #region 激发流程引擎执行到一下流程
                 string ss = "";
                 int n = 0;
-                StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
-                ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
+                //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
+                //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
                if (dataResult.AppState == null || dataResult.AppState == "")
                 {
                     user.TrackingMessage += " workflowRuntime.GetService<FlowEvent>()\r\n";
-                    scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                    workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
-                    scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                    //scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                    //workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
+                    //scheduleService.RunWorkflow(workflowinstance.InstanceId);
                     user.TrackingMessage += " workflowRuntime.GetService<FlowEvent>()完成\r\n";
                 }
                 else
                 {
-                    scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                    workflowinstance.SetState(dataResult.AppState); //流程跳转到指定节点
+                    //scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                    //workflowinstance.SetState(dataResult.AppState); //流程跳转到指定节点
                 }
 
                 #endregion
@@ -3256,11 +3250,11 @@ namespace SMT.FlowWFService.NewFlow
                         FLOW_FLOWDEFINE_T flowDefine = flowRelation.FLOW_FLOWDEFINE_T;
                         instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime , flowDefine.XOML, flowDefine.RULES);
                         user.TrackingMessage += "FormID=" + submitData.FormID + ";ApprovalFlow2(catch)完成重新创建工作流实例ID=" + instance.InstanceId + "\r\n";
-                        StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
-                        ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
-                        scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                        //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
+                        //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
+                        //scheduleService.RunWorkflow(workflowinstance.InstanceId);
 
-                        workflowinstance.SetState(entity.STATECODE);
+                        //workflowinstance.SetState(entity.STATECODE);
 
                         //System.Threading.Thread.Sleep(1000); //commented by alan 2012/9/7
                         instance = SMTWorkFlowManage.GetWorkflowInstance(workflowRuntime,instance.InstanceId.ToString());
@@ -3470,11 +3464,11 @@ namespace SMT.FlowWFService.NewFlow
 
                         FlowDataType.FlowData FlowData = new FlowDataType.FlowData();
                         FlowData.xml = submitData.XML;
-                        workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
-                        {
-                            instance = null;
+                        //workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
+                        //{
+                        //    instance = null;
 
-                        };
+                        //};
                         user.TrackingMessage += "处理kpi 开始 FORMID=" + user.FormID + "\r\n";
 
                         #region 处理kpi时间
@@ -3541,33 +3535,33 @@ namespace SMT.FlowWFService.NewFlow
 
                         user.TrackingMessage += "激发流程引擎执行到一下流程 开始 FORMID=" + user.FormID + "\r\n";
                         #region 激发流程引擎执行到一下流程
-                        StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
-                        ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
-                        if (dataResult.AppState == null || dataResult.AppState == "")
-                        {
-                            scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                            workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
-                            scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                        //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
+                        //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
+                        //if (dataResult.AppState == null || dataResult.AppState == "")
+                        //{
+                        //    scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                        //    workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
+                        //    scheduleService.RunWorkflow(workflowinstance.InstanceId);
 
-                        }
-                        else
-                        {
-                            string ss = "";
-                            int n = 0;
-                            scheduleService.RunWorkflow(workflowinstance.InstanceId);
+                        //}
+                        //else
+                        //{
+                        //    string ss = "";
+                        //    int n = 0;
+                        //    scheduleService.RunWorkflow(workflowinstance.InstanceId);
 
-                            workflowinstance.SetState(dataResult.AppState); //流程跳转到指定节点
-                            //while (true)
-                            //{
-                            //    ss += (n++).ToString()+"|" + workflowinstance.CurrentStateName;
-                            //    string stateName = workflowinstance.CurrentStateName;
+                        //    workflowinstance.SetState(dataResult.AppState); //流程跳转到指定节点
+                        //    //while (true)
+                        //    //{
+                        //    //    ss += (n++).ToString()+"|" + workflowinstance.CurrentStateName;
+                        //    //    string stateName = workflowinstance.CurrentStateName;
 
-                            //    if (stateName != null && stateName.ToUpper().IndexOf("START") == -1)
-                            //    {
-                            //        break;
-                            //    }
-                            //}
-                        }
+                        //    //    if (stateName != null && stateName.ToUpper().IndexOf("START") == -1)
+                        //    //    {
+                        //    //        break;
+                        //    //    }
+                        //    //}
+                        //}
                         #endregion
                         user.TrackingMessage += "激发流程引擎执行到一下流程 完成 FORMID=" + user.FormID + "\r\n";
                         //dataResult.CanSendMessage = true;
@@ -3772,12 +3766,12 @@ namespace SMT.FlowWFService.NewFlow
 
 
 
-                    workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
-                    {//完成工作流实例
+                    //workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
+                    //{//完成工作流实例
 
-                        instance = null;
+                    //    instance = null;
 
-                    };
+                    //};
 
                     ApprovalData.NextStateCode = ApprovalData.NextStateCode == "EndFlow" ? "EndFlow" : "Approval";
                     APPDataResult.RunTime += "---DoFlowStart:" + DateTime.Now.ToString();
@@ -3787,11 +3781,11 @@ namespace SMT.FlowWFService.NewFlow
                     APPDataResult.RunTime += "---DoFlowEnd:" + DateTime.Now.ToString();
                     if (ApprovalData.NextStateCode == "EndFlow")
                     {
-                        ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
-                        scheduleService.RunWorkflow(instance.InstanceId);
+                        //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
+                        //scheduleService.RunWorkflow(instance.InstanceId);
 
-                        workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
-                        scheduleService.RunWorkflow(instance.InstanceId);
+                        //workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
+                        //scheduleService.RunWorkflow(instance.InstanceId);
                         //System.Threading.Thread.Sleep(1000);
                     }
 

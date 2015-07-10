@@ -4,26 +4,19 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
-using System.Workflow.Runtime;
-using System.Workflow.Runtime.Hosting;
-using System.Workflow.Activities;
-using System.Workflow.ComponentModel.Compiler;
 using System.Threading;
 using SMT.WFLib;
 using System.Collections.ObjectModel;
 
-using WFTools.Services;
-using WFTools.Services.Persistence.Ado;
+
+
 using System.Configuration;
-using WFTools.Services.Tracking.Ado;
-using WFTools.Services.Batching.Ado;
+
+
 using System.Xml;
 using System.IO;
 using System.Transactions;
 using SMT.Foundation.Log;
-using System.Workflow.ComponentModel;
-using System.Workflow.ComponentModel.Serialization;
-using System.Workflow.Activities.Rules;
 using System.Xml.Linq;
 using System.Diagnostics;
 
@@ -31,6 +24,8 @@ using SMT.FLOWDAL.ADO;
 using System.Data.OracleClient;
 using SMT.Workflow.Common.Model.FlowEngine;
 using SMT.Workflow.Common.Model;
+using SMT.FlowWFService.NewFlow;
+using SMT.FlowWFService.XmlFlowManager;
 
 
 
@@ -56,9 +51,6 @@ namespace SMT.FlowWFService
                 return _strIsFlowEngine;
             }
         }
-
-
-
 
         #region 咨询
         public void AddConsultation(FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
@@ -149,10 +141,6 @@ namespace SMT.FlowWFService
         #endregion
 
         #region 流程处理
-
-
-
-
         #region 流程与任务审批
 
 
@@ -162,26 +150,6 @@ namespace SMT.FlowWFService
             return s2.SubimtFlow(submitData);
         }
         #endregion
-
-
-        /// <summary>
-        /// 检测用户是否有未处理的单据
-        /// </summary>
-        /// <param name="UserID"></param>
-        /// <returns></returns>
-        //public bool IsExistFlowDataByUserID(string UserID)
-        //{
-        //    try
-        //    {
-        //        FlowBLL Flow = new FlowBLL();
-        //        return Flow.IsExistFlowDataByUserID(UserID);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Tracer.Debug("IsExistFlowDataByUserID:" + UserID + " Ex:" + ex.Message);
-        //        throw ex;
-        //    }
-        //}
 
         /// <summary>
         /// 获取用户有哪些未处理的单据
@@ -202,8 +170,6 @@ namespace SMT.FlowWFService
             }
         }
         #endregion
-
-
 
         #region 查询下一节点用户
 
@@ -375,7 +341,6 @@ namespace SMT.FlowWFService
 
         #endregion
 
-
         private bool GetUser(string OptFlag, string Xoml, string Rules, string xml, ref DataResult DataResult)
         {          
             #region 旧代码
@@ -384,8 +349,6 @@ namespace SMT.FlowWFService
                 WorkflowRuntime WfRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(false);
                 WorkflowInstance Instance = SMTWorkFlowManage.CreateWorkflowInstance(WfRuntime, Xoml, Rules);
                 string strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, "StartFlow", xml);
-
-
             }
             catch (Exception ex)
             {
@@ -510,15 +473,6 @@ namespace SMT.FlowWFService
             return s2.GetWaitingApprovalForm(ModelCode, EditUserID);
         }
         #endregion
-        /// <summary>
-        /// 通过机构ID和模块代码查询对应流程代码
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        //public List<FLOW_MODELFLOWRELATION_T> GetFlowByModel(FLOW_MODELFLOWRELATION_T entity)
-        //{
-        //    return FlowBLL.GetFlowByModel(entity);
-        //}
 
         public string GetFlowDefine(SubmitData ApprovalData)
         {
@@ -548,7 +502,7 @@ namespace SMT.FlowWFService
             //OracleConnection con = ADOHelper.GetOracleConnection();
             try
             {
-                FlowBLL2 Flow = new FlowBLL2();
+                FlowBLL Flow = new FlowBLL();
                 return Flow.IsExistFlowDataByUserID( UserID, PostID);
             }
             catch (Exception ex)

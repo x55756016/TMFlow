@@ -1,7 +1,7 @@
 ﻿/*---------------------------------------------------------------------  
 	 * 版　权：Copyright ©  SmtOnline  2012     
 	 * 文件名：FLOW_INSTANCE_STATE.cs  
-	 * 创建者：LONGKC   
+	 * 创建者：提莫科技   
 	 * 创建日期：2012/9/10 8:49:12   
 	 * NET版本： 4.0.30319.225 
 	 * 命名空间：SMT.Workflow.Monitoring.Model 

@@ -16,15 +16,11 @@ using System.Data.Entity;
 
 using System.ServiceModel;
 using System.Configuration;
-using WFTools.Services.Persistence.Ado;
-using WFTools.Services.Tracking.Ado;
-using WFTools.Services.Batching.Ado;
 using System.Data.Objects.DataClasses;
 using System.Reflection;
 using System.ServiceModel.Description;
 using SMT.FLOWDAL.ADO;
 using System.Data.OracleClient;
-using SMT.Workflow.Common.DataAccess;
 using System.Xml.Linq;
 using System.Runtime.Serialization;
 
@@ -97,52 +93,52 @@ namespace SMTWFTest
         /// <summary>
         /// 增加一条数据(以参数传值)
         /// </summary>
-        public static int Add(//OracleConnection conn,SMT_TEST model)
-        {
+        //public static int Add(OracleConnection conn,SMT_TEST model)
+        //{
 
 
-            string insSql = "INSERT INTO SMT_TEST (TESTID,USERID,PASSWORD,AGE,BIRTHDAY,REMARK) VALUES (:TESTID,:USERID,:PASSWORD,:AGE,:BIRTHDAY,:REMARK)";
-            OracleParameter[] pageparm =
-                {               
-                    new OracleParameter(":TESTID",OracleType.NVarChar), 
-                    new OracleParameter(":USERID",OracleType.NVarChar), 
-                    new OracleParameter(":PASSWORD",OracleType.NVarChar), 
-                    new OracleParameter(":AGE",OracleType.Int32), 
-                    new OracleParameter(":BIRTHDAY",OracleType.DateTime), 
-                    new OracleParameter(":REMARK",OracleType.Clob) 
+        //    string insSql = "INSERT INTO SMT_TEST (TESTID,USERID,PASSWORD,AGE,BIRTHDAY,REMARK) VALUES (:TESTID,:USERID,:PASSWORD,:AGE,:BIRTHDAY,:REMARK)";
+        //    OracleParameter[] pageparm =
+        //        {               
+        //            new OracleParameter(":TESTID",OracleType.NVarChar), 
+        //            new OracleParameter(":USERID",OracleType.NVarChar), 
+        //            new OracleParameter(":PASSWORD",OracleType.NVarChar), 
+        //            new OracleParameter(":AGE",OracleType.Int32), 
+        //            new OracleParameter(":BIRTHDAY",OracleType.DateTime), 
+        //            new OracleParameter(":REMARK",OracleType.Clob) 
 
-                };
-            pageparm[0].Value = model.TESTID;//主键ID
-            pageparm[1].Value = model.USERID;//用户名
-            pageparm[2].Value = model.PASSWORD;//密码
-            pageparm[3].Value = model.AGE;//年龄
-            pageparm[4].Value = model.BIRTHDAY;//生日
-            pageparm[5].Value = model.REMARK;//备注
+        //        };
+        //    pageparm[0].Value = model.TESTID;//主键ID
+        //    pageparm[1].Value = model.USERID;//用户名
+        //    pageparm[2].Value = model.PASSWORD;//密码
+        //    pageparm[3].Value = model.AGE;//年龄
+        //    pageparm[4].Value = model.BIRTHDAY;//生日
+        //    pageparm[5].Value = model.REMARK;//备注
 
-            return MsOracle.ExecuteSQLByTransaction(conn,insSql, pageparm);
-        }
-        private static void TestAdo()
-        {
+        //    return MsOracle.ExecuteSQLByTransaction(conn,insSql, pageparm);
+        //}
+        //private static void TestAdo()
+        //{
             
-          ////OracleConnection conn=  ADOHelper.GetOracleConnection();
+        // ///OracleConnection conn=  ADOHelper.GetOracleConnection();
        
-          SMT_TEST entity = new SMT_TEST();
-          entity.TESTID =Guid.NewGuid().ToString().Replace("-","");//主键ID
-          entity.USERID ="中国人";//用户名
-          entity.PASSWORD = "abc";//密码
-          entity.AGE =32;//年龄
-          entity.BIRTHDAY =DateTime.Now;//生日
-          entity.REMARK = "就是备注";//备注
-          MsOracle.BeginTransaction(conn);
+        //  SMT_TEST entity = new SMT_TEST();
+        //  entity.TESTID =Guid.NewGuid().ToString().Replace("-","");//主键ID
+        //  entity.USERID ="中国人";//用户名
+        //  entity.PASSWORD = "abc";//密码
+        //  entity.AGE =32;//年龄
+        //  entity.BIRTHDAY =DateTime.Now;//生日
+        //  entity.REMARK = "就是备注";//备注
+        //  MsOracle.BeginTransaction(conn);
 
 
-         // Add(conn,entity);       
-          Add(conn, entity);
-          entity.TESTID = Guid.NewGuid().ToString().Replace("-", "");//主键ID
-          entity.AGE = 23;//年龄
-          Add(conn, entity);  
-            MsOracle.CommitTransaction(conn);
-        }
+        // // Add(conn,entity);       
+        //  Add(conn, entity);
+        //  entity.TESTID = Guid.NewGuid().ToString().Replace("-", "");//主键ID
+        //  entity.AGE = 23;//年龄
+        //  Add(conn, entity);  
+        //    MsOracle.CommitTransaction(conn);
+        //}
         #endregion
         /// <summary>
         /// [待办任务列表]

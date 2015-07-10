@@ -101,7 +101,7 @@ namespace SMT.Workflow.Engine.Services
             return bll.GetPersonalRecordList(pageIndex, strOrderBy, checkstate, filterString, strCreateID, Isforward, BeginDate, EndDate, ref pageCount);
         }
         /// <summary>
-        /// 返回我的单据实体列表[LONGKC]
+        /// 返回我的单据实体列表[提莫科技]
         /// </summary>
         /// <param name="pageIndex"></param>
         /// <param name="strOrderBy"></param>

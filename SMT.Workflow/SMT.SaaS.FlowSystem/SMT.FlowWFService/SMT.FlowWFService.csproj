@@ -77,50 +77,25 @@
     <Reference Include="System.Web.Extensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Workflow.Activities">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Workflow.ComponentModel">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Workflow.Runtime">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.WorkflowServices">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="WFTools.Resources, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WFTools\Resources\bin\Debug\WFTools.Resources.dll</HintPath>
-    </Reference>
-    <Reference Include="WFTools.Resources.resources">
-      <HintPath>..\..\..\..\SMT.SaaS.Flow\SMT.SaaS.FlowSys\SMT.FlowWFService\en-GB\WFTools.Resources.resources.dll</HintPath>
-    </Reference>
-    <Reference Include="WFTools.Utilities, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WFTools\Utilities\bin\Debug\WFTools.Utilities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="EnginFlowBLL.cs" />
-    <Compile Include="FlowBLL2.cs" />
+    <Compile Include="FlowBLL.cs" />
+    <Compile Include="NewFlow\Service_SubimtFlow.cs" />
     <Compile Include="NewFlow\EnginFlowBLL.cs" />
     <Compile Include="NewFlow\FlowBLL.cs" />
     <Compile Include="NewFlow\FlowMonitor.cs" />
-    <Compile Include="NewFlow\IService.cs" />
     <Compile Include="NewFlow\Service.cs" />
-    <Compile Include="NewFlow\SMTWorkFlowManage.cs" />
-    <Compile Include="NewFlow\SubmitUser.cs" />
-    <Compile Include="PublicClass\FreeFlow.xoml.cs">
-      <DependentUpon>FreeFlow.xoml</DependentUpon>
-      <SubType>Component</SubType>
+    <Compile Include="NewFlow\SMTWorkFlowManage.cs">
+      <SubType>Code</SubType>
     </Compile>
+    <Compile Include="NewFlow\SubmitUser.cs" />
     <Compile Include="PublicClass\Utility.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -139,15 +114,25 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SMTType.cs" />
-    <Compile Include="FlowBLL.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service.cs" />
-    <Compile Include="SMTWorkFlowManage.cs" />
+    <Compile Include="XmlFlowManager\WF21_WorkFlowActivitysActivityCountersigns.cs" />
+    <Compile Include="XmlFlowManager\WF211_WorkFlowActivitysActivityCountersignsCountersign.cs" />
+    <Compile Include="XmlFlowManager\WF3_WorkFlowRulesRule.cs" />
+    <Compile Include="XmlFlowManager\WF31_WorkFlowRulesRuleConditions.cs" />
+    <Compile Include="XmlFlowManager\WF311_WorkFlowRulesRuleConditionsCondition.cs" />
+    <Compile Include="XmlFlowManager\WF2_WorkFlowActivitysActivity.cs" />
+    <Compile Include="XmlFlowManager\WF1_WorkFlow.cs" />
+    <Compile Include="XmlFlowManager\WFCondition.cs" />
+    <Compile Include="XmlFlowManager\WorkflowInstance.cs" />
+    <Compile Include="XmlFlowManager\WorkflowRuntime.cs" />
+    <Compile Include="XmlFlowManager\XmlFlowManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="Service References\FlowEngineService\EngineWcfGlobalFunction.wsdl" />
     <None Include="Service References\FlowEngineService\EngineWcfGlobalFunction.xsd">
       <SubType>Designer</SubType>
@@ -324,13 +309,8 @@
       <Project>{39945946-45ee-418b-8b20-8bfac13ab2f8}</Project>
       <Name>SMT.WFLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WFTools\Services\WFTools.Services.csproj">
-      <Project>{afdbd4bb-bc33-421e-8086-68bd23ac90a2}</Project>
-      <Name>WFTools.Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="clientaccesspolicy.xml" />
     <None Include="Service References\FlowEngineService\EngineWcfGlobalFunction1.disco" />
     <None Include="Service References\FlowEngineService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
@@ -339,13 +319,6 @@
     <None Include="Service References\FlowEngineService\configuration.svcinfo" />
     <None Include="Service References\FlowEngineService\configuration91.svcinfo" />
     <None Include="Service References\FlowEngineService\EngineWcfGlobalFunction.disco" />
-    <Content Include="en-GB\WFTools.Resources.resources.dll" />
-    <Content Include="FreeFlow.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="PublicClass\FreeFlow.xoml">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Service References\OAWS\AgentServices.disco" />
     <None Include="Service References\OAWS\configuration91.svcinfo" />
     <None Include="Service References\OAWS\configuration.svcinfo" />
@@ -368,11 +341,6 @@
     <WCFMetadataStorage Include="Service References\FlowEngineService\" />
     <WCFMetadataStorage Include="Service References\OAWS\" />
     <WCFMetadataStorage Include="Service References\PerformanceServiceWS\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="PublicClass\FreeFlow.layout">
-      <DependentUpon>FreeFlow.xoml</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
