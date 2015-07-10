@@ -17,6 +17,7 @@ namespace SMT.FlowWFService.NewFlow
     /// </summary>
     class SMTWorkFlowManage
     {
+        public static Dictionary<string, WorkflowInstance> WorkflowInstanceAll;
 
         /// <summary>
         /// 创建工作流运行时
@@ -27,28 +28,7 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
-               // WorkflowRuntime WfRuntime = new WorkflowRuntime();
                 WorkflowRuntime WfRuntime = new WorkflowRuntime();
-
-                //if (IsPer)
-                //{
-                //    ConnectionStringSettings defaultConnectionString = ConfigurationManager.ConnectionStrings["//OracleConnection"];
-                //    WfRuntime.AddService(new AdoPersistenceService(defaultConnectionString, true, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)));
-                //    WfRuntime.AddService(new AdoTrackingService(defaultConnectionString));
-                //    WfRuntime.AddService(new AdoWorkBatchService());
-                //}
-
-                //FlowEvent ExternalEvent = new FlowEvent();
-                //ExternalDataExchangeService objService = new ExternalDataExchangeService();
-                //WfRuntime.AddService(objService);
-                //objService.AddService(ExternalEvent);
-
-                //ManualWorkflowSchedulerService scheduleService = new ManualWorkflowSchedulerService();
-                //WfRuntime.AddService(scheduleService);
-
-                //TypeProvider typeProvider = new TypeProvider(null);
-                //WfRuntime.AddService(typeProvider);
-                //WfRuntime.StartRuntime();
                 return WfRuntime;
             }
             catch (Exception ex)
@@ -71,28 +51,17 @@ namespace SMT.FlowWFService.NewFlow
         /// 根据模型文件创建工作流实例
         /// </summary>
         /// <param name="WfRuntime">运行时</param>
-        /// <param name="Xoml">模型文件</param>
+        /// <param name="FlowDefineXml">模型文件</param>
         /// <param name="Rules">规则文件</param>
         /// <returns></returns>
-        public static WorkflowInstance CreateWorkflowInstance(WorkflowRuntime WfRuntime, string Xoml, string Rules)
+        public static WorkflowInstance CreateWorkflowInstance(WorkflowRuntime WfRuntime, string FlowDefineXml, string Rules)
         {
             try
             {
-                WorkflowInstance instance;
-                XmlReader readerxoml, readerule;
-                StringReader strXoml = new StringReader(Xoml);
-                StringReader strRules = new StringReader(Rules == null ? "" : Rules);
-
-                readerxoml = XmlReader.Create(strXoml);
-                readerule = XmlReader.Create(strRules);
-
-                //  WorkflowRuntime workflowRuntime = SMTWorkFlowManage.StarWorkFlowRuntime(true);
-                if (Rules == null || Rules=="")
-                    instance =new WorkflowInstance();
-                else
-                    instance = new WorkflowInstance();
-
-                //instance.Start();
+                WorkflowInstance instance=new WorkflowInstance();
+                instance.WorkFlowDefine=XMLFlowManager.CreateWFInstanceFromXmlDefine(FlowDefineXml);
+                instance.InstanceId = Guid.NewGuid().ToString();
+                WorkflowInstanceAll.Add(instance.InstanceId, instance);
                 return instance;
             }catch(Exception ex)
             {
@@ -106,12 +75,11 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="WfRuntime"></param>
         /// <param name="xmlFileName"></param>
         /// <returns></returns>
-        public static WorkflowInstance CreateWorkflowInstance(WorkflowRuntime WfRuntime, string xmlFileName)
+        public static WorkflowInstance CreateFreeWorkflowInstance(WorkflowRuntime WfRuntime, string xmlFileName)
         {
             try
             {
                 WorkflowInstance instance = new WorkflowInstance();
-
                 return instance;
             }
             catch (Exception ex)
@@ -131,8 +99,14 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
-                WorkflowInstance instance = new WorkflowInstance();
-                return instance;
+                if(WorkflowInstanceAll[INSTANCEID]!=null)
+                {
+                    return WorkflowInstanceAll[INSTANCEID];
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
@@ -172,20 +146,15 @@ namespace SMT.FlowWFService.NewFlow
         /// <returns></returns>
         public static string GetNextState(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName)
         {
+            string StateName = CurrentStateName;
             try
             {
-                string StateName = CurrentStateName;
-                //Tracer.Debug("循环获取当前实例的状态代码  （开始）instance＝" + (instance != null ? instance.InstanceId.ToString() : "null") + " StateName＝" + StateName);
-                while (StateName == CurrentStateName)
+                if (instance == null)
                 {
-                    if (instance == null)
-                    {
-                        StateName = "EndFlow";
-                        return StateName;
-                    }
-                    //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(WfRuntime, instance.InstanceId);
-                    StateName ="CurrentStateName";
+                    StateName = "EndFlow";
+                    return StateName;
                 }
+                StateName = XMLFlowManager.GetNextNode(instance.WorkFlowDefine, CurrentStateName, string.Empty);
                 return StateName;
             }
             catch (Exception ex)
@@ -208,7 +177,7 @@ namespace SMT.FlowWFService.NewFlow
             try
             {
                 string FlowDefineXml=string.Empty;
-                NextNode= FlowManager.GetNextNode(FlowDefineXml, CurrentStateName, xml);
+                NextNode = XMLFlowManager.GetNextNode(instance.WorkFlowDefine, CurrentStateName, string.Empty);
             }
             catch (Exception ex)
             {

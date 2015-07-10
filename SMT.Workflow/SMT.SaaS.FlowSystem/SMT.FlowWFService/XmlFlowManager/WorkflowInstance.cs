@@ -13,6 +13,7 @@ namespace SMT.FlowWFService.XmlFlowManager
         public string CurrentActivit;
         public FLOW_FLOWRECORDMASTER_T Master;
         public FLOW_FLOWRECORDDETAIL_T Details;
+        public WF1_WorkFlow WorkFlowDefine;
 
        public void Terminate(string value)
         {

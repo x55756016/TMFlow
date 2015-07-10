@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using System.Linq;
 
 namespace SMT.FlowWFService.XmlFlowManager
 {
-   public class FlowManager
+   public static class XMLFlowManager
     {
         public DataResult SubimtFlow(SubmitData submitData)
         {
@@ -20,7 +19,7 @@ namespace SMT.FlowWFService.XmlFlowManager
         /// </summary>
         /// <param name="strFlowXml"></param>
         /// <returns></returns>
-        private static WF1_WorkFlow GetWFInstanceFromXmlDefine(string strFlowXml)
+        public static WF1_WorkFlow CreateWFInstanceFromXmlDefine(string strFlowXml)
         {
             WF1_WorkFlow workflowInstanc = new WF1_WorkFlow();
             XElement FlowDefine = XDocument.Parse(strFlowXml).Root;
@@ -140,10 +139,10 @@ namespace SMT.FlowWFService.XmlFlowManager
         /// <param name="strStartActive"></param>
         /// <param name="BussinessObj"></param>
         /// <returns></returns>
-        public static string GetNextNode(string WfxmlDefine, string strStartActive, string BussinessObj)
+        public static string GetNextNode(WF1_WorkFlow  workFlowDefine, string strStartActive, string BussinessObj)
         {
 
-            var WfDefine=GetWFInstanceFromXmlDefine(WfxmlDefine);
+            var WfDefine = workFlowDefine;
 
 
             List<string> rolesList = new List<string>();

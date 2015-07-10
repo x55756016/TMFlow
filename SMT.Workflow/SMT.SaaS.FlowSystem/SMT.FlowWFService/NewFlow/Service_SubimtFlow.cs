@@ -213,19 +213,19 @@ namespace SMT.FlowWFService.NewFlow
 
                     #region 新增,撤单,审核
                     dataResult.AppState = submitData.NextStateCode;
-                    //提交新流程
                     if (submitData.SubmitFlag == SubmitFlag.New)
                     {
+                        //提交新流程
                         #region 新增
                         AppCompanyID = submitData.ApprovalUser.CompanyID;
                         if (submitData.FlowSelectType == FlowSelectType.FreeFlow)
                             //自选流程
-                            dataResult = Flowbll.AddFreeFlow(submitData, dataResult, ref User);//对数据库操作
+                            dataResult = Flowbll.SubmitFreeFlow(submitData, dataResult, ref User);//对数据库操作
                         else
                         {
                             //固定流程
                             Tracer.Debug("固定流程.Flowbill.AddFlow2");
-                            dataResult = Flowbll.AddFlow(submitData, dataResult, ref User);//对数据库操作
+                            dataResult = Flowbll.SubmitFlow(submitData, dataResult, ref User);//对数据库操作
 
                         }
                         #endregion
@@ -242,17 +242,16 @@ namespace SMT.FlowWFService.NewFlow
                         dataResult.SubmitFlag = submitData.SubmitFlag;
                         #endregion
                     }
-
-                    //审批流程
                     else
                     {
+                        //审批流程
+                        #region  审核
                         if (CheckFlowResult.fd[0] == null)
                         {
                             dataResult.Err = "FormID =" + submitData.FormID + ";该单据没有审核记录！";
                             dataResult.FlowResult = FlowResult.FAIL;
                             return dataResult;
                         }
-                        #region  审核
                         if (!string.IsNullOrEmpty(CheckFlowResult.fd[0].FLOW_FLOWRECORDMASTER_T.BUSINESSOBJECT))
                         {
                             submitData.XML = CheckFlowResult.fd[0].FLOW_FLOWRECORDMASTER_T.BUSINESSOBJECT;
@@ -268,7 +267,7 @@ namespace SMT.FlowWFService.NewFlow
                         if (submitData.FlowSelectType == FlowSelectType.FreeFlow)
                             dataResult = Flowbll.ApprovalFreeFlow(submitData, dataResult, CheckFlowResult.fd, ref  User);//对数据库操作、对服务操作
                         else
-                            dataResult = Flowbll.ApprovalFlow2(submitData, dataResult, CheckFlowResult.fd, ref User, ref returnMsg);
+                            dataResult = Flowbll.ApprovalFlow(submitData, dataResult, CheckFlowResult.fd, ref User, ref returnMsg);
                         #endregion
                     }
 

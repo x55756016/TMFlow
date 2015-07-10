@@ -3344,7 +3344,7 @@ namespace SMT.FlowWFService
                 entity.FLOW_FLOWRECORDMASTER_T.FLOWSELECTTYPE = ((int)ApprovalData.FlowSelectType).ToString();
                 entity.FLOW_FLOWRECORDMASTER_T.FLOWCODE = "FreeFlow";
                 workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
-                instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, "FreeFlow.xml");//自选流程使用
+                instance = SMTWorkFlowManage.CreateFreeWorkflowInstance(workflowRuntime, "FreeFlow.xml");//自选流程使用
                 Tracer.Debug("自选流程使用 AddFreeFlow(try)创建工作流实例ID=" + instance.InstanceId);
                 entity.FLOW_FLOWRECORDMASTER_T.INSTANCEID = instance.InstanceId.ToString();
 

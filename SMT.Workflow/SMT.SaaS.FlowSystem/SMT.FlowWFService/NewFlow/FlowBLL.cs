@@ -1575,7 +1575,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="FlowType"></param>
         /// <param name="DataResult"></param>
         /// <param name="user"></param>
-        public void GetUserByFlow2(string companyID, string Xoml, string Rules, string Layout, string xml, string UserID, string PostID, FlowType FlowType, ref DataResult DataResult, ref FlowUser user)
+        public void GetUserByFlow(string companyID, string Xoml, string Rules, string Layout, string xml, string UserID, string PostID, FlowType FlowType, ref DataResult DataResult, ref FlowUser user)
         {
 
             WorkflowRuntime WfRuntime = null;
@@ -2854,12 +2854,9 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="ApprovalData"></param>
         /// <param name="APPDataResult"></param>
         /// <returns></returns>    
-        public DataResult AddFlow( SubmitData submitData, DataResult dataResult, ref FlowUser user)
+        public DataResult SubmitFlow( SubmitData submitData, DataResult dataResult, ref FlowUser user)
         {
-            // WorkflowRuntime workflowRuntime = null;
             WorkflowInstance instance = null;
-
-
             try
             {
                 #region 获取定义的流程
@@ -2891,7 +2888,7 @@ namespace SMT.FlowWFService.NewFlow
                     flowDefine.RULES = null;
                 }
                 workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
-                instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.XOML, flowDefine.RULES);
+                instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.LAYOUT, flowDefine.RULES);
                 Tracer.Debug("新增 FormID=" + user.FormID + " 流程名称＝" + flowDefine.DESCRIPTION + "("+flowDefine.FLOWCODE+") 提交人＝" + user.UserName + " 公司名称＝" + user.CompayName + " 部门名称＝" + user.DepartmentName + " 岗位名称＝" + user.PostName + "  WorkflowInstance ID=" + instance.InstanceId.ToString());
                 //workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
                 //{
@@ -2912,7 +2909,7 @@ namespace SMT.FlowWFService.NewFlow
 
                 #region 获取下一状态数据
                 user.TrackingMessage += "FORMID=" + user.FormID + "获取下一状态数据(开始)";
-                GetUserByFlow2(submitData.ApprovalUser.CompanyID, flowDefine.XOML, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref user);
+                GetUserByFlow(submitData.ApprovalUser.CompanyID, flowDefine.XOML, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref user);
                 Tracer.Debug("FormID=" + user.FormID + " 获取下一状态数据! dataResult.FlowResult=" + dataResult.FlowResult.ToString());
                 user.TrackingMessage += "FORMID=" + user.FormID + "获取下一状态数据(结束)";
                 if (dataResult.FlowResult == FlowResult.FAIL)
@@ -3181,7 +3178,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="dataResult"></param>
         /// <param name="listDetail"></param>
         /// <returns></returns>
-        public DataResult ApprovalFlow2( SubmitData submitData, DataResult dataResult, List<FLOW_FLOWRECORDDETAIL_T> listDetail, ref FlowUser user, ref string msg)
+        public DataResult ApprovalFlow( SubmitData submitData, DataResult dataResult, List<FLOW_FLOWRECORDDETAIL_T> listDetail, ref FlowUser user, ref string msg)
         {
             if (submitData.NextApprovalUser == null)
             {
@@ -3606,7 +3603,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="ApprovalData"></param>
         /// <param name="APPDataResult"></param>
         /// <returns></returns>
-        public DataResult AddFreeFlow( SubmitData ApprovalData, DataResult APPDataResult, ref FlowUser user)
+        public DataResult SubmitFreeFlow( SubmitData ApprovalData, DataResult APPDataResult, ref FlowUser user)
         {
             // WorkflowRuntime workflowRuntime = null;
             WorkflowInstance instance = null;
@@ -3630,7 +3627,7 @@ namespace SMT.FlowWFService.NewFlow
                 entity.FLOW_FLOWRECORDMASTER_T.FLOWSELECTTYPE = ((int)ApprovalData.FlowSelectType).ToString();
                 entity.FLOW_FLOWRECORDMASTER_T.FLOWCODE = "FreeFlow";
                 workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
-                instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime , "FreeFlow.xml");//自选流程使用
+                instance = SMTWorkFlowManage.CreateFreeWorkflowInstance(workflowRuntime , "FreeFlow.xml");//自选流程使用
                 user.TrackingMessage += "自选流程使用 AddFreeFlow(try)创建工作流实例完成 ID=" + instance.InstanceId;
                 entity.FLOW_FLOWRECORDMASTER_T.INSTANCEID = instance.InstanceId.ToString();
 
@@ -3723,7 +3720,7 @@ namespace SMT.FlowWFService.NewFlow
                 {
                     Tracer.Debug("Formid=" + ApprovalData.FormID + ";完成 审核获取[自选流程]工作流实例 出错,需要重新构造工作流程实例,原来的实例ID=" + tmp[0].FLOW_FLOWRECORDMASTER_T.INSTANCEID);
                     workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
-                    instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, "FreeFlow.xml");//自选流程使用 
+                    instance = SMTWorkFlowManage.CreateFreeWorkflowInstance(workflowRuntime, "FreeFlow.xml");//自选流程使用 
                     tmp[0].FLOW_FLOWRECORDMASTER_T.INSTANCEID = instance.InstanceId.ToString();
                     Tracer.Debug("Formid=" + ApprovalData.FormID + ";完成 重新构造[自选流程]工作流程实例,新的实例ID=" + tmp[0].FLOW_FLOWRECORDMASTER_T.INSTANCEID);
                 }
