@@ -1569,13 +1569,13 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="Xoml"></param>
         /// <param name="Rules"></param>
         /// <param name="Layout"></param>
-        /// <param name="xml"></param>
+        /// <param name="BusinessXml"></param>
         /// <param name="UserID"></param>
         /// <param name="PostID"></param>
         /// <param name="FlowType"></param>
         /// <param name="DataResult"></param>
         /// <param name="user"></param>
-        public void GetUserByFlow(string companyID, string Xoml, string Rules, string Layout, string xml, string UserID, string PostID, FlowType FlowType, ref DataResult DataResult, ref FlowUser user)
+        public void GetUserByFlow(string companyID, string Xoml, string Rules, string Layout, string BusinessXml, string UserID, string PostID, FlowType FlowType, ref DataResult DataResult, ref FlowUser user)
         {
 
             WorkflowRuntime WfRuntime = null;
@@ -1605,7 +1605,7 @@ namespace SMT.FlowWFService.NewFlow
                     #region 激发事件到一下状态
                     strCurrState = strNextState;
                     user.TrackingMessage += "激发事件到一下状态，并获取状态代码 SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)开始" + Instance.InstanceId.ToString() + "\r\n";
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
+                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, BusinessXml);
                     user.TrackingMessage += "激发事件到一下状态，并获取状态代码 SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)完成" + Instance.InstanceId.ToString() + "\r\n";
                     if (strNextState == "EndFlow")
                     {
@@ -2890,11 +2890,7 @@ namespace SMT.FlowWFService.NewFlow
                 workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
                 instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.LAYOUT, flowDefine.RULES);
                 Tracer.Debug("新增 FormID=" + user.FormID + " 流程名称＝" + flowDefine.DESCRIPTION + "("+flowDefine.FLOWCODE+") 提交人＝" + user.UserName + " 公司名称＝" + user.CompayName + " 部门名称＝" + user.DepartmentName + " 岗位名称＝" + user.PostName + "  WorkflowInstance ID=" + instance.InstanceId.ToString());
-                //workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
-                //{
-                //    instance = null;
 
-                //};
                 #region master赋值
                 FLOW_FLOWRECORDMASTER_T master = new FLOW_FLOWRECORDMASTER_T();
                 master.INSTANCEID = instance.InstanceId.ToString();
@@ -2909,7 +2905,7 @@ namespace SMT.FlowWFService.NewFlow
 
                 #region 获取下一状态数据
                 user.TrackingMessage += "FORMID=" + user.FormID + "获取下一状态数据(开始)";
-                GetUserByFlow(submitData.ApprovalUser.CompanyID, flowDefine.XOML, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref user);
+                GetUserByFlow(submitData.ApprovalUser.CompanyID, flowDefine.LAYOUT, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref user);
                 Tracer.Debug("FormID=" + user.FormID + " 获取下一状态数据! dataResult.FlowResult=" + dataResult.FlowResult.ToString());
                 user.TrackingMessage += "FORMID=" + user.FormID + "获取下一状态数据(结束)";
                 if (dataResult.FlowResult == FlowResult.FAIL)
@@ -3245,7 +3241,7 @@ namespace SMT.FlowWFService.NewFlow
 
                         FLOW_MODELFLOWRELATION_T flowRelation = MODELFLOWRELATION[0];
                         FLOW_FLOWDEFINE_T flowDefine = flowRelation.FLOW_FLOWDEFINE_T;
-                        instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime , flowDefine.XOML, flowDefine.RULES);
+                        instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.LAYOUT, flowDefine.RULES);
                         user.TrackingMessage += "FormID=" + submitData.FormID + ";ApprovalFlow2(catch)完成重新创建工作流实例ID=" + instance.InstanceId + "\r\n";
                         //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
                         //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;

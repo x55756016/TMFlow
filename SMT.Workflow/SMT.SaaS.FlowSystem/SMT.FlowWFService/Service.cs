@@ -146,8 +146,8 @@ namespace SMT.FlowWFService
 
         public DataResult SubimtFlow(SubmitData submitData)
         {
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
-            return s2.SubimtFlow(submitData);
+            SMT.FlowWFService.NewFlow.Service FlowSv = new SMT.FlowWFService.NewFlow.Service();
+            return FlowSv.SubimtFlow(submitData);
         }
         #endregion
 
@@ -182,161 +182,8 @@ namespace SMT.FlowWFService
         /// <returns></returns>
         public DataResult GetAppUser(string CompanyID, string ModelCode, string FlowGUID, string xml)
         {
-            //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
-            return s2.GetAppUser( CompanyID,  ModelCode,  FlowGUID,  xml);
-            #region 旧代码
-            //DataResult GetAppUserResult = new DataResult();
-            //try
-            //{
-            //    string StateName = null;
-
-
-            //    if (FlowGUID == "" || FlowGUID == "StartFlow")
-            //    {
-            //        StateName = "StartFlow";
-            //    }
-            //    else
-            //    {
-            //        //根据待审批流程GUID,检索待审批状态节点代码
-            //        List<FLOW_FLOWRECORDDETAIL_T> FlowRecord = FlowBLL.GetFlowInfo("", FlowGUID, "", "", "", "", "", null);
-            //        if (FlowRecord == null)
-            //        {
-            //            GetAppUserResult.Err = "没有待处理的审核";
-            //            GetAppUserResult.UserInfo = null;
-            //            return GetAppUserResult;
-            //        }
-            //        StateName = FlowRecord[0].STATECODE;
-            //    }
-
-            //    //根据公司ID，模块代码获取配置的流程
-            //    WorkflowInstance instance = null;
-            //    List<FLOW_MODELFLOWRELATION_T> MODELFLOWRELATION = FlowBLL.GetFlowByModelName(CompanyID, "", ModelCode, "0");
-
-            //    if (MODELFLOWRELATION == null || MODELFLOWRELATION.Count == 0)
-            //    {
-            //        GetAppUserResult.Err = "没有可使用的流程";
-            //        GetAppUserResult.UserInfo = null;
-            //        return GetAppUserResult;
-            //    }
-            //    FLOW_FLOWDEFINE_T Xoml = MODELFLOWRELATION[0].FLOW_FLOWDEFINE_T;
-
-            //    XmlReader readerxoml, readerule;
-            //    StringReader strXoml = new StringReader(Xoml.XOML);
-            //    StringReader strRules = new StringReader(Xoml.RULES == null ? "" : Xoml.RULES);
-
-            //    readerxoml = XmlReader.Create(strXoml);
-            //    readerule = XmlReader.Create(strRules);
-
-            //    WorkflowRuntime workflowRuntime = new WorkflowRuntime();
-            //    workflowRuntime.StartRuntime();
-
-            //    FlowEvent ExternalEvent = new FlowEvent();
-            //    ExternalDataExchangeService objService = new ExternalDataExchangeService();
-            //    workflowRuntime.AddService(objService);
-            //    objService.AddService(ExternalEvent);
-            //    TypeProvider typeProvider = new TypeProvider(null);
-            //    workflowRuntime.AddService(typeProvider);
-
-            //    //XmlReader readerxoml = XmlReader.Create(HttpContext.Current.Server.MapPath ("TestFlow.xml"));
-            //    // instance = workflowRuntime.CreateWorkflow(readerxoml);
-            //    if (Xoml.RULES == null)
-            //        instance = workflowRuntime.CreateWorkflow(readerxoml);
-            //    else
-            //        instance = workflowRuntime.CreateWorkflow(readerxoml, readerule, null);
-            //    // instance = workflowRuntime.CreateWorkflow(typeof(TestFlow));
-            //    instance.Start();
-            //    StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
-
-            //    //从实例中获取定义
-            //    if (1 == 2)
-            //    {
-            //        System.Workflow.Activities.StateMachineWorkflowActivity smworkflow = new StateMachineWorkflowActivity();
-            //        smworkflow = workflowinstance.StateMachineWorkflow;
-            //        RuleDefinitions ruleDefinitions = smworkflow.GetValue(RuleDefinitions.RuleDefinitionsProperty) as RuleDefinitions;
-            //        WorkflowMarkupSerializer markupSerializer = new WorkflowMarkupSerializer();
-
-            //        StringBuilder xoml = new StringBuilder();
-            //        StringBuilder rule = new StringBuilder();
-            //        XmlWriter xmlWriter = XmlWriter.Create(xoml);
-            //        XmlWriter ruleWriter = XmlWriter.Create(rule);
-            //        markupSerializer.Serialize(xmlWriter, smworkflow);
-            //        markupSerializer.Serialize(ruleWriter, ruleDefinitions);
-            //        xmlWriter.Close();
-            //        ruleWriter.Close();
-            //        StringReader readxoml = new StringReader(xoml.ToString());
-            //        StringReader readrule = new StringReader(rule.ToString());
-            //        XmlReader readerxoml2 = XmlReader.Create(readxoml);
-            //        XmlReader readerrule2 = XmlReader.Create(readrule);
-            //        WorkflowInstance instance1 = workflowRuntime.CreateWorkflow(readerxoml2, readerrule2, null);
-            //        instance1.Start();
-            //        StateMachineWorkflowInstance workflowinstance1 = new StateMachineWorkflowInstance(workflowRuntime, instance1.InstanceId);
-            //        workflowinstance1.SetState(StateName);
-            //    }
-            //    //从实例中获取定义并启动新实例
-
-            //    //跳转到节点StateName
-            //    workflowinstance.SetState(StateName);
-
-            //    FlowDataType.FlowData FlowData = new FlowDataType.FlowData();
-            //    FlowData.xml = xml;
-            //    //  FlowData.Flow_FlowRecord_T = null;
-
-            //    ExternalEvent.OnDoFlow(instance.InstanceId, FlowData);//激发流程引擎流转到下一状态
-            //    System.Threading.Thread.Sleep(1000);
-            //    PermissionServiceClient WcfPermissionService = new PermissionServiceClient();
-            //    string CurrentStateName = workflowinstance.CurrentStateName == null ? "End" : workflowinstance.CurrentStateName; //取得当前状态
-            //    List<UserInfo> listUser = new List<UserInfo>();
-            //    if (CurrentStateName != "End")
-            //    {
-            //        if (CurrentStateName.Substring(0, 5) == "State")
-            //        {
-            //            CurrentStateName = CurrentStateName.Substring(5);
-            //        }
-            //        string WFCurrentStateName = new Guid(CurrentStateName).ToString("D");
-            //        T_SYS_USER[]  User = WcfPermissionService.GetSysUserByRole(WFCurrentStateName); //检索本状态（角色）对应用户
-
-            //        if (User != null)
-            //            for (int i = 0; i < User.Length; i++)
-            //            {
-            //                UserInfo tmp = new UserInfo();
-            //                tmp.UserID = User[i].EMPLOYEEID;
-            //                tmp.UserName = User[i].EMPLOYEENAME;
-            //                listUser.Add(tmp);
-            //            }
-
-
-
-            //    }
-            //    else
-            //    {
-            //        //已经到流程结束状态
-            //        UserInfo tmp = new UserInfo();
-            //        tmp.UserID = "End";
-            //        tmp.UserName = "End";
-
-            //        listUser.Add(tmp);
-            //    }
-
-
-            //    GetAppUserResult.UserInfo = listUser.Count > 0 ? listUser : null;
-
-            //    if (GetAppUserResult.UserInfo == null)
-            //        GetAppUserResult.Err = "没有找到用户";
-
-            //    return GetAppUserResult;
-            //    // return listUser;
-
-
-            //    //return workflowinstance.CurrentStateName == null ? "End" : workflowinstance.CurrentStateName;
-            //}
-            //catch (Exception ex)
-            //{
-            //    GetAppUserResult.Err = ex.Message;
-            //    GetAppUserResult.UserInfo = null;
-            //    return GetAppUserResult;
-            //}
-            #endregion
+            SMT.FlowWFService.NewFlow.Service FlowSV = new SMT.FlowWFService.NewFlow.Service();
+            return FlowSV.GetAppUser( CompanyID,  ModelCode,  FlowGUID,  xml);
         }
 
         #endregion

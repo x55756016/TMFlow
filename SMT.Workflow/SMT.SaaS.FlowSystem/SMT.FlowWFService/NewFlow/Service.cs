@@ -846,7 +846,7 @@ namespace SMT.FlowWFService.NewFlow
                 FLOW_FLOWDEFINE_T Xoml = MODELFLOWRELATION[0].FLOW_FLOWDEFINE_T;
 
                 XmlReader readerxoml, readerule;
-                StringReader strXoml = new StringReader(Xoml.XOML);
+                StringReader strXoml = new StringReader(Xoml.LAYOUT);
                 StringReader strRules = new StringReader(Xoml.RULES == null ? "" : Xoml.RULES);
 
                 readerxoml = XmlReader.Create(strXoml);

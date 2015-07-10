@@ -169,15 +169,15 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="WfRuntime"></param>
         /// <param name="instance"></param>
         /// <param name="CurrentStateName"></param>
-        /// <param name="xml"></param>
+        /// <param name="BusinessXml"></param>
         /// <returns></returns>
-        public static string GetNextStateByEvent(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName, string xml)
+        public static string GetNextStateByEvent(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName, string BusinessXml)
         {
             string NextNode = string.Empty;
             try
             {
                 string FlowDefineXml=string.Empty;
-                NextNode = XMLFlowManager.GetNextNode(instance.WorkFlowDefine, CurrentStateName, string.Empty);
+                NextNode = XMLFlowManager.GetNextNode(instance.WorkFlowDefine, CurrentStateName, BusinessXml);
             }
             catch (Exception ex)
             {

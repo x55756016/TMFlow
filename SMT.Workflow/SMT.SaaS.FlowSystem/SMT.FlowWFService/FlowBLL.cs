@@ -2669,7 +2669,7 @@ namespace SMT.FlowWFService
                 //}
                 msg += " SMTWorkFlowManage.CreateWorkFlowRuntime(true)" + DateTime.Now.ToString() + "\r\n";
                 workflowRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(true);
-                instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.XOML, flowDefine.RULES);
+                instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.LAYOUT, flowDefine.RULES);
                 Tracer.Debug("AddFlow2创建工作流实例ID=" + instance.InstanceId);
                 //workflowRuntime.WorkflowCompleted += delegate(object sender, WorkflowCompletedEventArgs e)
                 //{
@@ -2692,7 +2692,7 @@ namespace SMT.FlowWFService
                 #region 获取下一状态数据
                 msg += " 获取下一状态数据" + DateTime.Now.ToString() + "\r\n";
                 DateTime star = DateTime.Now;
-                GetUserByFlow2(submitData.ApprovalUser.CompanyID, flowDefine.XOML, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref msg);
+                GetUserByFlow2(submitData.ApprovalUser.CompanyID, flowDefine.LAYOUT, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref msg);
                 DateTime end = DateTime.Now;
                 msg += " 获取下一状态数据完成" + DateTime.Now.ToString() + "\r\n";
                 //string str = Service2.DateDiff(end, star);
@@ -3005,7 +3005,7 @@ namespace SMT.FlowWFService
 
                         FLOW_MODELFLOWRELATION_T flowRelation = MODELFLOWRELATION[0];
                         FLOW_FLOWDEFINE_T flowDefine = flowRelation.FLOW_FLOWDEFINE_T;
-                        instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.XOML, flowDefine.RULES);
+                        instance = SMTWorkFlowManage.CreateWorkflowInstance(workflowRuntime, flowDefine.LAYOUT, flowDefine.RULES);
                         Tracer.Debug("FormID=" + submitData.FormID + ";ApprovalFlow2(catch)完成重新创建工作流实例ID=" + instance.InstanceId);
                         //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
                         //workflowinstance.SetState(entity.STATECODE);
