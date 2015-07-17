@@ -8,12 +8,6 @@ namespace SMT.FlowWFService.XmlFlowManager
 {
    public static class XMLFlowManager
     {
-        public DataResult SubimtFlow(SubmitData submitData)
-        {
-            DataResult dataResult = new DataResult();
-            return dataResult;
-        }
-
         /// <summary>
         /// 根据XML定义文件创建流程
         /// </summary>
@@ -24,11 +18,11 @@ namespace SMT.FlowWFService.XmlFlowManager
             WF1_WorkFlow workflowInstanc = new WF1_WorkFlow();
             XElement FlowDefine = XDocument.Parse(strFlowXml).Root;
 
-            var FlowDefineActivitys = (from ent in FlowDefine.Elements().Elements()
+            var FlowDefineActivitys = (from ent in FlowDefine.Elements()
                                         where ent.Name == "Activitys"
                                    select ent).ToList();
            
-            foreach(var item in FlowDefineActivitys)
+            foreach(var item in FlowDefineActivitys.Elements())
             {
                 WF2_WorkFlowActivitysActivity acivity= new WF2_WorkFlowActivitysActivity();
                 acivity.Name = item.Attribute("Name").Value;
@@ -57,7 +51,7 @@ namespace SMT.FlowWFService.XmlFlowManager
                         {
                             foreach(var CountersignChild in CountersignChildList)
                             {
-                                WF211_WorkFlowActivitysActivityCountersignsCountersign Countersign = new WF211_WorkFlowActivitysActivityCountersignsCountersign();
+                                WF211_WorkFlowActivitysActivityCountersignsCountersign Countersign = new             WF211_WorkFlowActivitysActivityCountersignsCountersign();
                                 Countersign.StateType = CountersignChild.Attribute("StateType").Value;
                                 Countersign.RoleName = CountersignChild.Attribute("RoleName").Value;
                                 Countersign.IsOtherCompany = CountersignChild.Attribute("IsOtherCompany").Value;
@@ -79,10 +73,10 @@ namespace SMT.FlowWFService.XmlFlowManager
 
             //workflowInstanc.Activitys
 
-            var FlowDefineRules = (from ent in FlowDefine.Elements().Elements()
+            var FlowDefineRules = (from ent in FlowDefine.Elements()
                                      where ent.Name == "Rules"
                                                 select ent).ToList();
-            foreach (var item in FlowDefineRules)
+            foreach (var item in FlowDefineRules.Elements())
             {
                 WF3_WorkFlowRulesRule role = new WF3_WorkFlowRulesRule();
                 role.Name = item.Attribute("Name").Value;
@@ -139,25 +133,24 @@ namespace SMT.FlowWFService.XmlFlowManager
         /// <param name="strStartActive"></param>
         /// <param name="BussinessObj"></param>
         /// <returns></returns>
-        public static string GetNextNode(WF1_WorkFlow  workFlowDefine, string strStartActive, string BussinessObj)
+        public static string GetNextStepRoles(WF1_WorkFlow workFlowDefine, string strStartActive, string BussinessObj)
         {
 
             var WfDefine = workFlowDefine;
 
-
             List<string> rolesList = new List<string>();
             var nextRoles = from ent in WfDefine.Rules
-                           where ent.StrStartActive == strStartActive
-                           select ent;
-            int i=nextRoles.Count();
+                            where ent.StrStartActive == strStartActive
+                            select ent;
+            int i = nextRoles.Count();
             //获取从传入的节点为开始的所有连线
-            if(i>0)
+            if (i > 0)
             {
                 //只有一条连线情况下
-                if(i==1)
+                if (i == 1)
                 {
-                    rolesList=getRoleIdsFromEndActivit(WfDefine,nextRoles.FirstOrDefault().StrEndActive);
-
+                    //rolesList=getRoleIdsFromEndActivit(WfDefine,nextRoles.FirstOrDefault().StrEndActive);
+                    return nextRoles.FirstOrDefault().StrEndActive;
                 }
                 else
                 {
@@ -169,30 +162,35 @@ namespace SMT.FlowWFService.XmlFlowManager
                     //用来保存最终满足的条件Role
                     List<WFCondition> ConditionList = new List<WFCondition>();
                     List<WFRoles> WFRolesList = new List<WFRoles>();
-                    foreach(var role in nextRoles)
+                    foreach (var role in nextRoles)
                     {
                         //如果条件成立，添加当前activit
-                        CheckConditionList(role.StrStartActive,role.StrEndActive,role.Conditions, BussinessObj, ref WFRolesList,ref ConditionList);
+                        CheckConditionList(role.StrStartActive, role.StrEndActive, role.Conditions, BussinessObj, ref WFRolesList, ref ConditionList);
                     }
                     //最终条件满足的
                     var active = ConditionList.FirstOrDefault();
-                    rolesList=getRoleIdsFromEndActivit(WfDefine, active.StrEndActive);
+                    return active.StrEndActive;
+                    //rolesList=getRoleIdsFromEndActivit(WfDefine, active.StrEndActive);
                 }
             }
             else
             {
-                throw new Exception("未找到下一节点："+strStartActive);
+                throw new Exception("未找到下一节点：" + strStartActive);
             }
-            //只有一个节点(非会签)
-            return rolesList.FirstOrDefault();
+        }
+
+       public  static string GetRolesFromActivit()
+        {
+           string rolesid=string.Empty;
+           return rolesid;
         }
 
         #region 根据结束的Activit获取角色id
-        private static List<string> getRoleIdsFromEndActivit(WF1_WorkFlow WfDefine, string endActivitId)
+        private static List<string> getRoleIdsFromActivit(WF1_WorkFlow WfDefine, string ActivitId)
         {
             List<string> roleIds = new List<string>();
             var rolesList = from ent in WfDefine.Activitys
-                            where ent.Name == endActivitId
+                            where ent.Name == ActivitId
                             select ent;
             if (rolesList.Count() > 0)
             {

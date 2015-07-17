@@ -577,7 +577,7 @@ namespace SMT.FlowWFService
         /// <param name="FlowType"></param>
         /// <returns></returns>
 
-        public DataResult DoFlowRecord_Add( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<Role_UserType, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
+        public DataResult DoFlowRecord_Add( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<FlowRole, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
         {
             DataResult tmpDataResult = new DataResult();
             tmpDataResult.DictCounterUser = dictUserInfo;
@@ -723,7 +723,7 @@ namespace SMT.FlowWFService
             }
         }
 
-        public DataResult DoFlowRecord_Approval( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<Role_UserType, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
+        public DataResult DoFlowRecord_Approval( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<FlowRole, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
         {
             DataResult tmpDataResult = new DataResult();
             tmpDataResult.DictCounterUser = dictUserInfo;
@@ -955,7 +955,7 @@ namespace SMT.FlowWFService
                 List<string> FlowTypeList = new List<string>();
 
                 FLOW_FLOWRECORDDETAIL_TDAL Dal = new FLOW_FLOWRECORDDETAIL_TDAL();
-                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecord( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, Utility.FlowTypeListToStringList(FlowType));
+                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecord( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, FlowUtility.FlowTypeListToStringList(FlowType));
 
                 if (dt.Count > 0)
                     return dt;
@@ -986,7 +986,7 @@ namespace SMT.FlowWFService
 
             try
             {
-                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordV( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, Utility.FlowTypeListToStringList(FlowType));
+                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordV( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, FlowUtility.FlowTypeListToStringList(FlowType));
 
                 if (dt.Count > 0)
                     return dt;
@@ -1014,7 +1014,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>           
         public static List<FLOW_FLOWRECORDDETAIL_T> GetFlowInfoTop( string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID, List<FlowType> FlowType)
         {
-            return FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordTop( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, Utility.FlowTypeListToStringList(FlowType));
+            return FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordTop( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, FlowUtility.FlowTypeListToStringList(FlowType));
         }
         /// <summary>
         /// 获取任务信息
@@ -1043,7 +1043,7 @@ namespace SMT.FlowWFService
                 {
                     TaskInfo tmpTaskInfo = new TaskInfo();
                     tmpTaskInfo.FlowInfo = FLOWRECORDDETAIList[i];
-                    tmpTaskInfo.SubModelCode = Utility.GetString(Utility.GetSubModelCode(ACTIVEROLE, FLOWRECORDDETAIList[i].STATECODE));
+                    tmpTaskInfo.SubModelCode = FlowUtility.GetString(FlowUtility.GetSubModelCode(ACTIVEROLE, FLOWRECORDDETAIList[i].STATECODE));
                     TaskInfoList.Add(tmpTaskInfo);
                 }
 
@@ -1337,7 +1337,7 @@ namespace SMT.FlowWFService
             string strCurrState = "StartFlow";
             string strNextState = "StartFlow";
 
-            Role_UserType RuleName;
+            FlowRole RuleName;
             List<UserInfo> AppUserInfo = null;
             try
             {
@@ -1350,7 +1350,7 @@ namespace SMT.FlowWFService
                 {
                     strCurrState = strNextState;
 
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
 
                     if (strNextState == "EndFlow")
                     {
@@ -1360,7 +1360,7 @@ namespace SMT.FlowWFService
                     else
                     {
 
-                        RuleName = Utility.GetRlueName(Layout, strNextState);
+                        RuleName = FlowUtility.GetRlueName(Layout, strNextState);
                         if (RuleName == null)
                         {
                             DataResult.Err = "没有找到对应角色";
@@ -1466,7 +1466,7 @@ namespace SMT.FlowWFService
             string CountersignType = "0";
             //Role_UserType RuleName;
             List<UserInfo> AppUserInfo = null;
-            Dictionary<Role_UserType, List<UserInfo>> DictCounterUser = null;
+            Dictionary<FlowRole, List<UserInfo>> DictCounterUser = null;
             try
             {
                 msg += " SMTWorkFlowManage.CreateWorkFlowRuntime(false)" + DateTime.Now.ToString() + "\r\n";
@@ -1489,7 +1489,7 @@ namespace SMT.FlowWFService
                     #region
                     strCurrState = strNextState;
                     msg += " SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)" + DateTime.Now.ToString() + "\r\n";
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
                     msg += " SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)完成" + DateTime.Now.ToString() + "\r\n";
                     if (strNextState == "EndFlow")
                     {
@@ -1498,7 +1498,7 @@ namespace SMT.FlowWFService
                     }
                     else
                     {
-                        List<Role_UserType> listRole = Utility.GetRlueName2(Layout, strNextState, ref IsCountersign, ref CountersignType);
+                        List<FlowRole> listRole = FlowUtility.GetRlueIdFromActivitID(Layout, strNextState, ref IsCountersign, ref CountersignType);
                         if (listRole.Count == 0)
                         {
                             DataResult.Err = "没有找到对应角色";
@@ -1569,7 +1569,7 @@ namespace SMT.FlowWFService
                         else
                         {
                             #region
-                            DictCounterUser = new Dictionary<Role_UserType, List<UserInfo>>();
+                            DictCounterUser = new Dictionary<FlowRole, List<UserInfo>>();
                             if (CountersignType == "0")
                             {
                                 #region
@@ -1698,10 +1698,10 @@ namespace SMT.FlowWFService
                 {
                     #region
                     DataResult.DictCounterUser = DictCounterUser;
-                    List<Role_UserType> listkeys = DictCounterUser.Keys.ToList();
+                    List<FlowRole> listkeys = DictCounterUser.Keys.ToList();
                     for (int i = 0; i < listkeys.Count; i++)
                     {
-                        Role_UserType key = listkeys[i];
+                        FlowRole key = listkeys[i];
                         if (DictCounterUser[key].Count > 1)
                         {
                             DataResult.FlowResult = FlowResult.Countersign;
@@ -1762,7 +1762,7 @@ namespace SMT.FlowWFService
                 WfRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(false);
                 Instance = SMTWorkFlowManage.CloneWorkflowInstance(WfRuntimeClone, instanceClone, WfRuntime);
 
-                string strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, CurrentStateName, xml);
+                string strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, CurrentStateName, xml);
                 bool isHigher = false;
                 List<UserInfo> AppUserInfo = GetUserByStateCode(strNextState, UserID, PostID, ref isHigher);
                 #region 打印审核人
@@ -1822,7 +1822,7 @@ namespace SMT.FlowWFService
             WorkflowInstance Instance = null;
             List<UserInfo> AppUserInfo = null;
             string strNextState = CurrentStateName;
-            Role_UserType RuleName;
+            FlowRole RuleName;
             try
             {
                 if (!WfRuntimeClone.IsStarted)
@@ -1836,7 +1836,7 @@ namespace SMT.FlowWFService
                 while (iscurruser)
                 {
                     //   CurrentStateName = strNextState;
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
                     //if (FlowType == FlowType.Task && strNextState != "EndFlow")
                     //{
                     //    XmlReader XmlReader;
@@ -1865,7 +1865,7 @@ namespace SMT.FlowWFService
                     //}
 
 
-                    RuleName = Utility.GetRlueName(Layout, strNextState);
+                    RuleName = FlowUtility.GetRlueName(Layout, strNextState);
 
 
 
@@ -1977,7 +1977,7 @@ namespace SMT.FlowWFService
             string CountersignType = "0";
             //Role_UserType RuleName;
             //List<UserInfo> AppUserInfo = null;
-            Dictionary<Role_UserType, List<UserInfo>> DictCounterUser = null;
+            Dictionary<FlowRole, List<UserInfo>> DictCounterUser = null;
             try
             {
                 if (!WfRuntimeClone.IsStarted)
@@ -1998,8 +1998,8 @@ namespace SMT.FlowWFService
                     #region
 
 
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
-                    List<Role_UserType> listRole = Utility.GetRlueName2(Layout, strNextState, ref IsCountersign, ref CountersignType);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
+                    List<FlowRole> listRole = FlowUtility.GetRlueIdFromActivitID(Layout, strNextState, ref IsCountersign, ref CountersignType);
                     if (listRole.Count == 0)
                     {
                         DataResult.Err = "没有找到对应角色";
@@ -2070,7 +2070,7 @@ namespace SMT.FlowWFService
                     else
                     {
                         #region
-                        DictCounterUser = new Dictionary<Role_UserType, List<UserInfo>>();
+                        DictCounterUser = new Dictionary<FlowRole, List<UserInfo>>();
                         if (CountersignType == "0")
                         {
                             #region
@@ -2218,10 +2218,10 @@ namespace SMT.FlowWFService
                     DataResult.DictCounterUser = DictCounterUser;
 
 
-                    List<Role_UserType> listkeys = DictCounterUser.Keys.ToList();
+                    List<FlowRole> listkeys = DictCounterUser.Keys.ToList();
                     for (int i = 0; i < listkeys.Count; i++)
                     {
-                        Role_UserType key = listkeys[i];
+                        FlowRole key = listkeys[i];
                         if (DictCounterUser[key].Count > 1)
                         {
                             DataResult.FlowResult = FlowResult.Countersign;
@@ -2683,7 +2683,7 @@ namespace SMT.FlowWFService
                 master.BUSINESSOBJECT = submitData.XML;
                 master.FORMID = submitData.FormID;
                 master.MODELCODE = submitData.ModelCode;
-                master.ACTIVEROLE = Utility.GetActiveRlue(flowDefine.LAYOUT);
+                master.ACTIVEROLE = FlowUtility.GetActiveRlue(flowDefine.LAYOUT);
                 master.FLOWTYPE = ((int)submitData.FlowType).ToString();
                 master.FLOWSELECTTYPE = ((int)submitData.FlowSelectType).ToString();
                 master.FLOWCODE = flowDefine.FLOWCODE;
@@ -2725,7 +2725,7 @@ namespace SMT.FlowWFService
                     #region
                     if (dataResult.FlowResult == FlowResult.MULTIUSER)
                     {
-                        if (submitData.NextApprovalUser == null || (Utility.GetString(submitData.NextApprovalUser.UserID) == "" || Utility.GetString(submitData.NextApprovalUser.UserName) == ""))
+                        if (submitData.NextApprovalUser == null || (FlowUtility.GetString(submitData.NextApprovalUser.UserID) == "" || FlowUtility.GetString(submitData.NextApprovalUser.UserName) == ""))
                         {
                             return dataResult;
                         }
@@ -2862,7 +2862,7 @@ namespace SMT.FlowWFService
                 //dataResult.CanSendMessage = true;
                 if (submitData.FlowType == FlowType.Task)
                 {
-                    dataResult.SubModelCode = Utility.GetSubModelCode(master.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
+                    dataResult.SubModelCode = FlowUtility.GetSubModelCode(master.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
                 }
                 msg += "System.Threading.Thread.Sleep(1000)完成" + DateTime.Now.ToString() + "\r\n";
                 return dataResult;
@@ -3033,7 +3033,7 @@ namespace SMT.FlowWFService
                 bool currentIsCountersign = false;
                 string currentCountersignType = "0";
 
-                Utility.IsCountersign(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, entity.STATECODE, ref currentIsCountersign, ref currentCountersignType);
+                FlowUtility.IsCountersign(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, entity.STATECODE, ref currentIsCountersign, ref currentCountersignType);
                 if (currentIsCountersign)
                 {
                     msg += "状态会签状态处理" + DateTime.Now.ToString() + "\r\n";
@@ -3145,7 +3145,7 @@ namespace SMT.FlowWFService
                             #region
                             if (dataResult.FlowResult == FlowResult.MULTIUSER)
                             {
-                                if (submitData.NextApprovalUser == null || (Utility.GetString(submitData.NextApprovalUser.UserID) == "" || Utility.GetString(submitData.NextApprovalUser.UserName) == ""))
+                                if (submitData.NextApprovalUser == null || (FlowUtility.GetString(submitData.NextApprovalUser.UserID) == "" || FlowUtility.GetString(submitData.NextApprovalUser.UserName) == ""))
                                 {
                                     return dataResult;
                                 }
@@ -3285,7 +3285,7 @@ namespace SMT.FlowWFService
                         msg += "System.Threading.Thread.Sleep(1000)" + DateTime.Now.ToString() + "\r\n";
                         System.Threading.Thread.Sleep(1000);
                         if (submitData.FlowType == FlowType.Task)
-                            dataResult.SubModelCode = Utility.GetSubModelCode(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
+                            dataResult.SubModelCode = FlowUtility.GetSubModelCode(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
                         msg += "System.Threading.Thread.Sleep(1000)完成" + DateTime.Now.ToString() + "\r\n";
 
                         #endregion
@@ -3531,7 +3531,7 @@ namespace SMT.FlowWFService
         /// <param name="ModelCode"></param>
         /// <param name="dictUserInfo"></param>
         /// <returns></returns>
-        public Dictionary<UserInfo, UserInfo> GetAgentUserInfo2(string ModelCode, Dictionary<Role_UserType, List<UserInfo>> dictUserInfo)
+        public Dictionary<UserInfo, UserInfo> GetAgentUserInfo2(string ModelCode, Dictionary<FlowRole, List<UserInfo>> dictUserInfo)
         {
             Dictionary<UserInfo, UserInfo> dict = new Dictionary<UserInfo, UserInfo>();
 

@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace SMT.FlowWFService.PublicClass
 {
-    public class Utility
+    public class FlowUtility
     {
         /// <summary>
         /// 通过节点设置获取节点对应子模块代码
@@ -23,7 +23,6 @@ namespace SMT.FlowWFService.PublicClass
             StringReader tmpLayout;
             try
             {
-
 
                 tmpLayout = new StringReader(ActiveRule);
                 xmlreader = XmlReader.Create(tmpLayout);
@@ -58,16 +57,16 @@ namespace SMT.FlowWFService.PublicClass
         /// <param name="ActiveRule"></param>
         /// <param name="StateCode"></param>
         /// <returns></returns>
-        public static Role_UserType GetRlueName(string ActiveRule, string StateCode)
+        public static FlowRole GetRlueName(string ActiveRule, string StateCode)
         {
             XmlReader xmlreader;
-            Role_UserType RuleName = null;
+            FlowRole RuleName = null;
             StringReader tmpLayout = null;
             try
             {
                 if (StateCode.ToUpper() == "ENDFLOW")
                 {
-                    RuleName = new Role_UserType();
+                    RuleName = new FlowRole();
                     RuleName.RoleName = StateCode;
                     RuleName.UserType = StateCode;
                 }
@@ -91,10 +90,10 @@ namespace SMT.FlowWFService.PublicClass
                     //            IsOtherCompany = c.Attribute("IsOtherCompany") == null ? false : bool.Parse(c.Attribute("IsOtherCompany").Value),
                     //            OtherCompanyID = c.Attribute("OtherCompanyID") == null ? "" : c.Attribute("OtherCompanyID").Value
                     //        };
-                    List<Role_UserType> a = new List<Role_UserType>();
+                    List<FlowRole> a = new List<FlowRole>();
                     XElementS.Descendants("Activity").Where(xestate => xestate.Attribute("Name").Value == StateCode).ToList().ForEach(c =>
                     {
-                        Role_UserType ru = new Role_UserType();
+                        FlowRole ru = new FlowRole();
                         ru.RoleName = c.Attribute("RoleName").Value;
                         ru.UserType = c.Attribute("UserType").Value;
                         XAttribute xIsOtherCompany = c.Attribute("IsOtherCompany");
@@ -196,17 +195,17 @@ namespace SMT.FlowWFService.PublicClass
         /// <param name="isCountersign">是否是会签</param>
         /// <param name="CountersignType">会签类型:0全部同意通过才能能过,1只有一个人通过即通过</param>
         /// <returns></returns>
-        public static List<Role_UserType> GetRlueName2(string ActiveRule, string StateCode, ref bool isCountersign,ref string CountersignType)
+        public static List<FlowRole> GetRlueIdFromActivitID(string ActiveRule, string StateCode, ref bool isCountersign,ref string CountersignType)
         {
             XmlReader xmlreader;
-            Role_UserType RuleName = null;
+            FlowRole RuleName = null;
             StringReader tmpLayout = null;
-            List<Role_UserType> list = new List<Role_UserType>();
+            List<FlowRole> list = new List<FlowRole>();
             try
             {
                 if (StateCode.ToUpper() == "ENDFLOW")
                 {
-                    RuleName = new Role_UserType();
+                    RuleName = new FlowRole();
                     RuleName.RoleName = StateCode;
                     RuleName.UserType = StateCode;
                     list.Add(RuleName);
@@ -227,7 +226,7 @@ namespace SMT.FlowWFService.PublicClass
                     if (xeCountersigns == null)
                     {
                         #region 非会签
-                        RuleName = new Role_UserType();
+                        RuleName = new FlowRole();
                         RuleName.RoleName = xActivity.Attribute("RoleName").Value;
                         RuleName.UserType = xActivity.Attribute("UserType").Value;
                         RuleName.Remark =xActivity.Attribute("Remark")!=null? xActivity.Attribute("Remark").Value:"";
@@ -254,7 +253,7 @@ namespace SMT.FlowWFService.PublicClass
                         CountersignType=xeCountersigns.Attribute("CountersignType").Value;
                         xeCountersigns.Elements().ToList().ForEach(item =>
                         {
-                            RuleName = new Role_UserType();
+                            RuleName = new FlowRole();
                             RuleName.RoleName = item.Attribute("StateType").Value;
                             RuleName.Remark = item.Attribute("RoleName").Value;
                             RuleName.UserType = item.Attribute("UserType").Value;

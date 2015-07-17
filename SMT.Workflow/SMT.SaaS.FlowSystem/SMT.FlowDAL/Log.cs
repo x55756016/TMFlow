@@ -32,24 +32,5 @@ namespace SMT.FlowDAL
             sb.AppendLine("日志内容:" + content);
             Tracer.Debug(sb.ToString());
         }
-        /// <summary>
-        /// 写日志
-        /// </summary>
-        /// <param name="obj">当前发生的对象（如：类对象this）</param>
-        /// <param name="methodName">方法名称</param>
-        /// <param name="content">内容</param>
-        /// <param name="e">Exception</param>
-        /// <returns></returns>
-        public static void WriteLog(object obj, string methodName, string content, Exception e)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("================================================================================");
-            sb.AppendLine("时间:" + DateTime.Now.ToString());
-            sb.AppendLine("DLL:" + obj.GetType().Module.Name);
-            sb.AppendLine("类名:" + obj.GetType().FullName);
-            sb.AppendLine("方法:" + methodName);
-            sb.AppendLine("内容:" + content);
-            Tracer.Debug(sb.ToString());
-        }
     }
 }

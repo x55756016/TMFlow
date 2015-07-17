@@ -38,7 +38,7 @@ using SMT.FlowWFService.XmlFlowManager;
 namespace SMT.FlowWFService.NewFlow
 {
     // 注意: 如果更改此处的类名“IService1”，也必须更新 App.config 中对“IService1”的引用。
-    public partial class Service
+    public partial class FlowService
     {
         public static IDAO dao = DALFacoty.CreateDao(ConfigurationManager.ConnectionStrings["WorkFlowConnString"].ToString());
 
@@ -363,7 +363,7 @@ namespace SMT.FlowWFService.NewFlow
                 if (submitData.DictCounterUser.Count > 0)
                 {
                     string name = "";
-                    foreach (KeyValuePair<Role_UserType, List<UserInfo>> u in submitData.DictCounterUser)
+                    foreach (KeyValuePair<FlowRole, List<UserInfo>> u in submitData.DictCounterUser)
                     {
                         name += "角色名称：" + u.Key.Remark + "  人数：" + u.Value.Count + "\r\n";
                         foreach (var user in u.Value)
@@ -973,7 +973,7 @@ namespace SMT.FlowWFService.NewFlow
                 WorkflowRuntime WfRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(false);
                 WorkflowInstance Instance = SMTWorkFlowManage.CreateWorkflowInstance(WfRuntime, Xoml, Rules);
                 Tracer.Debug("GetUser(try)下根据模型文件创建工作流实例(完成) ID=" + Instance.InstanceId);
-                string strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, "StartFlow", xml);
+                string strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, "StartFlow", xml);
 
 
             }
@@ -991,7 +991,7 @@ namespace SMT.FlowWFService.NewFlow
         {
 
             FlowBLL bll = new FlowBLL();
-            bll.UpdateFlowRecord( entity, "", "");
+            bll.UpdateFlowDetailRecord( entity, "", "");
 
             return "";
         }

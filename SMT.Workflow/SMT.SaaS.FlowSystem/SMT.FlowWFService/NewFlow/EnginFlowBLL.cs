@@ -144,8 +144,9 @@ namespace SMT.FlowWFService.NewFlow
             }
             catch (Exception ex)
             {
-                Tracer.Debug("Formid="+submitData.FormID+";转换元数据XML出错："+submitData.XML);
-                throw new Exception(ex.Message, ex);
+                Tracer.Debug("我的单据保存出错，Formid="+submitData.FormID+";转换元数据XML出错："+submitData.XML);
+                //throw new Exception(ex.Message, ex);
+                return string.Empty;
             }
         }
         #endregion
@@ -412,7 +413,7 @@ namespace SMT.FlowWFService.NewFlow
         private FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();      
         #endregion
        
-        private bool EngineExecute( T_WF_DOTASK Entity, string IsTask,ref FlowUser sUser, ref string ErroMessage)
+        private bool EngineExecute(T_WF_DOTASK Entity, string IsTask,ref FlowUser sUser, ref string ErroMessage)
         {
             bool result = false;
             dal = new EnginFlowDAL();
@@ -433,77 +434,6 @@ namespace SMT.FlowWFService.NewFlow
             }                
             if (dtFlowTrigger != null && dtFlowTrigger.Rows.Count > 0)
             {
-                #region
-                DataRow[] drs = dtFlowTrigger.Select("ISDEFAULTMSG=1");//发的是默认流程触发条件
-                if (drs.Count() > 0)
-                {
-                    sUser.ErrorMsg += "发现默认流程触发［消息规则］内容 FORMID=" + sUser.FormID + " IsTask:" + IsTask.ToString() + "\r\n";
-                    Tracer.Debug("FORMID=" + sUser.FormID + " 发现默认流程触发消息规则 IsTask=" + IsTask.ToString());
-                    if (IsTask == "1")//新增待办任务
-                    {                      
-                        dal.AddDoTask( Entity, drs[0], sourceTable, strAppFieldValue);//新增待办任务
-                        FlowEngine.TaskCacheReflesh(Entity.RECEIVEUSERID);
-                    }
-                    else if (IsTask == "0")//消息
-                    {
-                        dal.AddDoTaskMessage( Entity, drs[0], sourceTable);
-                    }
-                }
-                else
-                {
-                    sUser.ErrorMsg += "没有发现默认流程触发（审核通过、审核不通过、审核中）［消息规则］内容 FORMID=" + sUser.FormID + " IsTask:" + IsTask.ToString() + "\r\n";
-                    Tracer.Debug("FORMID=" + sUser.FormID + " 没有发现默认流程触发（审核通过、审核不通过、审核中）消息规则 ");
-                    //throw new Exception("该单据所对应的默认[消息规则]设置未找到,请先配置该模块 " + sUser.ModelName + " 默认消息规则(审核通过、审核不通过、审核中)");
-                }
-                DataRow[] NotDefaultMsg = dtFlowTrigger.Select("ISDEFAULTMSG=0");//非默认消息，需要调用的WCF待办任务
-                if (NotDefaultMsg != null && NotDefaultMsg.Count() > 0)
-                {
-                    //AutoCallFlow(  dal,Entity,dtFlowTrigger,sourceTable, ref  sUser, strAppFieldValue, ref ErroMessage);
-                    #region 非默认消息时，自动发起流程
-                    //foreach (DataRow dr1 in NotDefaultMsg)
-                    //{
-                    //    string strAppMsg = string.Empty;
-                    //    CallWCFService( dr1, sourceTable, ref sUser, ref strAppMsg, ref  ErroMessage);//调用WCF服务
-                    //    if (!string.IsNullOrEmpty(strAppMsg))
-                    //    {
-                    //        try
-                    //        {
-                    //            string IsNewFlow = "1";
-                    //            string NewFormID = string.Empty;
-                    //            string strFormTypes = string.Empty;//表单状态
-                    //            DataRow DRNewTrigger = null;
-                    //            if (ApplicationValueToDataTable( strAppMsg, string.Concat(Entity.COMPANYID), ref sourceTable, ref IsNewFlow, ref NewFormID, ref strFormTypes, ref DRNewTrigger))
-                    //            {
-                    //                //通过岗位查找用户，并且取第一个用户为发送消息的对像
-                                   
-                    //                PersonnelServiceClient HRClient = new PersonnelServiceClient();
-                    //                if (!string.IsNullOrEmpty(dr1["OWNERPOSTID"].ToString()))
-                    //                {
-                    //                    string[] Employees = HRClient.GetEmployeeIDsByPostID(dr1["OWNERPOSTID"].ToString());
-                    //                    if (Employees != null && Employees.Count() > 0)
-                    //                    {
-                    //                        dal.AddDoTask( Entity, dr1, sourceTable, Employees[0], NewFormID, strAppFieldValue, string.Concat(dr1["MESSAGEBODY"]), strFormTypes);//发送消息
-                    //                    }
-                    //                }
-                    //                else
-                    //                {
-                    //                    string cMessage = "引擎调用新流程时没有选定岗位 SystemCode:" + string.Concat(DRNewTrigger["SYSTEMCODE"]) + " MODELCODE:" + string.Concat(DRNewTrigger["MODELCODE"]) + " NewFormID:" + NewFormID;
-                    //                    ErroMessage = cMessage;
-                                       
-                    //                    throw new Exception("命名空间:SMT.FlowWFService.EnginFlowBLL类方法：EngineExecute()引擎调用新流程时没有选定岗位");
-                    //                }
-                    //            }
-                    //        }
-                    //        catch (Exception ex)
-                    //        {
-                    //            throw new Exception("命名空间:SMT.FlowWFService.EnginFlowBLL类方法：EngineExecute() FORMID=" + sUser.FormID + "" + ex.Message);
-                    //        }
-                    //    }
-                    //}
-                    #endregion
-                }
-                result = true;
-                #endregion
             }
             else
             {
@@ -519,6 +449,85 @@ namespace SMT.FlowWFService.NewFlow
                 //暂是没有默认消息也可以审核通过
                // throw new Exception("该单据所对应的引擎系统设置未找到,请先配置该模块 " + sUser.ModelName + " 引擎消息(审核通过、审核不通过、审核中)");
             }
+
+            #region 发送待办任务（不管有没有配置消息规则，都发送待办任务）
+            DataRow[] drs = new DataRow[] { };
+            if (dtFlowTrigger != null && dtFlowTrigger.Rows.Count > 0)
+            {
+                dtFlowTrigger.Select("ISDEFAULTMSG=1");//不管有没有配置
+            }
+            //edit by ken 2015-7-17
+            //if (drs.Count() > 0)
+            //{
+                sUser.ErrorMsg += "发现默认流程触发［消息规则］内容 FORMID=" + sUser.FormID + " IsTask:" + IsTask.ToString() + "\r\n";
+                Tracer.Debug("FORMID=" + sUser.FormID + " 发现默认流程触发消息规则 IsTask=" + IsTask.ToString());
+                //if (IsTask == "1")//新增待办任务
+                //{
+                    dal.AddDoTask(Entity, drs[0], sourceTable, strAppFieldValue);//新增待办任务
+                    //FlowEngine.TaskCacheReflesh(Entity.RECEIVEUSERID);
+                //}
+                //else if (IsTask == "0")//消息
+                //{
+                    //dal.AddDoTaskMessage(Entity, drs[0], sourceTable);
+                //}
+            //}
+            //else
+            //{
+            //    sUser.ErrorMsg += "没有发现默认流程触发（审核通过、审核不通过、审核中）［消息规则］内容 FORMID=" + sUser.FormID + " IsTask:" + IsTask.ToString() + "\r\n";
+            //    Tracer.Debug("FORMID=" + sUser.FormID + " 没有发现默认流程触发（审核通过、审核不通过、审核中）消息规则 ");
+            //    //throw new Exception("该单据所对应的默认[消息规则]设置未找到,请先配置该模块 " + sUser.ModelName + " 默认消息规则(审核通过、审核不通过、审核中)");
+            //}
+            //end edit by ken 2015-7-17
+            DataRow[] NotDefaultMsg = dtFlowTrigger.Select("ISDEFAULTMSG=0");//非默认消息，需要调用的WCF待办任务
+            if (NotDefaultMsg != null && NotDefaultMsg.Count() > 0)
+            {
+                //AutoCallFlow(  dal,Entity,dtFlowTrigger,sourceTable, ref  sUser, strAppFieldValue, ref ErroMessage);
+                #region 非默认消息时，自动发起流程
+                //foreach (DataRow dr1 in NotDefaultMsg)
+                //{
+                //    string strAppMsg = string.Empty;
+                //    CallWCFService( dr1, sourceTable, ref sUser, ref strAppMsg, ref  ErroMessage);//调用WCF服务
+                //    if (!string.IsNullOrEmpty(strAppMsg))
+                //    {
+                //        try
+                //        {
+                //            string IsNewFlow = "1";
+                //            string NewFormID = string.Empty;
+                //            string strFormTypes = string.Empty;//表单状态
+                //            DataRow DRNewTrigger = null;
+                //            if (ApplicationValueToDataTable( strAppMsg, string.Concat(Entity.COMPANYID), ref sourceTable, ref IsNewFlow, ref NewFormID, ref strFormTypes, ref DRNewTrigger))
+                //            {
+                //                //通过岗位查找用户，并且取第一个用户为发送消息的对像
+
+                //                PersonnelServiceClient HRClient = new PersonnelServiceClient();
+                //                if (!string.IsNullOrEmpty(dr1["OWNERPOSTID"].ToString()))
+                //                {
+                //                    string[] Employees = HRClient.GetEmployeeIDsByPostID(dr1["OWNERPOSTID"].ToString());
+                //                    if (Employees != null && Employees.Count() > 0)
+                //                    {
+                //                        dal.AddDoTask( Entity, dr1, sourceTable, Employees[0], NewFormID, strAppFieldValue, string.Concat(dr1["MESSAGEBODY"]), strFormTypes);//发送消息
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    string cMessage = "引擎调用新流程时没有选定岗位 SystemCode:" + string.Concat(DRNewTrigger["SYSTEMCODE"]) + " MODELCODE:" + string.Concat(DRNewTrigger["MODELCODE"]) + " NewFormID:" + NewFormID;
+                //                    ErroMessage = cMessage;
+
+                //                    throw new Exception("命名空间:SMT.FlowWFService.EnginFlowBLL类方法：EngineExecute()引擎调用新流程时没有选定岗位");
+                //                }
+                //            }
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            throw new Exception("命名空间:SMT.FlowWFService.EnginFlowBLL类方法：EngineExecute() FORMID=" + sUser.FormID + "" + ex.Message);
+                //        }
+                //    }
+                //}
+                #endregion
+            }
+            result = true;
+            #endregion
+
             return result;
         }
         /// <summary>

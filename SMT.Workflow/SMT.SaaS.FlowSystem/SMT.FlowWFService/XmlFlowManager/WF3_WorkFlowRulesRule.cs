@@ -15,7 +15,7 @@ namespace SMT.FlowWFService.XmlFlowManager
     public partial class WF3_WorkFlowRulesRule
     {
 
-        private List<WF31_WorkFlowRulesRuleConditions> conditionsField;
+        private List<WF31_WorkFlowRulesRuleConditions> conditionsField=new List<WF31_WorkFlowRulesRuleConditions>();
 
         private string nameField;
 

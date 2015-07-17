@@ -39,7 +39,7 @@ namespace SMT.FlowWFService
     /// </summary>
     /// 
     [DataContract]
-    public class Role_UserType
+    public class FlowRole
     {
         /// <summary>
         /// 活动ID

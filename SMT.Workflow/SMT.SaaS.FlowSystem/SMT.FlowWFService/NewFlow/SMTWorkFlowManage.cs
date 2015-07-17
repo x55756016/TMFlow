@@ -28,6 +28,10 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
+                if(WorkflowInstanceAll==null)
+                {
+                    WorkflowInstanceAll = new Dictionary<string, WorkflowInstance>();
+                }
                 WorkflowRuntime WfRuntime = new WorkflowRuntime();
                 return WfRuntime;
             }
@@ -142,11 +146,11 @@ namespace SMT.FlowWFService.NewFlow
         /// </summary>
         /// <param name="WfRuntime"></param>
         /// <param name="instance"></param>
-        /// <param name="CurrentStateName"></param>
+        /// <param name="CurrentStepId"></param>
         /// <returns></returns>
-        public static string GetNextState(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName)
+        public static string GetNextState(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStepId)
         {
-            string StateName = CurrentStateName;
+            string StateName = CurrentStepId;
             try
             {
                 if (instance == null)
@@ -154,7 +158,7 @@ namespace SMT.FlowWFService.NewFlow
                     StateName = "EndFlow";
                     return StateName;
                 }
-                StateName = XMLFlowManager.GetNextNode(instance.WorkFlowDefine, CurrentStateName, string.Empty);
+                StateName = XMLFlowManager.GetNextStepRoles(instance.WorkFlowDefine, CurrentStepId, string.Empty);
                 return StateName;
             }
             catch (Exception ex)
@@ -164,24 +168,24 @@ namespace SMT.FlowWFService.NewFlow
             }
         }
         /// <summary>
-        /// 激发事件到一下状态，并获取状态代码
+        /// 获取流程下一步骤ActivitID
         /// </summary>
         /// <param name="WfRuntime"></param>
         /// <param name="instance"></param>
         /// <param name="CurrentStateName"></param>
         /// <param name="BusinessXml"></param>
         /// <returns></returns>
-        public static string GetNextStateByEvent(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName, string BusinessXml)
+        public static string GetFlowNextStepRoles(WorkflowRuntime WfRuntime, WorkflowInstance instance, string CurrentStateName, string BusinessXml)
         {
             string NextNode = string.Empty;
             try
             {
                 string FlowDefineXml=string.Empty;
-                NextNode = XMLFlowManager.GetNextNode(instance.WorkFlowDefine, CurrentStateName, BusinessXml);
+                NextNode = XMLFlowManager.GetNextStepRoles(instance.WorkFlowDefine, CurrentStateName, BusinessXml);
             }
             catch (Exception ex)
             {
-                Tracer.Debug("GetNextStateByEvent异常信息 ：" + ex.ToString());
+                Tracer.Debug("GetFlowNextStepRoles异常信息 ：" + ex.ToString());
                 throw new Exception(ex.Message);
             }
             return NextNode;

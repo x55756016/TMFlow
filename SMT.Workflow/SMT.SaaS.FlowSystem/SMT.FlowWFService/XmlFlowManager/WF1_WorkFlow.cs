@@ -5,7 +5,9 @@ using System.Text;
 
 namespace SMT.FlowWFService.XmlFlowManager
 {
-    /// <remarks/>
+    /// <summary>
+    /// 流程定义
+    /// </summary>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -17,9 +19,9 @@ namespace SMT.FlowWFService.XmlFlowManager
 
         private string systemField;
 
-        private List<WF2_WorkFlowActivitysActivity> activitysField;
+        private List<WF2_WorkFlowActivitysActivity> activitysField=new List<WF2_WorkFlowActivitysActivity>();
 
-        private List<WF3_WorkFlowRulesRule> rulesField;
+        private List<WF3_WorkFlowRulesRule> rulesField=new List<WF3_WorkFlowRulesRule>();
 
         /// <remarks/>
         public string System

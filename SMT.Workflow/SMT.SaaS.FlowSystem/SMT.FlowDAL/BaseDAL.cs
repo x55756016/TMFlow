@@ -61,7 +61,7 @@ namespace SMT.FlowDAL
         /// <returns></returns>
         public static object GetValue(object value)
         {
-            return value == null ? DBNull.Value.ToString() : value;
+            return value == null ? DBNull.Value : value;
         }
         /// <summary>
         /// 执行SQL语句

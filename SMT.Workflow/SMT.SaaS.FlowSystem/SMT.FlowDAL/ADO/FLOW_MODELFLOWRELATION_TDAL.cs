@@ -37,7 +37,7 @@ namespace SMT.FLOWDAL.ADO
 
                     if (OrgType != "1")
                     {
-                        sql = sql + " and DEPARTMENTID is null";
+                        sql = sql + " and (DEPARTMENTID is null or DEPARTMENTID ='')";
 
                     }
                     else
@@ -55,7 +55,7 @@ namespace SMT.FLOWDAL.ADO
 
                     //dr = cmd.ExecuteReader();
                     Tracer.Debug("FLOW_MODELFLOWRELATION_TDAL->GetFlowByModelName SQL语句：" + sql);
-                    dr = dao.ExecuteReader(sql, null);
+                    dr = dao.ExecuteReader(sql);
                     while (dr.Read())
                     {
                         #region FLOW_MODELFLOWRELATION_T
@@ -87,7 +87,7 @@ namespace SMT.FLOWDAL.ADO
                          sql = @"select * from FLOW_FLOWDEFINE_T where FLOWCODE='" + listRelation[0].FLOW_FLOWDEFINE_T.FLOWCODE + "'";
                         //dr = cmd.ExecuteReader();
 
-                        dr = dao.ExecuteReader(sql, null);
+                        dr = dao.ExecuteReader(sql);
                         while (dr.Read())
                         {
                             #region FLOW_FLOWDEFINE_T

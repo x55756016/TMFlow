@@ -79,7 +79,7 @@
     <Content Include="crossdomain.xml" />
     <Content Include="FlowWFService.svc" />
     <Content Include="SMT.FlowWFService.Service.svc" />
-    <Content Include="TestEngineUpdateCheckState.aspx" />
+    <Content Include="Test.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -101,12 +101,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestEngineUpdateCheckState.aspx.cs">
-      <DependentUpon>TestEngineUpdateCheckState.aspx</DependentUpon>
+    <Compile Include="Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="TestEngineUpdateCheckState.aspx.designer.cs">
-      <DependentUpon>TestEngineUpdateCheckState.aspx</DependentUpon>
+    <Compile Include="Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <PropertyGroup>

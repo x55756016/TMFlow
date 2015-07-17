@@ -37,6 +37,8 @@ using System.Data;
 using SMT.Workflow.SMTCache;
 using SMT.Workflow.Common.Model;
 using SMT.FlowWFService.XmlFlowManager;
+using SMT.HRM.BLL;
+using SMT.HRM.BLL.Permission;
 
 namespace SMT.FlowWFService.NewFlow
 {
@@ -142,7 +144,7 @@ namespace SMT.FlowWFService.NewFlow
                         FLOW_FLOWRECORDMASTER_TDAL.Add( entity.FLOW_FLOWRECORDMASTER_T);//对数据库操作
                         fUser.NextEditUserID = entity.EDITUSERID;
                         fUser.NextEditUserName = entity.EDITUSERNAME;
-                        AddFlowRecord( entity, NextStateCode, AppUser.UserID);
+                        AddFlowDetailRecord( entity, NextStateCode, AppUser.UserID);
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
                         return tmpDataResult;
@@ -153,7 +155,7 @@ namespace SMT.FlowWFService.NewFlow
                     FLOW_FLOWRECORDMASTER_TDAL.Add( entity.FLOW_FLOWRECORDMASTER_T);//对数据库操作
                     fUser.NextEditUserID = entity.EDITUSERID;
                     fUser.NextEditUserName = entity.EDITUSERNAME;
-                    AddFlowRecord( entity, NextStateCode, AppUser.UserID);
+                    AddFlowDetailRecord( entity, NextStateCode, AppUser.UserID);
 
 
 
@@ -194,7 +196,7 @@ namespace SMT.FlowWFService.NewFlow
                     {
                         fUser.NextEditUserID = entity2.EDITUSERID;
                         fUser.NextEditUserName = entity2.EDITUSERNAME;
-                        AddFlowRecord( entity2, NextStateCode, AppUser.UserID);//对数据库操作
+                        AddFlowDetailRecord( entity2, NextStateCode, AppUser.UserID);//对数据库操作
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
                     }
@@ -217,7 +219,7 @@ namespace SMT.FlowWFService.NewFlow
 
 
 
-                    entity = UpdateFlowRecord( entity, NextStateCode, AppUser.UserID);//对数据库操作
+                    entity = UpdateFlowDetailRecord( entity, NextStateCode, AppUser.UserID);//对数据库操作
 
                     //添加下一状态
                     FLOW_FLOWRECORDDETAIL_T entity2 = new FLOW_FLOWRECORDDETAIL_T();
@@ -255,7 +257,7 @@ namespace SMT.FlowWFService.NewFlow
 
                         entity.FLOW_FLOWRECORDMASTER_T.EDITDATE = DateTime.Now;
 
-                        UpdateFlowRecord( entity, NextStateCode, AppUser.UserID);//对数据库操作
+                        UpdateFlowDetailRecord( entity, NextStateCode, AppUser.UserID);//对数据库操作
                         FLOW_FLOWRECORDMASTER_TDAL.Update(entity.FLOW_FLOWRECORDMASTER_T);//对数据库操作
                     }
 
@@ -305,7 +307,7 @@ namespace SMT.FlowWFService.NewFlow
                         entity2.FLOW_FLOWRECORDMASTER_T = entity.FLOW_FLOWRECORDMASTER_T;
                         fUser.NextEditUserID = entity2.EDITUSERID;
                         fUser.NextEditUserName = entity2.EDITUSERNAME;
-                        AddFlowRecord( entity2, NextStateCode, AppUser.UserID);//对数据库操作
+                        AddFlowDetailRecord( entity2, NextStateCode, AppUser.UserID);//对数据库操作
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
 
@@ -344,14 +346,10 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="SubmitFlag"></param>
         /// <param name="FlowType"></param>
         /// <returns></returns>
-        public DataResult DoFlowRecord2( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, UserInfo AppUser, UserInfo AgentUser, SubmitFlag SubmitFlag, FlowType FlowType,ref FlowUser fUser)
+        public DataResult AddOrUpdateFlowRecord( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, UserInfo AppUser, UserInfo AgentUser, SubmitFlag SubmitFlag, FlowType FlowType,ref FlowUser fUser)
         {
             DataResult tmpDataResult = new DataResult();
             UserInfo tmpUserInfo = AppUser;
-
-            //tmpUserInfo.UserID = EditUserId;
-            //tmpUserInfo.UserName = EditUserName;
-
             tmpDataResult.UserInfo.Add(tmpUserInfo);
             try
             {
@@ -365,7 +363,6 @@ namespace SMT.FlowWFService.NewFlow
                         entity.FLOW_FLOWRECORDMASTER_T.FLOWRECORDMASTERID = Guid.NewGuid().ToString();
                     }
                     entity.FLOW_FLOWRECORDMASTER_T.CHECKSTATE = "1";
-
                     entity.FLOW_FLOWRECORDMASTER_T.CREATECOMPANYID = entity.CREATECOMPANYID;
                     entity.FLOW_FLOWRECORDMASTER_T.CREATEDEPARTMENTID = entity.CREATEDEPARTMENTID;
                     entity.FLOW_FLOWRECORDMASTER_T.CREATEPOSTID = entity.CREATEPOSTID;
@@ -405,7 +402,7 @@ namespace SMT.FlowWFService.NewFlow
                         fUser.NextEditUserID = entity.EDITUSERID;
                         fUser.NextEditUserName = entity.EDITUSERNAME;
                         FLOW_FLOWRECORDMASTER_TDAL.Add( entity.FLOW_FLOWRECORDMASTER_T);
-                        AddFlowRecord( entity, NextStateCode, AppUser.UserID);
+                        AddFlowDetailRecord( entity, NextStateCode, AppUser.UserID);
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
                         return tmpDataResult;
@@ -416,46 +413,45 @@ namespace SMT.FlowWFService.NewFlow
                     FLOW_FLOWRECORDMASTER_TDAL.Add( entity.FLOW_FLOWRECORDMASTER_T);
                     fUser.NextEditUserID = entity.EDITUSERID;
                     fUser.NextEditUserName = entity.EDITUSERNAME;
-                    AddFlowRecord( entity, NextStateCode, AppUser.UserID);
+                    AddFlowDetailRecord( entity, NextStateCode, AppUser.UserID);
 
-                    FLOW_FLOWRECORDDETAIL_T entity2 = new FLOW_FLOWRECORDDETAIL_T();
+                    FLOW_FLOWRECORDDETAIL_T entDetail = new FLOW_FLOWRECORDDETAIL_T();
 
                     //添加下一状态
-                    entity2.FLOWRECORDDETAILID = Guid.NewGuid().ToString();
-                    entity2.FLOW_FLOWRECORDMASTER_T = entity.FLOW_FLOWRECORDMASTER_T;
-                    entity2.STATECODE = NextStateCode == "" ? SMTWorkFlowManage.GetNextState(workflowRuntime, instance, entity.STATECODE) : NextStateCode;
-                    entity2.PARENTSTATEID = entity.FLOWRECORDDETAILID;//entity.StateCode;
-
+                    entDetail.FLOWRECORDDETAILID = Guid.NewGuid().ToString();
+                    entDetail.FLOW_FLOWRECORDMASTER_T = entity.FLOW_FLOWRECORDMASTER_T;
+                    entDetail.STATECODE = NextStateCode == "" ? SMTWorkFlowManage.GetNextState(workflowRuntime, instance, entity.STATECODE) : NextStateCode;
+                    entDetail.PARENTSTATEID = entity.FLOWRECORDDETAILID;//entity.StateCode;
                     //entity2.Content = ".";
-                    entity2.FLAG = "0";
-                    entity2.CHECKSTATE = "2";
-                    entity2.CREATEPOSTID = entity.CREATEPOSTID;
-                    entity2.CREATECOMPANYID = entity.CREATECOMPANYID;
-                    entity2.CREATEDEPARTMENTID = entity.CREATEDEPARTMENTID;
-                    entity2.CREATEUSERID = entity.EDITUSERID;
-                    entity2.CREATEUSERNAME = entity.EDITUSERNAME;
-                    entity2.CREATEDATE = DateTime.Now;
-                    entity2.EDITUSERID = AppUser.UserID;
-                    entity2.EDITUSERNAME = AppUser.UserName;
-                    entity2.EDITCOMPANYID = AppUser.CompanyID;
-                    entity2.EDITDEPARTMENTID = AppUser.DepartmentID;
-                    entity2.EDITPOSTID = AppUser.PostID;
-                    entity2.EDITDATE = DateTime.Now;
+                    entDetail.FLAG = "0";
+                    entDetail.CHECKSTATE = "2";
+                    entDetail.CREATEPOSTID = entity.CREATEPOSTID;
+                    entDetail.CREATECOMPANYID = entity.CREATECOMPANYID;
+                    entDetail.CREATEDEPARTMENTID = entity.CREATEDEPARTMENTID;
+                    entDetail.CREATEUSERID = entity.EDITUSERID;
+                    entDetail.CREATEUSERNAME = entity.EDITUSERNAME;
+                    entDetail.CREATEDATE = DateTime.Now;
+                    entDetail.EDITUSERID = AppUser.UserID;
+                    entDetail.EDITUSERNAME = AppUser.UserName;
+                    entDetail.EDITCOMPANYID = AppUser.CompanyID;
+                    entDetail.EDITDEPARTMENTID = AppUser.DepartmentID;
+                    entDetail.EDITPOSTID = AppUser.PostID;
+                    entDetail.EDITDATE = DateTime.Now;
 
                     if (AgentUser != null)  //如果启用了代理，把代理人信息写入
                     {
-                        entity2.AGENTUSERID = AgentUser.UserID;
-                        entity2.AGENTERNAME = AgentUser.UserName;
-                        entity2.AGENTEDITDATE = DateTime.Now;
+                        entDetail.AGENTUSERID = AgentUser.UserID;
+                        entDetail.AGENTERNAME = AgentUser.UserName;
+                        entDetail.AGENTEDITDATE = DateTime.Now;
                     }
 
-                    tmpDataResult.AppState = entity2.STATECODE;
+                    tmpDataResult.AppState = entDetail.STATECODE;
 
-                    if (entity2.STATECODE != "EndFlow")
+                    if (entDetail.STATECODE != "EndFlow")
                     {
-                        fUser.NextEditUserID = entity2.EDITUSERID;
-                        fUser.NextEditUserName = entity2.EDITUSERNAME;
-                        AddFlowRecord( entity2, NextStateCode, AppUser.UserID);
+                        fUser.NextEditUserID = entDetail.EDITUSERID;
+                        fUser.NextEditUserName = entDetail.EDITUSERNAME;
+                        AddFlowDetailRecord( entDetail, NextStateCode, AppUser.UserID);
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
                     }
@@ -474,12 +470,8 @@ namespace SMT.FlowWFService.NewFlow
                 {
                     #region 更新流程
                     //如果NextStateCode为空则自动获取模型中的下一状态，如果不为空则使用传入状态代码，并使用传入下一任务人ID
-
                     //更新本流程
-
-
-
-                    entity = UpdateFlowRecord( entity, NextStateCode, AppUser.UserID);
+                    entity = UpdateFlowDetailRecord( entity, NextStateCode, AppUser.UserID);
                     string stateCode = "";
                     if (NextStateCode.ToUpper() == "ENDFLOW")
                     {
@@ -508,7 +500,7 @@ namespace SMT.FlowWFService.NewFlow
 
                         entity.FLOW_FLOWRECORDMASTER_T.EDITDATE = DateTime.Now;
 
-                        UpdateFlowRecord( entity, NextStateCode, AppUser.UserID);
+                        UpdateFlowDetailRecord( entity, NextStateCode, AppUser.UserID);
 
                         FLOW_FLOWRECORDMASTER_TDAL.Update(entity.FLOW_FLOWRECORDMASTER_T);
                         tmpDataResult.AppState = stateCode;
@@ -526,36 +518,20 @@ namespace SMT.FlowWFService.NewFlow
                         if (NextStateCode != "")
                         {
                             entity2.STATECODE = NextStateCode;
-                            //entity2.EditUserID = EditUserId;
-                            //entity2.EditUserName = EditUserName;
                         }
                         else
                         {
                             entity2.STATECODE = stateCode;
-                            // entity2.EditUserID = entity2.StateCode=="EndFlow" ? "" : "EditUserId"; //根据状态查询权限表中用户ID
                         }
-
-
                         entity2.FLOW_FLOWRECORDMASTER_T = entity.FLOW_FLOWRECORDMASTER_T;
                         entity2.PARENTSTATEID = entity.FLOWRECORDDETAILID;// entity.StateCode;
-
-                        //entity2.Content = "";
                         entity2.FLAG = "0";
                         entity2.CHECKSTATE = "2";
                         entity2.CREATEPOSTID = entity.CREATEPOSTID;
                         entity2.CREATECOMPANYID = entity.CREATECOMPANYID;
                         entity2.CREATEDEPARTMENTID = entity.CREATEDEPARTMENTID;
-
-                        //if (entity.EDITDATE == entity.AGENTEDITDATE) //代理审核时
-                        //{
-                        //    entity2.CREATEUSERID = entity.AGENTUSERID;
-                        //    entity2.CREATEUSERNAME = entity.AGENTERNAME;
-                        //}
-                        //else   //正常审核时
-                        //{
                         entity2.CREATEUSERID = entity.EDITUSERID;
                         entity2.CREATEUSERNAME = entity.EDITUSERNAME;
-                        //}
 
                         entity2.EDITUSERID = AppUser.UserID;
                         entity2.EDITUSERNAME = AppUser.UserName;
@@ -576,7 +552,7 @@ namespace SMT.FlowWFService.NewFlow
                         tmpDataResult.AppState = entity2.STATECODE;
                         fUser.NextEditUserID = entity2.EDITUSERID;
                         fUser.NextEditUserName = entity2.EDITUSERNAME;
-                        AddFlowRecord( entity2, NextStateCode, AppUser.UserID);
+                        AddFlowDetailRecord( entity2, NextStateCode, AppUser.UserID);
                         tmpDataResult.FlowResult = FlowResult.SUCCESS;
                         tmpDataResult.CheckState = "1";
                         #endregion
@@ -609,9 +585,6 @@ namespace SMT.FlowWFService.NewFlow
             {
                 Tracer.Debug("DoFlowRecord2异常信息 ：" + ex.ToString());
                 throw new Exception("DoFlowRecord2:" + ex.InnerException + ex.Message);
-                //tmpDataResult.FlowResult = FlowResult.FAIL;
-                //tmpDataResult.Err = ex.Message;
-                //return tmpDataResult;
             }
         }
 
@@ -628,7 +601,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="FlowType"></param>
         /// <returns></returns>
 
-        public DataResult DoFlowRecord_Add( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<Role_UserType, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
+        public DataResult DoFlowRecord_Add( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<FlowRole, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
         {
             DataResult tmpDataResult = new DataResult();
             tmpDataResult.DictCounterUser = dictUserInfo;
@@ -786,7 +759,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="SubmitFlag"></param>
         /// <param name="FlowType"></param>
         /// <returns></returns>
-        public DataResult DoFlowRecord_Approval( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<Role_UserType, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
+        public DataResult DoFlowRecord_Approval( WorkflowRuntime workflowRuntime, WorkflowInstance instance, FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, Dictionary<FlowRole, List<UserInfo>> dictUserInfo, Dictionary<UserInfo, UserInfo> dictAgentUserInfo, SubmitFlag SubmitFlag, FlowType FlowType)
         {
             DataResult tmpDataResult = new DataResult();
             tmpDataResult.DictCounterUser = dictUserInfo;
@@ -956,7 +929,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="entity">流程审批明细表</param>
         /// <param name="NextStateCode">下一个状态代码</param>
         /// <param name="EditUserId">编辑用户ID</param>
-        void AddFlowRecord( FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, string EditUserId)
+        void AddFlowDetailRecord( FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, string EditUserId)
         {
             FLOW_FLOWRECORDDETAIL_TDAL.Add( entity);
         }
@@ -975,7 +948,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="NextStateCode">下一个状态代码</param>
         /// <param name="EditUserId">编辑用户ID</param>
         /// <returns></returns>
-        public FLOW_FLOWRECORDDETAIL_T UpdateFlowRecord( FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, string EditUserId)
+        public FLOW_FLOWRECORDDETAIL_T UpdateFlowDetailRecord( FLOW_FLOWRECORDDETAIL_T entity, string NextStateCode, string EditUserId)
         {
             entity.FLAG = "1";
             FLOW_FLOWRECORDDETAIL_TDAL.Update( entity);
@@ -1018,7 +991,7 @@ namespace SMT.FlowWFService.NewFlow
                 List<string> FlowTypeList = new List<string>();
 
                 FLOW_FLOWRECORDDETAIL_TDAL Dal = new FLOW_FLOWRECORDDETAIL_TDAL();
-                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecord( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, Utility.FlowTypeListToStringList(FlowType));
+                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecord( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, FlowUtility.FlowTypeListToStringList(FlowType));
 
                 if (dt.Count > 0)
                     return dt;
@@ -1049,7 +1022,7 @@ namespace SMT.FlowWFService.NewFlow
 
             try
             {
-                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordV( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, Utility.FlowTypeListToStringList(FlowType));
+                var dt = FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordV( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, FlowUtility.FlowTypeListToStringList(FlowType));
 
                 if (dt.Count > 0)
                     return dt;
@@ -1077,7 +1050,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <returns></returns>           
         public static List<FLOW_FLOWRECORDDETAIL_T> GetFlowInfoTop( string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID, List<FlowType> FlowType)
         {
-            return FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordTop( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, Utility.FlowTypeListToStringList(FlowType));
+            return FLOW_FLOWRECORDDETAIL_TDAL.GetFlowRecordTop( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID, FlowUtility.FlowTypeListToStringList(FlowType));
         }
         /// <summary>
         /// 获取任务信息
@@ -1106,7 +1079,7 @@ namespace SMT.FlowWFService.NewFlow
                 {
                     TaskInfo tmpTaskInfo = new TaskInfo();
                     tmpTaskInfo.FlowInfo = FLOWRECORDDETAIList[i];
-                    tmpTaskInfo.SubModelCode = Utility.GetString(Utility.GetSubModelCode(ACTIVEROLE, FLOWRECORDDETAIList[i].STATECODE));
+                    tmpTaskInfo.SubModelCode = FlowUtility.GetString(FlowUtility.GetSubModelCode(ACTIVEROLE, FLOWRECORDDETAIList[i].STATECODE));
                     TaskInfoList.Add(tmpTaskInfo);
                 }
 
@@ -1244,9 +1217,13 @@ namespace SMT.FlowWFService.NewFlow
                 {
                     Tracer.Debug("FormID=" + user.FormID + ";没有找到公司[ " + user.CompayName + " ]下部门[ " + user.DepartmentName + " ]的匹配流程返回,继续部门的上级机构查找流程");
                 }
-                OrganizationServiceClient Organization = new OrganizationServiceClient();
-                Tracer.Debug("Organization.InnerChannel.LocalAddress=" + Organization.InnerChannel.LocalAddress.Uri + ";Organization.InnerChannel.RemoteAddress.Uri=" + Organization.InnerChannel.RemoteAddress.Uri);
-                Dictionary<string, string> OrganizationList = Organization.GetFatherByDepartmentID(DepartID);
+                //OrganizationServiceClient Organization = new OrganizationServiceClient();             
+                Dictionary<string, string> OrganizationList = new Dictionary<string,string>();
+                using (DepartmentBLL bll = new DepartmentBLL())
+                {
+                    OrganizationList= bll.GetFatherByDepartmentID(DepartID);
+                }
+
                 Tracer.Debug("FormID=" + user.FormID + ";继续查找部门的上级机构");
                 if (OrganizationList == null || OrganizationList.Count <= 0)
                 {
@@ -1434,7 +1411,7 @@ namespace SMT.FlowWFService.NewFlow
             string strCurrState = "StartFlow";
             string strNextState = "StartFlow";
 
-            Role_UserType RuleName;
+            FlowRole RuleName;
             List<UserInfo> AppUserInfo = null;
             try
             {
@@ -1447,7 +1424,7 @@ namespace SMT.FlowWFService.NewFlow
                 {
                     strCurrState = strNextState;
 
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
 
                     if (strNextState == "EndFlow")
                     {
@@ -1457,7 +1434,7 @@ namespace SMT.FlowWFService.NewFlow
                     else
                     {
 
-                        RuleName = Utility.GetRlueName(Layout, strNextState);
+                        RuleName = FlowUtility.GetRlueName(Layout, strNextState);
                         if (RuleName == null)
                         {
                             DataResult.Err = "没有找到对应角色";
@@ -1465,7 +1442,7 @@ namespace SMT.FlowWFService.NewFlow
                             return;
                         }
                         bool isHigher = false;
-                        AppUserInfo = GetUserByStateCode(RuleName.RoleName, UserID, PostID, ref isHigher);
+                        AppUserInfo = TmGetUserByRoleId(RuleName.RoleName, UserID, PostID, ref isHigher);
                         #region 打印审核人
                         string names = "\r\n=======打印审核人A(listRole[0].RoleName=" + RuleName.RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
                         foreach (var user in AppUserInfo)
@@ -1566,221 +1543,155 @@ namespace SMT.FlowWFService.NewFlow
         /// 获取下一状态数据
         /// </summary>
         /// <param name="companyID"></param>
-        /// <param name="Xoml"></param>
+        /// <param name="FlowDefineXML"></param>
         /// <param name="Rules"></param>
-        /// <param name="Layout"></param>
+        /// <param name="FlowLayoutXML"></param>
         /// <param name="BusinessXml"></param>
         /// <param name="UserID"></param>
         /// <param name="PostID"></param>
         /// <param name="FlowType"></param>
         /// <param name="DataResult"></param>
         /// <param name="user"></param>
-        public void GetUserByFlow(string companyID, string Xoml, string Rules, string Layout, string BusinessXml, string UserID, string PostID, FlowType FlowType, ref DataResult DataResult, ref FlowUser user)
+        public void TmFlowToNextStep(string companyID, string FlowDefineXML, string Rules, string FlowLayoutXML, string BusinessXml, string UserID, string PostID, FlowType FlowType, ref DataResult DataResult, ref FlowUser user)
         {
 
             WorkflowRuntime WfRuntime = null;
             WorkflowInstance Instance = null;
-            string strCurrState = "StartFlow";
-            string strNextState = "StartFlow";
+            string strCurrActivitID = "StartFlow";
+            string strNextActivitID = "StartFlow";
             bool IsCountersign = false;
             string CountersignType = "0";
             //Role_UserType RuleName;
             List<UserInfo> AppUserInfo = null;
-            Dictionary<Role_UserType, List<UserInfo>> DictCounterUser = null;
+            Dictionary<FlowRole, List<UserInfo>> DictCounterUser = null;
             try
             {
                 user.TrackingMessage += "创建工作流运行时 SMTWorkFlowManage.CreateWorkFlowRuntime(false)开始\r\n";
+                //创建工作流
                 WfRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(false);
+                
                 user.TrackingMessage += "创建工作流运行时SMTWorkFlowManage.CreateWorkFlowRuntime(false)完成\r\n";
-                Instance = SMTWorkFlowManage.CreateWorkflowInstance(WfRuntime,Xoml, Rules);
-                bool iscurruser = true;
-                int testflag = 0;
-                while (iscurruser)
+                Instance = SMTWorkFlowManage.CreateWorkflowInstance(WfRuntime, FlowDefineXML, Rules);
+              
+
+
+                #region 激发事件到一下状态
+                strCurrActivitID = strNextActivitID;
+                //user.TrackingMessage += "激发事件到一下状态，并获取状态代码 SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)开始" + Instance.InstanceId.ToString() + "\r\n";
+
+                strNextActivitID = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextActivitID, BusinessXml);
+
+                //user.TrackingMessage += "激发事件到一下状态，并获取状态代码 SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)完成" + Instance.InstanceId.ToString() + "\r\n";
+
+                if (strNextActivitID == "EndFlow")
                 {
-                    testflag++;
-                    if (testflag > 10)
+                    strNextActivitID = strCurrActivitID;
+                 
+                }
+                else
+                {
+                    //获取节点对应的角色id
+                    List<FlowRole> listRoleID = FlowUtility.GetRlueIdFromActivitID(FlowLayoutXML, strNextActivitID, ref IsCountersign, ref CountersignType);
+
+                    if (listRoleID.Count == 0)
                     {
-                        throw new Exception("循环超过10次");
+                        DataResult.Err = "流程:" + user.FlowName + " 没有找到对应角色";
+                        DataResult.FlowResult = FlowResult.FAIL;
+                        Tracer.Debug("Formid=" + user.FormID + ";活动属性 Name=" + strNextActivitID + ";没有在流程:" + user.FlowName + " Layout中找到对应角色,Layout如下:\r\r" + FlowLayoutXML);
+                        return;
                     }
-                    #region 激发事件到一下状态
-                    strCurrState = strNextState;
-                    user.TrackingMessage += "激发事件到一下状态，并获取状态代码 SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)开始" + Instance.InstanceId.ToString() + "\r\n";
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, BusinessXml);
-                    user.TrackingMessage += "激发事件到一下状态，并获取状态代码 SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml)完成" + Instance.InstanceId.ToString() + "\r\n";
-                    if (strNextState == "EndFlow")
+                    if (!IsCountersign)
                     {
-                        strNextState = strCurrState;
-                        iscurruser = false;
-                    }
-                    else
-                    {
-                        List<Role_UserType> listRole = Utility.GetRlueName2(Layout, strNextState, ref IsCountersign, ref CountersignType);
-                       
-                        if (listRole.Count == 0)
+                        Tracer.Debug("Formid=" + user.FormID + ";(非会签) 根活动的字符串查找角色状态码(即活动Name属性)StateCode=" + strNextActivitID + " Layout=" + FlowLayoutXML + "");
+                        #region 非会签
+                        bool isHigher = false;
+                        //根据角色找人,如果角色有多个人,只找其中一个
+                        AppUserInfo = TmGetUserByRoleId(listRoleID[0].RoleName, UserID, PostID, ref isHigher);
+
+                        #region 打印审核人
+                        string names = "\r\n=======FormID=" + user.FormID + " 非会签 根据角色找人,如果角色有多个人,只找其中一个 打印审核人B(listRole[0].RoleName=" + listRoleID[0].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
+                        foreach (var us in AppUserInfo)
                         {
-                            DataResult.Err = "流程:" + user.FlowName + " 没有找到对应角色";
-                            DataResult.FlowResult = FlowResult.FAIL;
-                            Tracer.Debug("Formid=" + user.FormID + ";活动属性 Name=" + strNextState + ";没有在流程:" + user.FlowName + " Layout中找到对应角色,Layout如下:\r\r" + Layout);
-                            return;
+                            names += "CompanyID:" + us.CompanyID + "\r\n";
+                            names += "DepartmentID:" + us.DepartmentID + "\r\n";
+                            names += "PostID:" + us.PostID + "\r\n";
+                            names += "UserID:" + us.UserID + "\r\n";
+
+                            names += "CompanyName:" + us.CompanyName + "\r\n";
+                            names += "DepartmentName:" + us.DepartmentName + "\r\n";
+                            names += "PostName:" + us.PostName + "\r\n";
+                            names += "UserName:" + us.UserName + "\r\n";
+                            names += "----------------------------------------------------\r\n";
                         }
-                        if (!IsCountersign)
+                        if (!isHigher && listRoleID[0].IsOtherCompany != null)
                         {
-                            Tracer.Debug("Formid=" + user.FormID + ";(非会签) 根活动的字符串查找角色状态码(即活动Name属性)StateCode=" + strNextState + " Layout=" + Layout + "");
-                            #region 非会签
-                            bool isHigher = false;
-                            //根据角色找人,如果角色有多个人,只找其中一个
-                            AppUserInfo = GetUserByStateCode(listRole[0].RoleName, UserID, PostID, ref isHigher);
-                            #region 打印审核人
-                            string names = "\r\n=======FormID="+user.FormID+" 非会签 根据角色找人,如果角色有多个人,只找其中一个 打印审核人B(listRole[0].RoleName=" + listRole[0].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
-                            foreach (var us in AppUserInfo)
+                            if (listRoleID[0].IsOtherCompany.Value == true)
                             {
-                                names += "CompanyID:" + us.CompanyID + "\r\n";
-                                names += "DepartmentID:" + us.DepartmentID + "\r\n";
-                                names += "PostID:" + us.PostID + "\r\n";
-                                names += "UserID:" + us.UserID + "\r\n";
-
-                                names += "CompanyName:" + us.CompanyName + "\r\n";
-                                names += "DepartmentName:" + us.DepartmentName + "\r\n";
-                                names += "PostName:" + us.PostName + "\r\n";
-                                names += "UserName:" + us.UserName + "\r\n";
-                                names += "----------------------------------------------------\r\n";
-                            }
-                            if (!isHigher && listRole[0].IsOtherCompany != null)
-                            {
-                                if (listRole[0].IsOtherCompany.Value == true)
+                                names += "是否指定公司：" + listRoleID[0].IsOtherCompany.Value.ToString() + "\r\n";
+                                names += "公司的ID：" + listRoleID[0].OtherCompanyID + "\r\n";
+                                if (string.IsNullOrEmpty(listRoleID[0].OtherCompanyID))
                                 {
-                                    names += "是否指定公司：" + listRole[0].IsOtherCompany.Value.ToString() + "\r\n";
-                                    names += "公司的ID：" + listRole[0].OtherCompanyID + "\r\n";
-                                    if (string.IsNullOrEmpty(listRole[0].OtherCompanyID))
-                                    {
-                                        names +="Layout=" + Layout + "\r\n";
-                                    }
-                                }
-                                else if (listRole[0].IsOtherCompany.Value == false)
-                                {
-                                    names += "实际要查找公司的ID:" + companyID + " " + user.GetCompanyName(companyID) + "\r\n";
+                                    names += "Layout=" + FlowLayoutXML + "\r\n";
                                 }
                             }
-                            user.ErrorMsg += names;
-                            Tracer.Debug(names);
-                            #endregion
-                            #region beyond
-
-                            if (!isHigher)
+                            else if (listRoleID[0].IsOtherCompany.Value == false)
                             {
-                                if (listRole[0].IsOtherCompany != null && listRole[0].IsOtherCompany.Value == true)
-                                {//指定公司
-                                    //过滤人
-                                    AppUserInfo = AppUserInfo.Where(u => u.CompanyID == listRole[0].OtherCompanyID).ToList();
-                                }
-                                else
-                                {
-                                    AppUserInfo = AppUserInfo.Where(u => u.CompanyID == companyID).ToList();
-                                }
+                                names += "实际要查找公司的ID:" + companyID + " " + user.GetCompanyName(companyID) + "\r\n";
                             }
-                            #endregion
-                            if (AppUserInfo == null || AppUserInfo.Count == 0)
-                            {
-                                DataResult.Err = user.GetCompanyName(companyID) + " " + listRole[0].Remark + " 没有找到审核人";
-                                DataResult.FlowResult = FlowResult.FAIL;
-                                return;
-                            }
-
-
-                            if (AppUserInfo.Where(c => c.UserID == UserID).Count() == 0)
-                                iscurruser = false;
-                            #endregion
                         }
-                        else
+                        user.ErrorMsg += names;
+                        Tracer.Debug(names);
+                        #endregion
+
+                        #region beyond
+
+                        if (!isHigher)
                         {
-                            Tracer.Debug("Formid=" + user.FormID + ";(会签) 根活动的字符串查找角色状态码(即活动Name属性)StateCode=" + strNextState + " Layout=" + Layout + "");
-                            #region 会签
-                            DictCounterUser = new Dictionary<Role_UserType, List<UserInfo>>();
-                            if (CountersignType == "0")
-                            {
-                                #region 全部审核通过才算通过
-                                for (int i = 0; i < listRole.Count; i++)
-                                {
-                                    bool isHigher = false;
-
-
-                                    var listuserinfo = GetUserByStateCode(listRole[i].RoleName, UserID, PostID, ref isHigher);
-                                    #region 打印审核人
-                                    string names = "\r\n=======FormID=" + user.FormID + "会签 全部审核通过才算通过  打印审核人C(listRole[0].RoleName=" + listRole[i].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
-                                    if (listuserinfo != null)
-                                    {
-                                        foreach (var u in listuserinfo)
-                                        {
-                                            names += "CompanyID:" + u.CompanyID + "\r\n";
-                                            names += "DepartmentID:" + u.DepartmentID + "\r\n";
-                                            names += "PostID:" + u.PostID + "\r\n";
-                                            names += "UserID:" + u.UserID + "\r\n";
-
-                                            names += "CompanyName:" + u.CompanyName + "\r\n";
-                                            names += "DepartmentName:" + u.DepartmentName + "\r\n";
-                                            names += "PostName:" + u.PostName + "\r\n";
-                                            names += "UserName:" + u.UserName + "\r\n";
-                                            names += "----------------------------------------------------\r\n";
-                                        }
-                                    }
-                                    if (!isHigher && listRole[i].IsOtherCompany != null)
-                                    {
-                                        if (listRole[i].IsOtherCompany.Value == true)
-                                        {
-                                            names += "是否指定公司：" + listRole[i].IsOtherCompany.Value.ToString() + "\r\n";
-                                            names += "公司的ID：" + listRole[i].OtherCompanyID + "\r\n";
-                                            if (string.IsNullOrEmpty(listRole[i].OtherCompanyID))
-                                            {
-                                                names += "Layout=" + Layout + "\r\n";
-                                            }
-                                        }
-                                        else if (listRole[i].IsOtherCompany.Value == false)
-                                        {
-                                            names += "实际要查找公司的ID:" + companyID + "\r\n";
-                                        }
-                                    }
-                                    user.ErrorMsg += names;
-                                    Tracer.Debug(names);
-                                    #endregion
-                                    if (!isHigher)
-                                    {
-                                        if (listRole[i].IsOtherCompany != null && listRole[i].IsOtherCompany.Value == true)
-                                        {
-                                            listuserinfo = listuserinfo.Where(u => u.CompanyID == listRole[i].OtherCompanyID).ToList();
-                                        }
-                                        else
-                                        {
-                                            listuserinfo = listuserinfo.Where(u => u.CompanyID == companyID).ToList();
-                                        }
-                                    }
-
-                                    if (listuserinfo == null || listuserinfo.Count == 0)
-                                    {
-                                        DataResult.Err = user.GetCompanyName(companyID) + " " + listRole[i].Remark + " 没有找到审核人";
-                                        DataResult.FlowResult = FlowResult.FAIL;
-                                        return;
-                                    }
-                                    DictCounterUser.Add(listRole[i], listuserinfo);
-                                }
-                                iscurruser = false;
-                                #endregion
+                            if (listRoleID[0].IsOtherCompany != null && listRoleID[0].IsOtherCompany.Value == true)
+                            {//指定公司
+                                //过滤人
+                                AppUserInfo = AppUserInfo.Where(u => u.CompanyID == listRoleID[0].OtherCompanyID).ToList();
                             }
                             else
                             {
-                                #region 只有一个审核通过了就算审核通过了
-                                iscurruser = false;
-                                bool bFlag = false;//判断是否找到审核人
-                                string roles = "";//得到所有的角色
-                                user.TrackingMessage += "GetUserByStateCode\r\n";
-                                for (int i = 0; i < listRole.Count; i++)
-                                {
-                                    roles += listRole[i].Remark + "、";
-                                    #region
-                                    bool isHigher = false;
+                                AppUserInfo = AppUserInfo.Where(u => u.CompanyID == companyID).ToList();
+                            }
+                        }
+                        #endregion
 
-                                    var listuserinfo = GetUserByStateCode(listRole[i].RoleName, UserID, PostID, ref isHigher);
-                                    #region 打印审核人
-                                    string names = "\r\n=======FormID=" + user.FormID + " 会签 只有一个审核通过了就算审核通过了  打印审核人C(listRole[0].RoleName=" + listRole[i].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
+                        if (AppUserInfo == null || AppUserInfo.Count == 0)
+                        {
+                            DataResult.Err = user.GetCompanyName(companyID) + " " + listRoleID[0].Remark + " 没有找到审核人";
+                            DataResult.FlowResult = FlowResult.FAIL;
+                            return;
+                        }
+
+
+                        if (AppUserInfo.Where(c => c.UserID == UserID).Count() == 0)
+                        {
+
+                        }
+                         
+                        #endregion
+                    }
+                    else
+                    {
+                        Tracer.Debug("Formid=" + user.FormID + ";(会签) 根活动的字符串查找角色状态码(即活动Name属性)StateCode=" + strNextActivitID + " Layout=" + FlowLayoutXML + "");
+                        #region 会签
+                        DictCounterUser = new Dictionary<FlowRole, List<UserInfo>>();
+                        if (CountersignType == "0")
+                        {
+                            #region 全部审核通过才算通过
+                            for (int i = 0; i < listRoleID.Count; i++)
+                            {
+                                bool isHigher = false;
+
+
+                                var listuserinfo = TmGetUserByRoleId(listRoleID[i].RoleName, UserID, PostID, ref isHigher);
+                                #region 打印审核人
+                                string names = "\r\n=======FormID=" + user.FormID + "会签 全部审核通过才算通过  打印审核人C(listRole[0].RoleName=" + listRoleID[i].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
+                                if (listuserinfo != null)
+                                {
                                     foreach (var u in listuserinfo)
                                     {
                                         names += "CompanyID:" + u.CompanyID + "\r\n";
@@ -1794,69 +1705,135 @@ namespace SMT.FlowWFService.NewFlow
                                         names += "UserName:" + u.UserName + "\r\n";
                                         names += "----------------------------------------------------\r\n";
                                     }
-                                    if (!isHigher && listRole[i].IsOtherCompany != null)
-                                    {
-                                        if (listRole[i].IsOtherCompany.Value == true)
-                                        {
-                                            names += "是否指定公司：" + listRole[i].IsOtherCompany.Value.ToString() + "\r\n";
-                                            names += "公司的ID：" + listRole[i].OtherCompanyID + "\r\n";
-                                            if (string.IsNullOrEmpty(listRole[i].OtherCompanyID))
-                                            {
-                                                names += "Layout=" + Layout + "\r\n";
-                                            }
-                                        }
-                                        else if (listRole[i].IsOtherCompany.Value == false)
-                                        {
-                                            names += "实际要查找公司的ID:" + companyID + "\r\n";
-                                        }
-                                    }
-                                    user.ErrorMsg += names;
-                                    Tracer.Debug(names);
-                                    #endregion
-                                    if (!isHigher)
-                                    {
-                                        if (listRole[i].IsOtherCompany != null && listRole[i].IsOtherCompany.Value == true)
-                                        {
-                                            listuserinfo = listuserinfo.Where(u => u.CompanyID == listRole[i].OtherCompanyID).ToList();
-                                        }
-                                        else
-                                        {
-                                            listuserinfo = listuserinfo.Where(u => u.CompanyID == companyID).ToList();
-                                        }
-                                    }
-
-                                    if (listuserinfo != null && listuserinfo.Count > 0)
-                                    {
-                                        bFlag = true;
-                                        if (listuserinfo.FirstOrDefault(u => u.UserID == UserID) != null)
-                                        {
-                                            iscurruser = true;
-                                            break;
-                                        }
-                                        //DataResult.Err = "没有找到审核人";
-                                        //DataResult.FlowResult = FlowResult.FAIL;
-                                        //return;
-                                    }
-                                    DictCounterUser.Add(listRole[i], listuserinfo);
-                                    #endregion
                                 }
-                                if (!bFlag)
+                                if (!isHigher && listRoleID[i].IsOtherCompany != null)
                                 {
-                                    DataResult.Err = user.GetCompanyName(companyID) + " " + roles + " 没有找到审核人";
+                                    if (listRoleID[i].IsOtherCompany.Value == true)
+                                    {
+                                        names += "是否指定公司：" + listRoleID[i].IsOtherCompany.Value.ToString() + "\r\n";
+                                        names += "公司的ID：" + listRoleID[i].OtherCompanyID + "\r\n";
+                                        if (string.IsNullOrEmpty(listRoleID[i].OtherCompanyID))
+                                        {
+                                            names += "Layout=" + FlowLayoutXML + "\r\n";
+                                        }
+                                    }
+                                    else if (listRoleID[i].IsOtherCompany.Value == false)
+                                    {
+                                        names += "实际要查找公司的ID:" + companyID + "\r\n";
+                                    }
+                                }
+                                user.ErrorMsg += names;
+                                Tracer.Debug(names);
+                                #endregion
+                                if (!isHigher)
+                                {
+                                    if (listRoleID[i].IsOtherCompany != null && listRoleID[i].IsOtherCompany.Value == true)
+                                    {
+                                        listuserinfo = listuserinfo.Where(u => u.CompanyID == listRoleID[i].OtherCompanyID).ToList();
+                                    }
+                                    else
+                                    {
+                                        listuserinfo = listuserinfo.Where(u => u.CompanyID == companyID).ToList();
+                                    }
+                                }
+
+                                if (listuserinfo == null || listuserinfo.Count == 0)
+                                {
+                                    DataResult.Err = user.GetCompanyName(companyID) + " " + listRoleID[i].Remark + " 没有找到审核人";
                                     DataResult.FlowResult = FlowResult.FAIL;
                                     return;
                                 }
-                                user.TrackingMessage += " GetUserByStateCode完成\r\n";
-                                //iscurruser = false;
-                                #endregion
+                                DictCounterUser.Add(listRoleID[i], listuserinfo);
                             }
                             #endregion
                         }
+                        else
+                        {
+                            #region 只有一个审核通过了就算审核通过了
+                            bool bFlag = false;//判断是否找到审核人
+                            string roles = "";//得到所有的角色
+                            user.TrackingMessage += "GetUserByStateCode\r\n";
+                            for (int i = 0; i < listRoleID.Count; i++)
+                            {
+                                roles += listRoleID[i].Remark + "、";
+                                #region
+                                bool isHigher = false;
+
+                                var listuserinfo = TmGetUserByRoleId(listRoleID[i].RoleName, UserID, PostID, ref isHigher);
+                                #region 打印审核人
+                                string names = "\r\n=======FormID=" + user.FormID + " 会签 只有一个审核通过了就算审核通过了  打印审核人C(listRole[0].RoleName=" + listRoleID[i].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
+                                foreach (var u in listuserinfo)
+                                {
+                                    names += "CompanyID:" + u.CompanyID + "\r\n";
+                                    names += "DepartmentID:" + u.DepartmentID + "\r\n";
+                                    names += "PostID:" + u.PostID + "\r\n";
+                                    names += "UserID:" + u.UserID + "\r\n";
+
+                                    names += "CompanyName:" + u.CompanyName + "\r\n";
+                                    names += "DepartmentName:" + u.DepartmentName + "\r\n";
+                                    names += "PostName:" + u.PostName + "\r\n";
+                                    names += "UserName:" + u.UserName + "\r\n";
+                                    names += "----------------------------------------------------\r\n";
+                                }
+                                if (!isHigher && listRoleID[i].IsOtherCompany != null)
+                                {
+                                    if (listRoleID[i].IsOtherCompany.Value == true)
+                                    {
+                                        names += "是否指定公司：" + listRoleID[i].IsOtherCompany.Value.ToString() + "\r\n";
+                                        names += "公司的ID：" + listRoleID[i].OtherCompanyID + "\r\n";
+                                        if (string.IsNullOrEmpty(listRoleID[i].OtherCompanyID))
+                                        {
+                                            names += "Layout=" + FlowLayoutXML + "\r\n";
+                                        }
+                                    }
+                                    else if (listRoleID[i].IsOtherCompany.Value == false)
+                                    {
+                                        names += "实际要查找公司的ID:" + companyID + "\r\n";
+                                    }
+                                }
+                                user.ErrorMsg += names;
+                                Tracer.Debug(names);
+                                #endregion
+                                if (!isHigher)
+                                {
+                                    if (listRoleID[i].IsOtherCompany != null && listRoleID[i].IsOtherCompany.Value == true)
+                                    {
+                                        listuserinfo = listuserinfo.Where(u => u.CompanyID == listRoleID[i].OtherCompanyID).ToList();
+                                    }
+                                    else
+                                    {
+                                        listuserinfo = listuserinfo.Where(u => u.CompanyID == companyID).ToList();
+                                    }
+                                }
+
+                                if (listuserinfo != null && listuserinfo.Count > 0)
+                                {
+                                    bFlag = true;
+                                    if (listuserinfo.FirstOrDefault(u => u.UserID == UserID) != null)
+                                    {
+                                        break;
+                                    }
+                                }
+                                DictCounterUser.Add(listRoleID[i], listuserinfo);
+                                #endregion
+                            }
+                            if (!bFlag)
+                            {
+                                DataResult.Err = user.GetCompanyName(companyID) + " " + roles + " 没有找到审核人";
+                                DataResult.FlowResult = FlowResult.FAIL;
+                                return;
+                            }
+                            user.TrackingMessage += " GetUserByStateCode完成\r\n";
+                            //iscurruser = false;
+                            #endregion
+                        }
+                        #endregion
                     }
-                    #endregion
                 }
+                #endregion
+
                 DataResult.IsCountersign = IsCountersign;
-                DataResult.AppState = strNextState;
+                DataResult.AppState = strNextActivitID;
                 DataResult.CountersignType = CountersignType;
                 if (!IsCountersign)
                 {
@@ -1873,12 +1850,12 @@ namespace SMT.FlowWFService.NewFlow
                 else
                 {
                     Tracer.Debug("FormID=" + user.FormID + " 检查会签角色的审核人数＝" + DictCounterUser.Count.ToString());
-                    #region 检查会签角色是否有多个审核人,如果有多个审核人,则返回                    
+                    #region 检查会签角色是否有多个审核人,如果有多个审核人,则返回
                     DataResult.DictCounterUser = DictCounterUser;
-                    List<Role_UserType> listkeys = DictCounterUser.Keys.ToList();
+                    List<FlowRole> listkeys = DictCounterUser.Keys.ToList();
                     for (int i = 0; i < listkeys.Count; i++)
                     {
-                        Role_UserType key = listkeys[i];
+                        FlowRole key = listkeys[i];
                         if (DictCounterUser[key].Count > 1)
                         {
                             DataResult.FlowResult = FlowResult.Countersign;
@@ -1898,8 +1875,8 @@ namespace SMT.FlowWFService.NewFlow
             }
             finally
             {
-                strCurrState = null;
-                strNextState = null;
+                strCurrActivitID = null;
+                strNextActivitID = null;
                 //RuleName = null;
                 AppUserInfo = null;
                 Instance = null;
@@ -1935,9 +1912,9 @@ namespace SMT.FlowWFService.NewFlow
                 WfRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(false);
                 Instance = SMTWorkFlowManage.CloneWorkflowInstance(WfRuntimeClone, instanceClone, WfRuntime);
 
-                string strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, CurrentStateName, xml);
+                string strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, CurrentStateName, xml);
                 bool isHigher = false;
-                List<UserInfo> AppUserInfo = GetUserByStateCode(strNextState, UserID, PostID, ref isHigher);
+                List<UserInfo> AppUserInfo = TmGetUserByRoleId(strNextState, UserID, PostID, ref isHigher);
                 #region 打印审核人
                 string names = "\r\n=======打印审核人D(strNextState" + strNextState + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
                 foreach (var user in AppUserInfo)
@@ -2000,7 +1977,7 @@ namespace SMT.FlowWFService.NewFlow
             WorkflowInstance Instance = null;
             List<UserInfo> AppUserInfo = null;
             string strNextState = CurrentStateName;
-            Role_UserType RuleName;
+            FlowRole RuleName;
             try
             {
                 if (!WfRuntimeClone.IsStarted)
@@ -2014,7 +1991,7 @@ namespace SMT.FlowWFService.NewFlow
                 while (iscurruser)
                 {
                     //   CurrentStateName = strNextState;
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
                     //if (FlowType == FlowType.Task && strNextState != "EndFlow")
                     //{
                     //    XmlReader XmlReader;
@@ -2043,7 +2020,7 @@ namespace SMT.FlowWFService.NewFlow
                     //}
 
 
-                    RuleName = Utility.GetRlueName(Layout, strNextState);
+                    RuleName = FlowUtility.GetRlueName(Layout, strNextState);
 
 
 
@@ -2056,7 +2033,7 @@ namespace SMT.FlowWFService.NewFlow
 
                     string tmpPostID = RuleName.UserType == "CREATEUSER" ? PostID[0] : PostID[1];
                     bool isHigher = false;
-                    AppUserInfo = GetUserByStateCode(RuleName.RoleName, null, tmpPostID, ref isHigher);
+                    AppUserInfo = TmGetUserByRoleId(RuleName.RoleName, null, tmpPostID, ref isHigher);
                     #region 打印审核人
                     string names = "\r\n=======打印审核人E(RuleName.RoleName=" + RuleName.RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
                     foreach (var user in AppUserInfo)
@@ -2165,7 +2142,7 @@ namespace SMT.FlowWFService.NewFlow
             string CountersignType = "0";
             //Role_UserType RuleName;
             //List<UserInfo> AppUserInfo = null;
-            Dictionary<Role_UserType, List<UserInfo>> DictCounterUser = null;
+            Dictionary<FlowRole, List<UserInfo>> DictCounterUser = null;
             try
             {
                 if (!WfRuntimeClone.IsStarted)
@@ -2186,8 +2163,8 @@ namespace SMT.FlowWFService.NewFlow
                     #region
 
 
-                    strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, strNextState, xml);
-                    List<Role_UserType> listRole = Utility.GetRlueName2(Layout, strNextState, ref IsCountersign, ref CountersignType);
+                    strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, strNextState, xml);
+                    List<FlowRole> listRole = FlowUtility.GetRlueIdFromActivitID(Layout, strNextState, ref IsCountersign, ref CountersignType);
                     if (listRole.Count == 0)
                     {
                         DataResult.Err = "没有找到对应角色";
@@ -2200,7 +2177,7 @@ namespace SMT.FlowWFService.NewFlow
                         #region
                         string tmpPostID = listRole[0].UserType == "CREATEUSER" ? PostID[0] : PostID[1];
                         bool isHigher = false;
-                        AppUserInfo = GetUserByStateCode(listRole[0].RoleName, null, tmpPostID, ref isHigher);
+                        AppUserInfo = TmGetUserByRoleId(listRole[0].RoleName, null, tmpPostID, ref isHigher);
                         #region 打印审核人
                         string names = "\r\nFormID=" + fUser.FormID + ";=======打印审核人F(listRole[0].RoleName=" + listRole[0].RoleName + ";审核人数量=" + AppUserInfo.Count + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
                         foreach (var user in AppUserInfo)
@@ -2268,7 +2245,7 @@ namespace SMT.FlowWFService.NewFlow
                     else
                     {
                         #region
-                        DictCounterUser = new Dictionary<Role_UserType, List<UserInfo>>();
+                        DictCounterUser = new Dictionary<FlowRole, List<UserInfo>>();
                         if (CountersignType == "0")
                         {
                             #region
@@ -2276,7 +2253,7 @@ namespace SMT.FlowWFService.NewFlow
                             {
                                 string tmpPostID = listRole[i].UserType == "CREATEUSER" ? PostID[0] : PostID[1];
                                 bool isHigher = false;
-                                var listuserinfo = GetUserByStateCode(listRole[i].RoleName, null, tmpPostID, ref isHigher);
+                                var listuserinfo = TmGetUserByRoleId(listRole[i].RoleName, null, tmpPostID, ref isHigher);
                                 #region 打印审核人
                                 string names = "\r\n=======打印审核人G(listRole[i].RoleName=" + listRole[0].RoleName + ";UserID=" + UserID + ";PostID=" + PostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
                                 foreach (var user in listuserinfo)
@@ -2345,7 +2322,7 @@ namespace SMT.FlowWFService.NewFlow
                                 roleNames += listRole[i].Remark + "、";
                                 string tmpPostID = listRole[i].UserType == "CREATEUSER" ? PostID[0] : PostID[1];
                                 bool isHigher = false;
-                                var listuserinfo = GetUserByStateCode(listRole[i].RoleName, null, tmpPostID, ref isHigher);
+                                var listuserinfo = TmGetUserByRoleId(listRole[i].RoleName, null, tmpPostID, ref isHigher);
                                 #region 打印审核人
                                 string names = "\r\n=======打印审核人H(listRole[0].RoleName=" + listRole[i].RoleName + ";UserID=" + UserID + ";PostID=" + tmpPostID + ";isHigher=" + isHigher.ToString() + ")=======\r\n";
                                 foreach (var user in listuserinfo)
@@ -2438,14 +2415,14 @@ namespace SMT.FlowWFService.NewFlow
                     #region
                     if (DataResult.DictCounterUser == null)
                     {
-                        DataResult.DictCounterUser = new Dictionary<Role_UserType, List<UserInfo>>();
+                        DataResult.DictCounterUser = new Dictionary<FlowRole, List<UserInfo>>();
                     }
                     DataResult.DictCounterUser = DictCounterUser;
 
-                    List<Role_UserType> listkeys = DictCounterUser.Keys.ToList();
+                    List<FlowRole> listkeys = DictCounterUser.Keys.ToList();
                     for (int i = 0; i < listkeys.Count; i++)
                     {
-                        Role_UserType key = listkeys[i];
+                        FlowRole key = listkeys[i];
                         if (DictCounterUser[key].Count > 1)
                         {
                             DataResult.FlowResult = FlowResult.Countersign;
@@ -2485,48 +2462,49 @@ namespace SMT.FlowWFService.NewFlow
         /// <summary>
         /// 通过状态代码查询下一处理人(对服务操作)
         /// </summary>
-        /// <param name="StateCode">状态代码(角色ID(RoleName))</param>
+        /// <param name="RoleId">状态代码(角色ID(RoleName))</param>
         /// <returns></returns>
-        private List<UserInfo> GetUserByStateCode(string StateCode, string UserID, string PostID, ref bool isHigher)
+        private List<UserInfo> TmGetUserByRoleId(string RoleId, string UserID, string PostID, ref bool isHigher)
         {
             try
             {
 
-                string CurrentStateName = StateCode == "EndFlow" ? "End" : StateCode; //取得当前状态
+                string CurrentRoleId = RoleId == "EndFlow" ? "End" : RoleId; //取得当前状态
                 List<UserInfo> listUser = new List<UserInfo>();
-                if (CurrentStateName != "End")
+                if (CurrentRoleId != "End")
                 {
-                    //if (CurrentStateName.Substring(0, 5) == "State")
-                    //{
-                    //    CurrentStateName = CurrentStateName.Substring(5);
-                    //}
-
-                    string WFCurrentStateName = "";
+                    string WFCurrentRoleId = "";
                     int isDirect = 0;
                     #region 是否是直接上级,隔级上级,部门负责人
                     foreach (Higher c in Enum.GetValues(typeof(Higher)))
                     {
-                        if (CurrentStateName.ToUpper() == c.ToString().ToUpper())
+                        if (CurrentRoleId.ToUpper() == c.ToString().ToUpper())
                         {
                             isDirect = (int)c;//== 1 ? true : false;
 
-                            WFCurrentStateName = CurrentStateName;
+                            WFCurrentRoleId = CurrentRoleId;
                             isHigher = true;
                         }
                     }
                     #endregion
 
-                    if (WFCurrentStateName != "")
+                    if (WFCurrentRoleId != "")
                     {
                         //PermissionService
                         #region 如果是直接上级,隔级上级,部门负责人
                         Tracer.Debug("UserID=" + UserID + " 开始调用 直接上级,隔级上级,部门负责人：WcfPersonnel.GetEmployeeLeaders(岗位ID=" + PostID + ", isDirect=" + isDirect + ")");
-                        PersonnelServiceClient WcfPersonnel = new PersonnelServiceClient();//Commented by Alan 2012-7-25 ,只在使用时构造
-                        V_EMPLOYEEVIEW[] User = WcfPersonnel.GetEmployeeLeaders(PostID, isDirect);
-                        string strtemp = "UserID=" + UserID + " 结束调用 直接上级,隔级上级,部门负责人：WcfPersonnel.GetEmployeeLeaders(岗位ID=" + PostID + ", isDirect=" + isDirect + ")";
-                        if (User != null && User.Length > 0)
+
+                        List<SMT.HRM.CustomModel.V_EMPLOYEEVIEW> User = new List<SMT.HRM.CustomModel.V_EMPLOYEEVIEW>();
+                        using (EmployeeBLL bll = new EmployeeBLL())
                         {
-                            for (int i = 0; i < User.Length; i++)
+                            User = bll.GetEmployeeLeaders(PostID, isDirect);
+                        }
+
+                        //V_EMPLOYEEVIEW[] User = WcfPersonnel.GetEmployeeLeaders(PostID, isDirect);
+                        string strtemp = "UserID=" + UserID + " 结束调用 直接上级,隔级上级,部门负责人：WcfPersonnel.GetEmployeeLeaders(岗位ID=" + PostID + ", isDirect=" + isDirect + ")";
+                        if (User != null && User.Count > 0)
+                        {
+                            for (int i = 0; i < User.Count; i++)
                             {
                                 UserInfo tmp = new UserInfo();
                                 tmp.UserID = User[i].EMPLOYEEID;
@@ -2538,13 +2516,7 @@ namespace SMT.FlowWFService.NewFlow
                                 tmp.CompanyName = User[i].COMPANYNAME;
                                 tmp.DepartmentName = User[i].DEPARTMENTNAME;
                                 tmp.PostName = User[i].POSTNAME;
-                                tmp.Roles = new List<T_SYS_ROLE>();
-                                //foreach (var role in User[i].Roles)
-                                //{
-                                //    tmp.Roles.Add(role);
-                                //    strRole += "角色ID   = " + role.ROLEID + "\r\n";
-                                //    strRole += "角色名称 = " + role.ROLENAME + "\r\n";
-                                //}
+                                tmp.Roles = new List<TM_SaaS_OA_EFModel.T_SYS_ROLE>();
                                 listUser.Add(tmp);  
                                 strtemp += "公司ID   = " + User[i].EMPLOYEEID + "\r\n";
                                 strtemp += "部门ID   = " + User[i].OWNERDEPARTMENTID + "\r\n";
@@ -2563,28 +2535,22 @@ namespace SMT.FlowWFService.NewFlow
                     else
                     {
                         #region 根据角色ID查找人
-                        Tracer.Debug("UserID=" + UserID + " 开始调用 检索本状态（角色）对应用户：WcfPermissionService.GetFlowUserInfoByRoleID(角色ID=" + WFCurrentStateName + ")");
-                        WFCurrentStateName = new Guid(CurrentStateName).ToString("D");
-
-                        PermissionServiceClient WcfPermissionService = new PermissionServiceClient();
-
-                        foreach (var op in WcfPermissionService.Endpoint.Contract.Operations)
-                        {
-                            var dataContractBehavior = op.Behaviors[typeof(DataContractSerializerOperationBehavior)]
-                                as DataContractSerializerOperationBehavior;
-                            if (dataContractBehavior != null)
-                            {
-                                dataContractBehavior.MaxItemsInObjectGraph = Int32.MaxValue; //int.MaxValue;
-                            }
-                        }
+                        Tracer.Debug("UserID=" + UserID + " 开始调用 检索本状态（角色）对应用户：WcfPermissionService.GetFlowUserInfoByRoleID(角色ID=" + WFCurrentRoleId + ")");
+                        WFCurrentRoleId = new Guid(CurrentRoleId).ToString("D");
+                        
                         try
                         {
-                            FlowUserInfo[] User = WcfPermissionService.GetFlowUserInfoByRoleID(WFCurrentStateName);//新的接口
-                            string strRole = "UserID=" + UserID + " 结束调用 检索本状态（角色）对应用户：WcfPermissionService.GetFlowUserInfoByRoleID(角色ID=" + WFCurrentStateName + ")\r\n";
-
-                            if (User != null && User.Length > 0)
+                            List<SMT.HRM.CustomModel.Permission.FlowUserInfo> User = new List<HRM.CustomModel.Permission.FlowUserInfo>();//新的接口
+                            using (SysUserBLL bll = new SysUserBLL())
                             {
-                                for (int i = 0; i < User.Length; i++)
+                                User= bll.GetFlowUserInfoByRoleID(WFCurrentRoleId);
+                            }
+
+                            string strRole = "UserID=" + UserID + " 结束调用 检索本状态（角色）对应用户：WcfPermissionService.GetFlowUserInfoByRoleID(角色ID=" + WFCurrentRoleId + ")\r\n";
+
+                            if (User != null && User.Count > 0)
+                            {
+                                for (int i = 0; i < User.Count; i++)
                                 {
                                     #region
                                     UserInfo tmp = new UserInfo();
@@ -2607,7 +2573,7 @@ namespace SMT.FlowWFService.NewFlow
                                     tmp.CompanyName = User[i].CompayName;
                                     tmp.DepartmentName = User[i].DepartmentName;
                                     tmp.PostName = User[i].PostName;
-                                    tmp.Roles = new List<T_SYS_ROLE>();
+                                    tmp.Roles = new List<TM_SaaS_OA_EFModel.T_SYS_ROLE>();
                                     foreach (var role in User[i].Roles)
                                     {
                                         tmp.Roles.Add(role);
@@ -2625,8 +2591,8 @@ namespace SMT.FlowWFService.NewFlow
                         }
                         catch (Exception ex)
                         {
-                            Tracer.Debug("权限服务GetSysUserByRole异常信息 角色id：" + WFCurrentStateName + "" + ex.ToString());
-                            throw new Exception("下一审核人为空，请联系公司权限管理员检查角色下的人员,角色id：" + WFCurrentStateName);
+                            Tracer.Debug("权限服务GetSysUserByRole异常信息 角色id：" + WFCurrentRoleId + "" + ex.ToString());
+                            throw new Exception("下一审核人为空，请联系公司权限管理员检查角色下的人员,角色id：" + WFCurrentRoleId);
                         }
                         #endregion
 
@@ -2897,7 +2863,7 @@ namespace SMT.FlowWFService.NewFlow
                 master.BUSINESSOBJECT = submitData.XML;
                 master.FORMID = submitData.FormID;
                 master.MODELCODE = submitData.ModelCode;
-                master.ACTIVEROLE = Utility.GetActiveRlue(flowDefine.LAYOUT);
+                master.ACTIVEROLE = FlowUtility.GetActiveRlue(flowDefine.LAYOUT);//此字段可以保存当前节点ActivitID
                 master.FLOWTYPE = ((int)submitData.FlowType).ToString();
                 master.FLOWSELECTTYPE = ((int)submitData.FlowSelectType).ToString();
                 master.FLOWCODE = flowDefine.FLOWCODE;
@@ -2905,7 +2871,11 @@ namespace SMT.FlowWFService.NewFlow
 
                 #region 获取下一状态数据
                 user.TrackingMessage += "FORMID=" + user.FormID + "获取下一状态数据(开始)";
-                GetUserByFlow(submitData.ApprovalUser.CompanyID, flowDefine.LAYOUT, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref user);
+
+
+                TmFlowToNextStep(submitData.ApprovalUser.CompanyID, flowDefine.LAYOUT, flowDefine.RULES, master.ACTIVEROLE, submitData.XML, submitData.ApprovalUser.UserID, submitData.ApprovalUser.PostID, submitData.FlowType, ref dataResult, ref user);
+
+
                 Tracer.Debug("FormID=" + user.FormID + " 获取下一状态数据! dataResult.FlowResult=" + dataResult.FlowResult.ToString());
                 user.TrackingMessage += "FORMID=" + user.FormID + "获取下一状态数据(结束)";
                 if (dataResult.FlowResult == FlowResult.FAIL)
@@ -2950,14 +2920,14 @@ namespace SMT.FlowWFService.NewFlow
                     if (dataResult.FlowResult == FlowResult.MULTIUSER)
                     {
                         Tracer.Debug("FormID=" + user.FormID + " 发现有多个审核人员!");
-                        if (submitData.NextApprovalUser == null || (Utility.GetString(submitData.NextApprovalUser.UserID) == "" || Utility.GetString(submitData.NextApprovalUser.UserName) == ""))
+                        if (submitData.NextApprovalUser == null || (FlowUtility.GetString(submitData.NextApprovalUser.UserID) == "" || FlowUtility.GetString(submitData.NextApprovalUser.UserName) == ""))
                         {
                             Tracer.Debug("FormID=" + user.FormID + " 发现有多个审核人员!但下一审核人为空，所以返回选择审核人！");
                             return dataResult;
                         }
                         else
                         {
-                            Tracer.Debug("FormID=" + user.FormID + " 发现有多个审核人员,但发现下一审核人不为空 usrid="+(Utility.GetString(submitData.NextApprovalUser.UserID)+" 姓名="+Utility.GetString(submitData.NextApprovalUser.UserName)));
+                            Tracer.Debug("FormID=" + user.FormID + " 发现有多个审核人员,但发现下一审核人不为空 usrid="+(FlowUtility.GetString(submitData.NextApprovalUser.UserID)+" 姓名="+FlowUtility.GetString(submitData.NextApprovalUser.UserName)));
                         }
                     }
                     else
@@ -2972,7 +2942,8 @@ namespace SMT.FlowWFService.NewFlow
 
                 #endregion
 
-                #region 实体赋值 当提交人为空时，创建人变成单据所属人，如果不为空，则创建人保存为系统登录人;创建公司，部门，岗位，仍然保存单据所属人的公司，部门，岗位
+                #region 流程明细赋值 
+                //当提交人为空时，创建人变成单据所属人，如果不为空，则创建人保存为系统登录人;创建公司，部门，岗位，仍然保存单据所属人的公司，部门，岗位
                 FLOW_FLOWRECORDDETAIL_T entity = new FLOW_FLOWRECORDDETAIL_T();
                 entity.FLOW_FLOWRECORDMASTER_T = master;
                 entity.CREATECOMPANYID = submitData.ApprovalUser.CompanyID;
@@ -2981,17 +2952,19 @@ namespace SMT.FlowWFService.NewFlow
                 entity.CREATEUSERID = string.IsNullOrEmpty(submitData.SumbitUserID) ? submitData.ApprovalUser.UserID : submitData.SumbitUserID;
                 entity.CREATEUSERNAME = string.IsNullOrEmpty(submitData.SumbitUserName) ? submitData.ApprovalUser.UserName : submitData.SumbitUserName;
                 #endregion
-                user.TrackingMessage += " 处理kpi时间\r\n";
+
                 #region 处理kpi时间
+                user.TrackingMessage += " 处理kpi时间\r\n";
                 string KPITime = "";
                 #region 加入缓存
                 string pscResult = CacheProvider.GetCache<string>(flowRelation.MODELFLOWRELATIONID);
                 if (string.IsNullOrEmpty(pscResult))
                 {
-                    PerformanceServiceWS.PerformanceServiceClient psc = new PerformanceServiceWS.PerformanceServiceClient();
-                    pscResult = psc.GetKPIPointsByBusinessCode(flowRelation.MODELFLOWRELATIONID);//调用服务
-                    CacheProvider.Add<string>(flowRelation.MODELFLOWRELATIONID, pscResult);
-                    psc.Close();
+                    //ken 暂时屏蔽kpi
+                    //PerformanceServiceWS.PerformanceServiceClient psc = new PerformanceServiceWS.PerformanceServiceClient();
+                    //pscResult = psc.GetKPIPointsByBusinessCode(flowRelation.MODELFLOWRELATIONID);//调用服务
+                    //CacheProvider.Add<string>(flowRelation.MODELFLOWRELATIONID, pscResult);
+                    //psc.Close();
                 }
                 #endregion
                 //PerformanceServiceWS.PerformanceServiceClient psc = new PerformanceServiceWS.PerformanceServiceClient();
@@ -3022,8 +2995,10 @@ namespace SMT.FlowWFService.NewFlow
 
                 dataResult.KPITime = KPITime;
                 master.KPITIMEXML = pscResult;
-                #endregion
                 user.TrackingMessage += " 处理kpi时间完成\r\n";
+
+                #endregion
+
                 FlowDataType.FlowData FlowData = new FlowDataType.FlowData();
                 FlowData.xml = submitData.XML;
 
@@ -3034,8 +3009,9 @@ namespace SMT.FlowWFService.NewFlow
                     AppUser = submitData.NextApprovalUser;
                     dataResult.UserInfo.Clear();
                     dataResult.UserInfo.Add(AppUser);
-                    UserInfo AgentAppUser = GetAgentUserInfo(submitData.ModelCode, AppUser.UserID);//查询是否启用了代理人                    
-                    dataResult = DoFlowRecord2( workflowRuntime, instance, entity, submitData.NextStateCode, AppUser, AgentAppUser, submitData.SubmitFlag, submitData.FlowType,ref user); //处理流程数据
+                    //暂时不处理代理，ken2015-7-17
+                    UserInfo AgentAppUser = null;// GetAgentUserInfo(submitData.ModelCode, AppUser.UserID);//查询是否启用了代理人                    
+                    dataResult = AddOrUpdateFlowRecord( workflowRuntime, instance, entity, submitData.NextStateCode, AppUser, AgentAppUser, submitData.SubmitFlag, submitData.FlowType,ref user); //处理流程数据
                     dataResult.IsCountersign = false;
                     dataResult.AgentUserInfo = AgentAppUser;
                     #endregion
@@ -3056,23 +3032,23 @@ namespace SMT.FlowWFService.NewFlow
                 }
                 user.TrackingMessage += "激发流程引擎执行到一下流程\r\n";
                 #region 激发流程引擎执行到一下流程
-                string ss = "";
-                int n = 0;
-                //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
-                //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
-               if (dataResult.AppState == null || dataResult.AppState == "")
-                {
-                    user.TrackingMessage += " workflowRuntime.GetService<FlowEvent>()\r\n";
-                    //scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                    //workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
-                    //scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                    user.TrackingMessage += " workflowRuntime.GetService<FlowEvent>()完成\r\n";
-                }
-                else
-                {
-                    //scheduleService.RunWorkflow(workflowinstance.InstanceId);
-                    //workflowinstance.SetState(dataResult.AppState); //流程跳转到指定节点
-                }
+               // string ss = "";
+               // int n = 0;
+               // //StateMachineWorkflowInstance workflowinstance = new StateMachineWorkflowInstance(workflowRuntime, instance.InstanceId);
+               // //ManualWorkflowSchedulerService scheduleService = workflowRuntime.GetService(typeof(ManualWorkflowSchedulerService)) as ManualWorkflowSchedulerService;
+               //if (dataResult.AppState == null || dataResult.AppState == "")
+               // {
+               //     user.TrackingMessage += " workflowRuntime.GetService<FlowEvent>()\r\n";
+               //     //scheduleService.RunWorkflow(workflowinstance.InstanceId);
+               //     //workflowRuntime.GetService<FlowEvent>().OnDoFlow(instance.InstanceId, FlowData); //激发流程引擎执行到一下流程
+               //     //scheduleService.RunWorkflow(workflowinstance.InstanceId);
+               //     user.TrackingMessage += " workflowRuntime.GetService<FlowEvent>()完成\r\n";
+               // }
+               // else
+               // {
+               //     //scheduleService.RunWorkflow(workflowinstance.InstanceId);
+               //     //workflowinstance.SetState(dataResult.AppState); //流程跳转到指定节点
+               // }
 
                 #endregion
                 user.TrackingMessage += "激发流程引擎执行到一下流程完成\r\n";
@@ -3083,7 +3059,7 @@ namespace SMT.FlowWFService.NewFlow
                 //dataResult.CanSendMessage = true;
                 if (submitData.FlowType == FlowType.Task)
                 {
-                    dataResult.SubModelCode = Utility.GetSubModelCode(master.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
+                    dataResult.SubModelCode = FlowUtility.GetSubModelCode(master.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
                 }
                 user.TrackingMessage += "System.Threading.Thread.Sleep(1000)完成\r\n";
                 return dataResult;
@@ -3274,7 +3250,7 @@ namespace SMT.FlowWFService.NewFlow
                 bool currentIsCountersign = false;
                 string currentCountersignType = "0";
 
-                Utility.IsCountersign(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, entity.STATECODE, ref currentIsCountersign, ref currentCountersignType);
+                FlowUtility.IsCountersign(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, entity.STATECODE, ref currentIsCountersign, ref currentCountersignType);
                 if (currentIsCountersign)
                 {
                     user.TrackingMessage += "状态会签状态处理 FORMID=" + user.FormID + "  \r\n";
@@ -3334,7 +3310,7 @@ namespace SMT.FlowWFService.NewFlow
                     //user.TrackingMessage += " entity.FLOW_FLOWRECORDMASTER_T.FLOWRECORDMASTERID=" + entity.FLOW_FLOWRECORDMASTER_T.FLOWRECORDMASTERID + "\r\n";//
 
                     
-                    UpdateFlowRecord( entity, submitData.NextStateCode, submitData.NextApprovalUser.UserID);
+                    UpdateFlowDetailRecord( entity, submitData.NextStateCode, submitData.NextApprovalUser.UserID);
                     user.TrackingMessage += "审核不通过【开始更新主表】!FORMID=" + user.FormID;
                     FLOW_FLOWRECORDMASTER_TDAL.Update(entity.FLOW_FLOWRECORDMASTER_T);
                     dataResult.CheckState = "3";//
@@ -3415,7 +3391,7 @@ namespace SMT.FlowWFService.NewFlow
                             #region
                             if (dataResult.FlowResult == FlowResult.MULTIUSER)
                             {
-                                if (submitData.NextApprovalUser == null || (Utility.GetString(submitData.NextApprovalUser.UserID) == "" || Utility.GetString(submitData.NextApprovalUser.UserName) == ""))
+                                if (submitData.NextApprovalUser == null || (FlowUtility.GetString(submitData.NextApprovalUser.UserID) == "" || FlowUtility.GetString(submitData.NextApprovalUser.UserName) == ""))
                                 {
                                     return dataResult;
                                 }
@@ -3506,7 +3482,7 @@ namespace SMT.FlowWFService.NewFlow
                             dataResult.UserInfo.Clear();
                             dataResult.UserInfo.Add(AppUser);
                             UserInfo AgentAppUser = GetAgentUserInfo(submitData.ModelCode, AppUser.UserID);//查询是否启用了代理人                            
-                            dataResult = DoFlowRecord2( workflowRuntime, instance, entity, submitData.NextStateCode, AppUser, AgentAppUser, submitData.SubmitFlag, submitData.FlowType,ref user); //处理流程数据
+                            dataResult = AddOrUpdateFlowRecord( workflowRuntime, instance, entity, submitData.NextStateCode, AppUser, AgentAppUser, submitData.SubmitFlag, submitData.FlowType,ref user); //处理流程数据
                             dataResult.AgentUserInfo = AgentAppUser;
                             dataResult.IsCountersign = false;
                             #endregion
@@ -3562,7 +3538,7 @@ namespace SMT.FlowWFService.NewFlow
                         user.TrackingMessage += "System.Threading.Thread.Sleep(1000)\r\n";
                        //System.Threading.Thread.Sleep(1000); //Commented by Alan 2012-7-25 ,使用手动ScheduleService运行工作流,此处不需要
                         if (submitData.FlowType == FlowType.Task)
-                            dataResult.SubModelCode = Utility.GetSubModelCode(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
+                            dataResult.SubModelCode = FlowUtility.GetSubModelCode(entity.FLOW_FLOWRECORDMASTER_T.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
                         user.TrackingMessage += "System.Threading.Thread.Sleep(1000)完成\r\n";
 
                         #endregion
@@ -3729,7 +3705,7 @@ namespace SMT.FlowWFService.NewFlow
                     entity.FLOW_FLOWRECORDMASTER_T.EDITUSERID = ApprovalData.ApprovalUser.UserID;
                     entity.FLOW_FLOWRECORDMASTER_T.EDITUSERNAME = ApprovalData.ApprovalUser.UserName;
                     entity.FLOW_FLOWRECORDMASTER_T.EDITDATE = DateTime.Now;
-                    UpdateFlowRecord( entity, ApprovalData.NextStateCode, ApprovalData.NextApprovalUser.UserID);
+                    UpdateFlowDetailRecord( entity, ApprovalData.NextStateCode, ApprovalData.NextApprovalUser.UserID);
                     FLOW_FLOWRECORDMASTER_TDAL.Update( entity.FLOW_FLOWRECORDMASTER_T);//对数据库操作
                     APPDataResult.CheckState = "3";//
                     user.TrackingMessage += "终审不通过,设置状态 CheckState=3;FORMID=" + user.FormID;
@@ -3846,7 +3822,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="ModelCode"></param>
         /// <param name="dictUserInfo"></param>
         /// <returns></returns>
-        public Dictionary<UserInfo, UserInfo> GetAgentUserInfo2(string ModelCode, Dictionary<Role_UserType, List<UserInfo>> dictUserInfo)
+        public Dictionary<UserInfo, UserInfo> GetAgentUserInfo2(string ModelCode, Dictionary<FlowRole, List<UserInfo>> dictUserInfo)
         {
             Dictionary<UserInfo, UserInfo> dict = new Dictionary<UserInfo, UserInfo>();
 

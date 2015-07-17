@@ -36,102 +36,18 @@ using SMT.FlowWFService.XmlFlowManager;
 
 namespace SMT.FlowWFService.NewFlow
 {
-    public partial class Service
+    public partial class FlowService
     {
         public DataResult SubimtFlow(SubmitData submitData)
         {
-            #region 测试用例
-            //submitData.FlowSelectType = FlowSelectType.FixedFlow;
-            //submitData.FormID = "0671c1d0-07b9-4baa-9a36-349f0c09bd04";
-            //submitData.ModelCode = "T_WP_YEARNORMDRAFT";
-            //submitData.ApprovalUser = new UserInfo();
-            //submitData.ApprovalUser.CompanyID = "721c99d5-4cfb-4cc7-ba43-a05217e25918";
-            //submitData.ApprovalUser.DepartmentID = "7fc6b3af-92ec-442b-921e-6a8d13039ce9";
-            //submitData.ApprovalUser.PostID = "aa1496a5-840b-4b15-bc3e-36c2aeb14d3b";
-            //submitData.ApprovalUser.UserID = "e65cdb8f-26f2-440c-a5f9-977ea29fe4c2";
-            //submitData.ApprovalUser.UserName = "黄总";
-            //submitData.NextStateCode = "";
-            //submitData.NextApprovalUser = new UserInfo();
-            //submitData.NextApprovalUser.CompanyID = "721c99d5-4cfb-4cc7-ba43-a05217e25918";
-            //submitData.NextApprovalUser.DepartmentID = "e6e9546c-2d58-4f1c-abb6-139df4055114";
-            //submitData.NextApprovalUser.PostID = "fdbe688e-8886-42ac-9392-914e4e20960b";
-            //submitData.NextApprovalUser.UserID = "7e2fb3cd-ff1a-47b4-91b0-1572e6a3f3e5";
-            //submitData.NextApprovalUser.UserName = "王董";
-            //submitData.SubmitFlag = SubmitFlag.Approval;
-            //submitData.FlowType = FlowType.Approval;
-            //submitData.ApprovalResult = ApprovalResult.Pass;
-            //submitData.ApprovalContent = "审核通过";
-            //submitData.SumbitCompanyID = "";
-            //submitData.SumbitDeparmentID = "";
-            //submitData.SumbitPostID = "";
-            //submitData.SumbitUserID = "";
-            //submitData.SumbitUserName = "";
-
-
-            //StringBuilder sb = new StringBuilder();
-            //sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-            //sb.AppendLine("<System>");
-            //sb.AppendLine("  <Name>WP</Name>");
-            //sb.AppendLine("  <Version>1.0</Version>");
-            //sb.AppendLine("  <System>");
-            //sb.AppendLine("    <Function Description=\"\" Address=\"\" FuncName=\"\" Binding=\"\" SplitChar=\"Г\">");
-            //sb.AppendLine("      <ParaStr>");
-            //sb.AppendLine("        <Para TableName=\"\" Name=\"\" Description=\"\" Value=\"\" />");
-            //sb.AppendLine("      </ParaStr>");
-            //sb.AppendLine("    </Function>");
-            //sb.AppendLine("  </System>");
-            //sb.AppendLine("  <MsgOpen>");
-            //sb.AppendLine("    <AssemblyName>SMT.WP.UI</AssemblyName>");
-            //sb.AppendLine("    <PublicClass>SMT.WP.UI.Class.Utility</PublicClass>");
-            //sb.AppendLine("    <ProcessName>CreateFormFromEngine</ProcessName>");
-            //sb.AppendLine("    <PageParameter>WP/YearNormDraft/Audit</PageParameter>");
-            //sb.AppendLine("    <ApplicationOrder>{DNORMID}</ApplicationOrder>");
-            //sb.AppendLine("    <FormTypes>Audit</FormTypes>");
-            //sb.AppendLine("  </MsgOpen>");
-            //sb.AppendLine("  <Object Name=\"T_WP_YEARNORMDRAFT\" Description=\"公司年度经营指标方案\" Key=\"DNORMID\" id=\"0671c1d0-07b9-4baa-9a36-349f0c09bd04\">");
-            //sb.AppendLine("    <Attribute Name=\"DNORMID\" LableResourceID=\"DNORMID\" Description=\"指标主键ID,GUID\" DataType=\"string\" DataValue=\"0671c1d0-07b9-4baa-9a36-349f0c09bd04\" DataText=\"0671c1d0-07b9-4baa-9a36-349f0c09bd04\" />");
-            //sb.AppendLine("    <Attribute Name=\"PLANYEAR\" LableResourceID=\"PLANYEAR\" Description=\"计划年度\" DataType=\"string\" DataValue=\"2009\" DataText=\"2009\" />");
-            //sb.AppendLine("    <Attribute Name=\"COMPANYID\" LableResourceID=\"COMPANYID\" Description=\"所属公司ID\" DataType=\"string\" DataValue=\"721c99d5-4cfb-4cc7-ba43-a05217e25918\" DataText=\"721c99d5-4cfb-4cc7-ba43-a05217e25918\" />");
-            //sb.AppendLine("    <Attribute Name=\"COMPANYNAME\" LableResourceID=\"COMPANYNAME\" Description=\"所属公司名称\" DataType=\"string\" DataValue=\"集团公司\" DataText=\"集团公司\" />");
-            //sb.AppendLine("    <Attribute Name=\"APPLYDATE\" LableResourceID=\"APPLYDATE\" Description=\"申请日期\" DataType=\"datetime\" DataValue=\"2012/12/4 14:19:39\" DataText=\"2012/12/4 14:19:39\" />");
-            //sb.AppendLine("    <Attribute Name=\"APPLYMAN\" LableResourceID=\"APPLYMAN\" Description=\"申请人\" DataType=\"string\" DataValue=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" DataText=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" />");
-            //sb.AppendLine("    <Attribute Name=\"TASKSENDDATE\" LableResourceID=\"TASKSENDDATE\" Description=\"任务发放日期\" DataType=\"datetime\" DataValue=\"0001/1/1 0:00:00\" DataText=\"0001/1/1 0:00:00\" />");
-            //sb.AppendLine("    <Attribute Name=\"CHECKSTATES\" LableResourceID=\"CHECKSTATES\" Description=\"审核状态\" DataType=\"string\" DataValue=\"0\" DataText=\"0\" />");
-            //sb.AppendLine("    <Attribute Name=\"EDITSTATE\" LableResourceID=\"EDITSTATE\" Description=\"对象编辑状态\" DataType=\"string\" DataValue=\"2\" DataText=\"2\" />");
-            //sb.AppendLine("    <Attribute Name=\"OWNERCOMPANYID\" LableResourceID=\"OWNERCOMPANYID\" Description=\"记录所属公司ID\" DataType=\"string\" DataValue=\"721c99d5-4cfb-4cc7-ba43-a05217e25918\" DataText=\"721c99d5-4cfb-4cc7-ba43-a05217e25918\" />");
-            //sb.AppendLine("    <Attribute Name=\"OWNERDEPARTMENTID\" LableResourceID=\"OWNERDEPARTMENTID\" Description=\"记录所属部门ID\" DataType=\"string\" DataValue=\"7fc6b3af-92ec-442b-921e-6a8d13039ce9\" DataText=\"7fc6b3af-92ec-442b-921e-6a8d13039ce9\" />");
-            //sb.AppendLine("    <Attribute Name=\"OWNERPOSTID\" LableResourceID=\"OWNERPOSTID\" Description=\"记录所属岗位ID\" DataType=\"string\" DataValue=\"aa1496a5-840b-4b15-bc3e-36c2aeb14d3b\" DataText=\"aa1496a5-840b-4b15-bc3e-36c2aeb14d3b\" />");
-            //sb.AppendLine("    <Attribute Name=\"OWNERID\" LableResourceID=\"OWNERID\" Description=\"记录所属用户ID\" DataType=\"string\" DataValue=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" DataText=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" />");
-            //sb.AppendLine("    <Attribute Name=\"CREATECOMPANYID\" LableResourceID=\"CREATECOMPANYID\" Description=\"创建公司ID\" DataType=\"string\" DataValue=\"721c99d5-4cfb-4cc7-ba43-a05217e25918\" DataText=\"集团公司\" />");
-            //sb.AppendLine("    <Attribute Name=\"CREATEDEPARTMENTID\" LableResourceID=\"CREATEDEPARTMENTID\" Description=\"创建部门ID\" DataType=\"string\" DataValue=\"7fc6b3af-92ec-442b-921e-6a8d13039ce9\" DataText=\"总经办\" />");
-            //sb.AppendLine("    <Attribute Name=\"CREATEPOSTID\" LableResourceID=\"CREATEPOSTID\" Description=\"创建岗位ID\" DataType=\"string\" DataValue=\"aa1496a5-840b-4b15-bc3e-36c2aeb14d3b\" DataText=\"总经理\" />");
-            //sb.AppendLine("    <Attribute Name=\"CREATEUSERID\" LableResourceID=\"CREATEUSERID\" Description=\"创建人ID\" DataType=\"string\" DataValue=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" DataText=\"黄总\" />");
-            //sb.AppendLine("    <Attribute Name=\"CREATEDATE\" LableResourceID=\"CREATEDATE\" Description=\"创建时间\" DataType=\"datetime\" DataValue=\"2012/12/4 14:19:39\" DataText=\"2012/12/4 14:19:39\" />");
-            //sb.AppendLine("    <Attribute Name=\"UPDATEUSERID\" LableResourceID=\"UPDATEUSERID\" Description=\"修改人ID\" DataType=\"string\" DataValue=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" DataText=\"e65cdb8f-26f2-440c-a5f9-977ea29fe4c2\" />");
-            //sb.AppendLine("    <Attribute Name=\"UPDATEDATE\" LableResourceID=\"UPDATEDATE\" Description=\"修改时间\" DataType=\"datetime\" DataValue=\"2012/12/4 14:19:44\" DataText=\"2012/12/4 14:19:44\" />");
-            //sb.AppendLine("    <Attribute Name=\"REMARK\" LableResourceID=\"REMARK\" Description=\"备注\" DataType=\"string\" DataValue=\"\" DataText=\"\" />");
-            //sb.AppendLine("    <Attribute Name=\"ISMAJORDATA\" LableResourceID=\"ISMAJORDATA\" Description=\"是否主数据\" DataType=\"string\" DataValue=\"1\" DataText=\"1\" />");
-            //sb.AppendLine("    <Attribute Name=\"AUXIDNORMID\" LableResourceID=\"AUXIDNORMID\" Description=\"附属的主数据\" DataType=\"string\" DataValue=\"\" DataText=\"\" />");
-            //sb.AppendLine("    <Attribute Name=\"RECVERSION\" LableResourceID=\"RECVERSION\" Description=\"版本号\" DataType=\"string\" DataValue=\"1\" DataText=\"1\" />");
-            //sb.AppendLine("    <ObjectList Name=\"T_WP_YEARNORMDEFINE\" LableResourceID=\"T_WP_YEARNORMDEFINE\" Description=\"公司年度经营指标定义\" DataText=\"\" />");
-            //sb.AppendLine("  </Object>");
-            //sb.AppendLine("</System>");
-
-
-            //submitData.XML = sb.ToString();
-            //sb.Clear();
-
-            //SmulatedFlowService sfs = new SmulatedFlowService();
-            //sfs.SubimtFlow(submitData);
-            //return null;
-            #endregion
             SMTWorkFlowManage.ColseWorkFlowRuntime(null);
             DataSet ds = new DataSet();
             WriteSubmitDate(submitData);
             Tracer.Debug("***********************************************开始" + DateTime.Now.ToString() + "***********************************************");
             string returnMsg = "";//暂时没有用,记录执行的顺序
             #region 更新个人缓存
-            FlowEngine.TaskCacheReflesh(submitData.ApprovalUser.UserID);
+            //临时屏蔽
+            //FlowEngine.TaskCacheReflesh(submitData.ApprovalUser.UserID);
             Tracer.Debug("FormID=" + submitData.FormID + ";更新个人缓存 完成 UserID=" + submitData.ApprovalUser.UserID);
             #endregion
             DateTime dtStart = DateTime.Now;
@@ -141,8 +57,8 @@ namespace SMT.FlowWFService.NewFlow
             DataResult dataResult = new DataResult();
             FlowUser User = new FlowUser();
             //设置2分钟超时时间
-            using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(DateTime.Now.AddMinutes(2).Ticks)))
-            {
+            //using (TransactionScope ts = new TransactionScope(TransactionScopeOption.Required, new TimeSpan(DateTime.Now.AddMinutes(2).Ticks)))
+            //{
                 try
                 {
                     #region 初始化流程所属人的信息
@@ -316,7 +232,7 @@ namespace SMT.FlowWFService.NewFlow
                         if (dataResult.DictCounterUser.Count > 0)
                         {
                             string name = "";
-                            foreach (KeyValuePair<Role_UserType, List<UserInfo>> u in dataResult.DictCounterUser)
+                            foreach (KeyValuePair<FlowRole, List<UserInfo>> u in dataResult.DictCounterUser)
                             {
                                 name += "角色名称：" + u.Key.Remark + "  人数：" + u.Value.Count + "\r\n";
                                 foreach (var user in u.Value)
@@ -361,14 +277,14 @@ namespace SMT.FlowWFService.NewFlow
                     }
                     #endregion
 
-                    ts.Complete();//提交事务
+                    //ts.Complete();//提交事务
                     //关闭数据库  
                     Tracer.Debug("执行流程成功：FormID＝" + User.FormID + ";单据所属人：" + User.UserName + "(" + User.UserID + ");公司名称:" + User.CompayName + ";模块名称:" + User.ModelName + " ;流程名称：" + User.FlowName + " (" + User.FlowCode + ") \r\n 返回给业务系统的 dataResult.FlowResult＝" + dataResult.FlowResult.ToString() + "  " + dataResult.Err);
                 }
                 catch (Exception ex)
                 {
                     #region 记录到流程监控表里
-                    ts.Dispose();
+                    //ts.Dispose();
                     dataResult.RunTime += "---FlowEnd:" + DateTime.Now.ToString();
                     dataResult.FlowResult = FlowResult.FAIL;
                     dataResult.Err = ex.Message;
@@ -402,7 +318,7 @@ namespace SMT.FlowWFService.NewFlow
                 finally
                 {
                 }
-            }
+            //}
             FlowMonitor.AddInstance(submitData, User);
             return dataResult;
         }

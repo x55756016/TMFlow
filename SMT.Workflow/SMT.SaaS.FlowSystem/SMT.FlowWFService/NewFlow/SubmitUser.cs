@@ -8,6 +8,7 @@ using System.Data;
 using SMT.SaaS.BLLCommonServices.PermissionWS;
 using SMT.Foundation.Log;
 using SMT.Workflow.SMTCache;
+using SMT.HRM.BLL.Permission;
 
 namespace SMT.FlowWFService.NewFlow
 {
@@ -23,7 +24,7 @@ namespace SMT.FlowWFService.NewFlow
             try
             {
                 ModelInfo modelinfo = new ModelInfo();
-                FlowUserInfo[] Users = { };
+                List<SMT.HRM.CustomModel.Permission.FlowUserInfo> Users = new List<HRM.CustomModel.Permission.FlowUserInfo>();
                 #region ModelInfo加入缓存
                 object modelinfoObj= CacheProvider.GetCache(modelCode);
                 if (modelinfoObj != null)
@@ -58,15 +59,17 @@ namespace SMT.FlowWFService.NewFlow
                 object FlowUserInfoObj = CacheProvider.GetCache(userid);
                 if (FlowUserInfoObj != null)
                 {
-                    Users = (FlowUserInfo[])FlowUserInfoObj;
+                    Users = (List<SMT.HRM.CustomModel.Permission.FlowUserInfo>)FlowUserInfoObj;
                     Tracer.Debug("从缓存中获取 FlowUserInfo");
                 }
                 else
                 {
-                    Tracer.Debug("创建服务 PermissionServiceClient 开始");
-                    PermissionServiceClient WcfPermissionService = new PermissionServiceClient();
                     Tracer.Debug("从数据库获取 FlowUserInfo 开始 userid=" + userid);
-                    Users = WcfPermissionService.GetFlowUserByUserID(userid);//新的接口
+                    using (SysUserBLL bll = new SysUserBLL())
+                    {
+                        Tracer.Debug("流程调用了GetFlowUserByUserID：" + "用户ID:" + userid);
+                        Users = bll.GetFlowUserByUserID(userid);
+                    }
                     if (Users != null)
                     {
                         CacheProvider.RemoveCache(userid);
@@ -100,7 +103,7 @@ namespace SMT.FlowWFService.NewFlow
                         this.DepartmentName = user.DepartmentName;
                         this.PostName = user.PostName;
                         this.UserName = user.EmployeeName;
-                        this.Roles = new List<T_SYS_ROLE>();
+                        this.Roles = new List<TM_SaaS_OA_EFModel.T_SYS_ROLE>();
                         foreach (var role in user.Roles)
                         {
                             if (role != null)
@@ -183,7 +186,7 @@ namespace SMT.FlowWFService.NewFlow
         /// <summary>
         /// 所包含的角色：一个人在同一家公司可以有多个角色
         /// </summary>
-        public List<T_SYS_ROLE> Roles { get; set; }
+        public List<TM_SaaS_OA_EFModel.T_SYS_ROLE> Roles { get; set; }
         /// <summary>
         /// 是否是所在的部门的负责人
         /// </summary>

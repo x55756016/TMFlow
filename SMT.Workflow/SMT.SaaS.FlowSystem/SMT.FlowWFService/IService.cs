@@ -235,7 +235,7 @@ namespace SMT.FlowWFService
         /// 会签人角色人员列表
         /// </summary>
         [DataMember]
-        public Dictionary<Role_UserType, List<UserInfo>> DictCounterUser
+        public Dictionary<FlowRole, List<UserInfo>> DictCounterUser
         {
             get;
             set;
@@ -461,7 +461,7 @@ namespace SMT.FlowWFService
         /// 会签人角色人员列表
         /// </summary>
         [DataMember]
-        public Dictionary<Role_UserType, List<UserInfo>> DictCounterUser
+        public Dictionary<FlowRole, List<UserInfo>> DictCounterUser
         {
             get;
             set;
@@ -578,7 +578,7 @@ namespace SMT.FlowWFService
         /// 所包含的角色：一个人在同一家公司可以有多个角色
         /// </summary>
          [DataMember]
-        public List<T_SYS_ROLE> Roles { get; set; }
+        public List<TM_SaaS_OA_EFModel.T_SYS_ROLE> Roles { get; set; }
         /// <summary>
         /// 是否是所在的部门的负责人
         /// </summary>

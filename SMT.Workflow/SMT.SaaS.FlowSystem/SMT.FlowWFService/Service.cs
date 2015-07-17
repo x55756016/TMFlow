@@ -56,7 +56,7 @@ namespace SMT.FlowWFService
         public void AddConsultation(FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             s2.AddConsultation(flowConsultation,  submitData);
             #region 旧代码
             //if (strIsFlowEngine.ToLower() == "true")
@@ -109,7 +109,7 @@ namespace SMT.FlowWFService
         public void ReplyConsultation(FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             s2.ReplyConsultation( flowConsultation, submitData);
             #region 旧代码
             //if (strIsFlowEngine.ToLower() == "true")
@@ -140,13 +140,11 @@ namespace SMT.FlowWFService
         }
         #endregion
 
-        #region 流程处理
-        #region 流程与任务审批
-
-
+   
+        #region 流程与审批
         public DataResult SubimtFlow(SubmitData submitData)
         {
-            SMT.FlowWFService.NewFlow.Service FlowSv = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService FlowSv = new SMT.FlowWFService.NewFlow.FlowService();
             return FlowSv.SubimtFlow(submitData);
         }
         #endregion
@@ -169,7 +167,7 @@ namespace SMT.FlowWFService
                 throw ex;
             }
         }
-        #endregion
+     
 
         #region 查询下一节点用户
 
@@ -182,7 +180,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>
         public DataResult GetAppUser(string CompanyID, string ModelCode, string FlowGUID, string xml)
         {
-            SMT.FlowWFService.NewFlow.Service FlowSV = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService FlowSV = new SMT.FlowWFService.NewFlow.FlowService();
             return FlowSV.GetAppUser( CompanyID,  ModelCode,  FlowGUID,  xml);
         }
 
@@ -195,7 +193,7 @@ namespace SMT.FlowWFService
             {
                 WorkflowRuntime WfRuntime = SMTWorkFlowManage.CreateWorkFlowRuntime(false);
                 WorkflowInstance Instance = SMTWorkFlowManage.CreateWorkflowInstance(WfRuntime, Xoml, Rules);
-                string strNextState = SMTWorkFlowManage.GetNextStateByEvent(WfRuntime, Instance, "StartFlow", xml);
+                string strNextState = SMTWorkFlowManage.GetFlowNextStepRoles(WfRuntime, Instance, "StartFlow", xml);
             }
             catch (Exception ex)
             {
@@ -211,7 +209,7 @@ namespace SMT.FlowWFService
         public string UpdateFlow(FLOW_FLOWRECORDDETAIL_T entity)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             return s2.UpdateFlow( entity);
             #region 旧代码
             //FlowBLL bll = new FlowBLL();
@@ -229,7 +227,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>
         public List<FLOW_FLOWRECORDDETAIL_T> GetFlowInfo(string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
         {
-                SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+                SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
                 return s2.GetFlowInfo(  FormID,  FlowGUID,  CheckState,  Flag,  ModelCode,  CompanyID,  EditUserID);
             
             #region 旧代码
@@ -269,7 +267,7 @@ namespace SMT.FlowWFService
         public List<FLOW_FLOWRECORDMASTER_T> GetFlowRecordMaster(string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             return s2.GetFlowRecordMaster( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID);
             #region 旧代码
             //try
@@ -299,7 +297,7 @@ namespace SMT.FlowWFService
         public List<TaskInfo> GetTaskInfo(string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             return s2.GetTaskInfo( FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID);
             #region 旧代码
             //return FlowBLL.GetTaskInfo(FormID, FlowGUID, CheckState, Flag, ModelCode, CompanyID, EditUserID);
@@ -316,7 +314,7 @@ namespace SMT.FlowWFService
         /// <returns>Formids</returns>
         public List<string> GetWaitingApprovalForm(string ModelCode, string EditUserID)
         {
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             return s2.GetWaitingApprovalForm(ModelCode, EditUserID);
         }
         #endregion
@@ -324,7 +322,7 @@ namespace SMT.FlowWFService
         public string GetFlowDefine(SubmitData ApprovalData)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             return s2.GetFlowDefine( ApprovalData);
             #region 旧代码
             //FlowBLL Flow = new FlowBLL();
@@ -340,7 +338,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>
         public T_WF_PERSONALRECORD GetPersonalRecordByID(string personalrecordid)
         {
-            SMT.FlowWFService.NewFlow.Service s2 = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService s2 = new SMT.FlowWFService.NewFlow.FlowService();
             return s2.GetPersonalRecordByID(personalrecordid);
         }
 
@@ -365,7 +363,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>
         public List<string> GetFlowBranch(string FlowID)
         {
-            SMT.FlowWFService.NewFlow.Service Flow = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService Flow = new SMT.FlowWFService.NewFlow.FlowService();
             return Flow.GetFlowBranch(FlowID);
         }
         /// <summary>
@@ -377,12 +375,12 @@ namespace SMT.FlowWFService
         /// <param name="companyid">公司ID</param>       
         public string[] IsFreeFlowAndIsCancel(string modelcode, string companyid)
         {
-            SMT.FlowWFService.NewFlow.Service Flow = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService Flow = new SMT.FlowWFService.NewFlow.FlowService();
             return Flow.IsFreeFlowAndIsCancel(modelcode, companyid);
         }
         public List<FLOW_MODELFLOWRELATION_T> GetModelFlowRelationInfosListBySearch(int pageIndex, int pageSize, string sort, string filterString, object[] paras, ref int pageCount)
         {
-            SMT.FlowWFService.NewFlow.Service Flow = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService Flow = new SMT.FlowWFService.NewFlow.FlowService();
             return Flow.GetModelFlowRelationInfosListBySearch( pageIndex,  pageSize,  sort,  filterString, paras, ref  pageCount); 
         }
         /// <summary>
@@ -392,7 +390,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>       
         public string GetMetadataByFormid(string formid)
         {
-            SMT.FlowWFService.NewFlow.Service Flow = new SMT.FlowWFService.NewFlow.Service();            
+            SMT.FlowWFService.NewFlow.FlowService Flow = new SMT.FlowWFService.NewFlow.FlowService();            
             return Flow.GetMetadataByFormid(formid);
         }
         /// <summary>
@@ -403,7 +401,7 @@ namespace SMT.FlowWFService
         /// <returns></returns>       
         public bool UpdateMetadataByFormid(string formid, string xml)
         {
-            SMT.FlowWFService.NewFlow.Service Flow = new SMT.FlowWFService.NewFlow.Service();
+            SMT.FlowWFService.NewFlow.FlowService Flow = new SMT.FlowWFService.NewFlow.FlowService();
             return Flow.UpdateMetadataByFormid(formid, xml);
         }
 

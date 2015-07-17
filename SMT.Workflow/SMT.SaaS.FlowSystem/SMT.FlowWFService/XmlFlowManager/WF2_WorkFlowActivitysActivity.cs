@@ -15,7 +15,7 @@ namespace SMT.FlowWFService.XmlFlowManager
     public partial class WF2_WorkFlowActivitysActivity
     {
 
-        private List<WF21_WorkFlowActivitysActivityCountersigns> countersignsField;
+        private List<WF21_WorkFlowActivitysActivityCountersigns> countersignsField=new List<WF21_WorkFlowActivitysActivityCountersigns>();
 
         private string nameField;
 

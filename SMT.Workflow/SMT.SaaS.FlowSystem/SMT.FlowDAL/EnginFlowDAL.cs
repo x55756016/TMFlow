@@ -46,8 +46,7 @@ namespace SMT.FlowDAL
                 string sql = "SELECT PERSONALRECORDID FROM T_WF_PERSONALRECORD WHERE SYSTYPE='" + sysCode + "' AND MODELCODE='" + modelCode + "' AND MODELID='" +orderID + "' ";
                 sql += " AND ISFORWARD=" + forwar + " AND rownum=1";
                // 
-                Log.WriteLog("GetExistRecord():" + sql + "");
-                Tracer.Debug(sql);
+                Tracer.Debug("GetExistRecord():" + sql + "");
                // object obj = dao.ExecuteScalar(sql);
                 DataTable obj= dao.GetDataTable(sql);
                 return obj.Rows.Count > 0 ? obj.Rows[0]["PERSONALRECORDID"].ToString() : "";
@@ -80,7 +79,7 @@ namespace SMT.FlowDAL
                 sql += @"'" + model.OWNERID + "','" + model.OWNERPOSTID + "','" + model.OWNERDEPARTMENTID + "',";
                 //sql += @"to_date('" + Convert.ToDateTime(entity.TRIGGERTIME).ToString("yyyy/MM/dd hh:mm") + "','YYYY-MM-DD hh24:mi:ss')          
                 sql += @"'" + model.OWNERCOMPANYID + "','" + model.CONFIGINFO + "','" + model.MODELDESCRIPTION + "'," + (model.ISFORWARD == "1" ? 1 : 0) + ")";
-                Log.WriteLog("AddPersonalRecord():" + sql + "");
+                Tracer.Debug("AddPersonalRecord():" + sql + "");
                // 
                 //Tracer.Debug("新增我的单据 FormID=" + model.MODELID + "");
                 //return dao.ExecuteNonQuery(sql) > 0 ? true : false;
@@ -110,7 +109,7 @@ namespace SMT.FlowDAL
             {
                 string sql = "UPDATE T_WF_PERSONALRECORD SET CHECKSTATE=" + model.CHECKSTATE + ",CONFIGINFO='" + model.CONFIGINFO + "',MODELDESCRIPTION='" +model.MODELDESCRIPTION + "',";
                 sql += "UPDATEDATE=to_date('" + DateTime.Now.ToString("yyyy/MM/dd hh:mm") + "','YYYY-MM-DD hh24:mi') WHERE PERSONALRECORDID='" + recordID + "'";
-                Log.WriteLog("UpdatePersonalRecord():" + sql + "");
+                Tracer.Debug("UpdatePersonalRecord():" + sql + "");
                 //
                 Tracer.Debug("修改我的单据 FormID=" + model.MODELID + " SQL语句＝" + sql);
                // return dao.ExecuteNonQuery(sql) >= 0 ? true : false;
@@ -386,31 +385,31 @@ namespace SMT.FlowDAL
                     string insSql = @"INSERT INTO T_WF_DOTASK (DOTASKID,COMPANYID,ORDERID,ORDERUSERID,ORDERUSERNAME,ORDERSTATUS,MESSAGEBODY,
                                      APPLICATIONURL,RECEIVEUSERID,BEFOREPROCESSDATE,DOTASKTYPE,DOTASKSTATUS,MAILSTATUS,
                                      RTXSTATUS,APPFIELDVALUE,FLOWXML,APPXML,SYSTEMCODE,MODELCODE,MODELNAME)
-                                     VALUES (:DOTASKID,:COMPANYID,:ORDERID,:ORDERUSERID,:ORDERUSERNAME,:ORDERSTATUS,:MESSAGEBODY,:APPLICATIONURL,
-                                    :RECEIVEUSERID,:BEFOREPROCESSDATE,:DOTASKTYPE,:DOTASKSTATUS,:MAILSTATUS,:RTXSTATUS,
-                                    :APPFIELDVALUE,:FLOWXML,:APPXML,:SYSTEMCODE,:MODELCODE,:MODELNAME)";
+                                     VALUES (@DOTASKID,@COMPANYID,@ORDERID,@ORDERUSERID,@ORDERUSERNAME,@ORDERSTATUS,@MESSAGEBODY,@APPLICATIONURL,
+                                    @RECEIVEUSERID,@BEFOREPROCESSDATE,@DOTASKTYPE,@DOTASKSTATUS,@MAILSTATUS,@RTXSTATUS,
+                                    @APPFIELDVALUE,@FLOWXML,@APPXML,@SYSTEMCODE,@MODELCODE,@MODELNAME)";
                     Parameter[] pageparm =
                         {               
-                            new Parameter(":DOTASKID",null), 
-                            new Parameter(":COMPANYID",null), 
-                            new Parameter(":ORDERID",null), 
-                            new Parameter(":ORDERUSERID",null), 
-                            new Parameter(":ORDERUSERNAME",null), 
-                            new Parameter(":ORDERSTATUS",null), 
-                            new Parameter(":MESSAGEBODY",null), 
-                            new Parameter(":APPLICATIONURL",null), 
-                            new Parameter(":RECEIVEUSERID",null), 
-                            new Parameter(":BEFOREPROCESSDATE",null), 
-                            new Parameter(":DOTASKTYPE",null),
-                            new Parameter(":DOTASKSTATUS",null), 
-                            new Parameter(":MAILSTATUS",null), 
-                            new Parameter(":RTXSTATUS",null),                  
-                            new Parameter(":APPFIELDVALUE",null), 
-                            new Parameter(":FLOWXML",null), 
-                            new Parameter(":APPXML",null), 
-                            new Parameter(":SYSTEMCODE",null), 
-                            new Parameter(":MODELCODE",null), 
-                            new Parameter(":MODELNAME",null),                  
+                            new Parameter("@DOTASKID",null), 
+                            new Parameter("@COMPANYID",null), 
+                            new Parameter("@ORDERID",null), 
+                            new Parameter("@ORDERUSERID",null), 
+                            new Parameter("@ORDERUSERNAME",null), 
+                            new Parameter("@ORDERSTATUS",null), 
+                            new Parameter("@MESSAGEBODY",null), 
+                            new Parameter("@APPLICATIONURL",null), 
+                            new Parameter("@RECEIVEUSERID",null), 
+                            new Parameter("@BEFOREPROCESSDATE",null), 
+                            new Parameter("@DOTASKTYPE",null),
+                            new Parameter("@DOTASKSTATUS",null), 
+                            new Parameter("@MAILSTATUS",null), 
+                            new Parameter("@RTXSTATUS",null),                  
+                            new Parameter("@APPFIELDVALUE",null), 
+                            new Parameter("@FLOWXML",null), 
+                            new Parameter("@APPXML",null), 
+                            new Parameter("@SYSTEMCODE",null), 
+                            new Parameter("@MODELCODE",null), 
+                            new Parameter("@MODELNAME",null),                  
 
                         };
                     pageparm[0].ParameterValue = GetValue(Guid.NewGuid().ToString());//待办任务ID
@@ -428,7 +427,13 @@ namespace SMT.FlowDAL
                     {
                         string strMsgBody = string.Empty;
                         string strMsgUrl = string.Empty;
-                        ModelMsgDefine(dr1["SYSTEMCODE"].ToString(), dr1["MODELCODE"].ToString(), entity.COMPANYID, ref strMsgBody, ref strMsgUrl);
+                        if (dr1 != null)
+                        {
+                            ModelMsgDefine(dr1["SYSTEMCODE"].ToString(), dr1["MODELCODE"].ToString(), entity.COMPANYID, ref strMsgBody, ref strMsgUrl);
+                        }else
+                        {
+                            strMsgBody = "";
+                        }
                         if (string.IsNullOrEmpty(strMsgBody))
                         {
                             try
