@@ -141,7 +141,7 @@ namespace SMT.FlowDAL
             string sql = "";
             try
             {//to_date('" + DateTime.Now + "','YYYY-MM-DD hh24:mi:ss')"
-                sql = "UPDATE T_WF_DOTASK SET DOTASKSTATUS=1, CLOSEDDATE=to_date('" + DateTime.Now + "','YYYY-MM-DD hh24:mi:ss'),REMARK='关闭待办' WHERE SYSTEMCODE='" + strSystemCode + "' AND DOTASKSTATUS=0 AND ORDERID='" + strFormID + "'";
+                sql = "UPDATE T_WF_DOTASK SET DOTASKSTATUS=1, CLOSEDDATE='" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "',REMARK='关闭待办' WHERE SYSTEMCODE='" + strSystemCode + "' AND DOTASKSTATUS=0 AND ORDERID='" + strFormID + "'";
                 if (!string.IsNullOrEmpty(strReceiveID))
                 {
                     sql += "  AND RECEIVEUSERID='" + strReceiveID + "'";
@@ -235,8 +235,7 @@ namespace SMT.FlowDAL
         {
             try
             {
-                string sql = @"SELECT B.APPLICATIONURL,B.SYSTEMCODE,B.MODELCODE,B.MESSAGEBODY,B.ISDEFAULTMSG,
-                B.RECEIVEUSER,B.LASTDAYS,B.WCFBINDINGCONTRACT,B.WCFURL,B.FUNCTIONNAME,B.FUNCTIONPARAMTER,B.PAMETERSPLITCHAR,B.OWNERDEPARTMENTID, 
+                string sql = @"SELECT B.APPLICATIONURL,B.SYSTEMCODE,B.MODELCODE,B.MESSAGEBODY,B.ISDEFAULTMSG,                B.RECEIVEUSER,B.LASTDAYS,B.WCFBINDINGCONTRACT,B.WCFURL,B.FUNCTIONNAME,B.FUNCTIONPARAMTER,B.PAMETERSPLITCHAR,B.OWNERDEPARTMENTID, 
                 B.OWNERCOMPANYID,  
                 B.OWNERPOSTID,  A.DOTASKRULEID  FROM T_WF_DOTASKRULE A LEFT JOIN   T_WF_DOTASKRULEDETAIL B ON A.DOTASKRULEID=B.DOTASKRULEID";
                 sql += "  WHERE A.SYSTEMCODE='" + strSystemCode + "' AND A.MODELCODE='" + strModelCode + "' AND A.COMPANYID='" + strCompanyID + "'";
@@ -364,7 +363,7 @@ namespace SMT.FlowDAL
         /// <param name="dr1"></param>
         /// <param name="SourceValueDT"></param>
         /// <param name="strAPPFIELDVALUE"></param>
-        public void AddDoTask(T_WF_DOTASK entity, DataRow dr1, DataTable SourceValueDT, string strAPPFIELDVALUE)
+        public void AddDoTask(T_WF_DOTASK entity, DataRow[] drs, DataTable SourceValueDT, string strAPPFIELDVALUE, string submitUserName, string ModeName, string applicationUrl)
         {
             CloseDoTaskStatus(entity.SYSTEMCODE, entity.ORDERID, null);
             try
@@ -423,65 +422,72 @@ namespace SMT.FlowDAL
                                   "<System>" + "\r\n" +
                                   "{0}" +
                                   "</System>";
-                    if (dr1["MESSAGEBODY"].ToString() == "")//默认消息为空
+
+                    string strMsgBody = string.Empty;
+                    string strMsgUrl = applicationUrl;
+                    if (drs.Count() == 0)//如果没有设置消息，则构造默认消息：请审核xxx提交的"xxxx",
                     {
-                        string strMsgBody = string.Empty;
-                        string strMsgUrl = string.Empty;
-                        if (dr1 != null)
-                        {
-                            ModelMsgDefine(dr1["SYSTEMCODE"].ToString(), dr1["MODELCODE"].ToString(), entity.COMPANYID, ref strMsgBody, ref strMsgUrl);
-                        }else
-                        {
-                            strMsgBody = "";
-                        }
-                        if (string.IsNullOrEmpty(strMsgBody))
-                        {
-                            try
-                            {
-                                DataRow[] drvList = SourceValueDT.Select("ColumnName='ModelName'");
-                                if (drvList.Count() == 1)
-                                {
-                                    string value = drvList[0]["ColumnValue"].ToString();
-                                    if (string.IsNullOrWhiteSpace(value))
-                                    {
-                                        value = drvList[0]["ColumnText"].ToString();
-                                    }         
-                                    pageparm[6].ParameterValue = GetValue(value + "已审批通过");//消息体                                    
-                                }
-                                else
-                                {
-                                    pageparm[6].ParameterValue = GetValue(entity.ORDERID + "已审批通过");//消息体 
-
-                                }
-                            }
-                            catch { }
-
-                        }
-                        else
-                        {
-                            pageparm[6].ParameterValue = GetValue(ReplaceMessageBody(strMsgBody, SourceValueDT));//消息体                             
-                        }
-                        string strUrl = string.Format(XmlTemplete, ReplaceValue(strMsgUrl, SourceValueDT));
-                        Tracer.Debug("查询到得消息链接：" + strUrl + "单据ID：" + entity.ORDERID);
-                        pageparm[7].ParameterValue = GetValue(strUrl);//应用URL                         
+                        strMsgBody ="请审核["+ submitUserName + @"]提交的[" + ModeName+"]";
+                        pageparm[7].ParameterValue = ReplaceLowerValue(strMsgUrl, SourceValueDT);//应用URL     
                     }
-                    else//在引擎配置界面定义了消息内容
+                    else
                     {
-                        Tracer.Debug("Formid=" + entity.ORDERID + "开始 待办消息体:" + dr1["MESSAGEBODY"].ToString() + "\n\r 开始 打开待办连接的参数:" + dr1["APPLICATIONURL"].ToString());
-                        string rowsValues = "Formid=" + entity.ORDERID + "\r\n";//每一行的值
-                        for (int j = 0; j < SourceValueDT.Rows.Count; j++)
+                        DataRow dr1 = drs[0];
+                        if (dr1["MESSAGEBODY"].ToString() == "")//默认消息为空
                         {
-                            for (int i = 0; i < SourceValueDT.Columns.Count; i++)
+                            if (dr1 != null)
                             {
-                                string columnName = SourceValueDT.Columns[i].ColumnName;
-                                rowsValues += columnName + "=" + SourceValueDT.Rows[j][columnName].ToString() + ";";
+                                ModelMsgDefine(dr1["SYSTEMCODE"].ToString(), dr1["MODELCODE"].ToString(), entity.COMPANYID, ref strMsgBody, ref strMsgUrl);
                             }
-                            rowsValues += "\r\n";
+                            if (string.IsNullOrEmpty(strMsgBody))
+                            {
+                                try
+                                {
+                                    DataRow[] drvList = SourceValueDT.Select("ColumnName='ModelName'");
+                                    if (drvList.Count() == 1)
+                                    {
+                                        string value = drvList[0]["ColumnValue"].ToString();
+                                        if (string.IsNullOrWhiteSpace(value))
+                                        {
+                                            value = drvList[0]["ColumnText"].ToString();
+                                        }
+                                        pageparm[6].ParameterValue = GetValue(value + "已审批通过");//消息体                                    
+                                    }
+                                    else
+                                    {
+                                        pageparm[6].ParameterValue = GetValue(entity.ORDERID + "已审批通过");//消息体 
+
+                                    }
+                                }
+                                catch { }
+
+                            }
+                            else
+                            {
+                                pageparm[6].ParameterValue = GetValue(ReplaceMessageBody(strMsgBody, SourceValueDT));//消息体                             
+                            }
+                            string strUrl = string.Format(XmlTemplete, ReplaceValue(strMsgUrl, SourceValueDT));
+                            Tracer.Debug("查询到得消息链接：" + strUrl + "单据ID：" + entity.ORDERID);
+                            pageparm[7].ParameterValue = GetValue(strUrl);//应用URL                         
                         }
-                        Tracer.Debug("SourceValueDT表数据:" + rowsValues);
-                        pageparm[6].ParameterValue = GetValue(ReplaceMessageBody(dr1["MESSAGEBODY"].ToString(), SourceValueDT));//消息体
-                        pageparm[7].ParameterValue = GetValue(string.Format(XmlTemplete, ReplaceValue(dr1["APPLICATIONURL"].ToString(), SourceValueDT)));//应用URL   
-                        Tracer.Debug("Formid=" + entity.ORDERID + "最后 待办消息体:" + pageparm[6].ParameterValue + "\n\r 最后 打开待办连接的参数:" + pageparm[7].ParameterValue);
+                        else//在引擎配置界面定义了消息内容
+                        {
+                            Tracer.Debug("Formid=" + entity.ORDERID + "开始 待办消息体:" + dr1["MESSAGEBODY"].ToString() + "\n\r 开始 打开待办连接的参数:" + dr1["APPLICATIONURL"].ToString());
+                            string rowsValues = "Formid=" + entity.ORDERID + "\r\n";//每一行的值
+                            for (int j = 0; j < SourceValueDT.Rows.Count; j++)
+                            {
+                                for (int i = 0; i < SourceValueDT.Columns.Count; i++)
+                                {
+                                    string columnName = SourceValueDT.Columns[i].ColumnName;
+                                    rowsValues += columnName + "=" + SourceValueDT.Rows[j][columnName].ToString() + ";";
+                                }
+                                rowsValues += "\r\n";
+                            }
+                            Tracer.Debug("SourceValueDT表数据:" + rowsValues);
+                            pageparm[6].ParameterValue = GetValue(ReplaceMessageBody(dr1["MESSAGEBODY"].ToString(), SourceValueDT));//消息体
+                            pageparm[7].ParameterValue = GetValue(string.Format(XmlTemplete, ReplaceValue(dr1["APPLICATIONURL"].ToString(), SourceValueDT)));//应用URL   
+                            Tracer.Debug("Formid=" + entity.ORDERID + "最后 待办消息体:" + pageparm[6].ParameterValue + "\n\r 最后 打开待办连接的参数:" + pageparm[7].ParameterValue);
+                        }
                     }
                     #endregion                  
                     pageparm[8].ParameterValue =GetValue(User);// GetValue(entity.RECEIVEUSERID);//接收用户ID
@@ -492,20 +498,24 @@ namespace SMT.FlowDAL
                     }
                     else
                     {
-                        if (dr1["LASTDAYS"] != null)
+                        if (drs.Count()>0)//如果没有设置消息，则构造默认消息：请审核xxx提交的"xxxx",
                         {
-                            if (string.IsNullOrEmpty(dr1["LASTDAYS"].ToString()))
+                            DataRow dr1 = drs[0];
+                            if (dr1["LASTDAYS"] != null)
                             {
-                                pageparm[9].ParameterValue = GetValue(DateTime.Now.AddDays(3));//可处理时间（主要针对KPI考核）
+                                if (string.IsNullOrEmpty(dr1["LASTDAYS"].ToString()))
+                                {
+                                    pageparm[9].ParameterValue = GetValue(DateTime.Now.AddDays(3));//可处理时间（主要针对KPI考核）
+                                }
+                                else
+                                {
+                                    pageparm[9].ParameterValue = GetValue(DateTime.Now.AddDays(int.Parse(dr1["LASTDAYS"].ToString())));//可处理时间（主要针对KPI考核）                             
+                                }
                             }
                             else
                             {
-                                pageparm[9].ParameterValue = GetValue(DateTime.Now.AddDays(int.Parse(dr1["LASTDAYS"].ToString())));//可处理时间（主要针对KPI考核）                             
+                                pageparm[9].ParameterValue = GetValue(DateTime.Now.AddDays(3));
                             }
-                        }
-                        else
-                        {
-                            pageparm[9].ParameterValue = GetValue(DateTime.Now.AddDays(3));
                         }
                     }
                     pageparm[10].ParameterValue = GetValue(0);//待办任务类型(0、待办任务、1、流程咨询、3 ) 
@@ -1365,6 +1375,17 @@ namespace SMT.FlowDAL
             Tracer.Debug("URL临时值" + temp);
             return PorcessString;
         }
+        public string ReplaceLowerValue(string PorcessString, DataTable SourceValueDT)
+        {
+            foreach (DataRow dr in SourceValueDT.Rows)
+            {
+                if (!string.IsNullOrEmpty(dr["ColumnValue"].ToString().Trim()))
+                {
+                    PorcessString = PorcessString.Replace("{" + dr["ColumnName"].ToString().ToLower() + "}", dr["ColumnValue"].ToString());
+                }
+            }
+            return PorcessString;
+        }
         public string EncyptFormType(string Url, string strFormTypes)
         {
             if (!string.IsNullOrEmpty(Url))
@@ -1397,9 +1418,6 @@ namespace SMT.FlowDAL
         /// <returns></returns>
         private string ReplaceMessageBody(string InString, DataTable valueTable)
         {
-           
-       
-
             string temp = "";
             string[] KEY_SQLNODE = InString.Split('{');
             for (int k = 0; k < KEY_SQLNODE.Length; k++)
@@ -1422,26 +1440,6 @@ namespace SMT.FlowDAL
                         InString = InString.Replace("{" + NodeList[0] + ":" + NodeList[1] + "}", "");
                         temp += "没NEW{" + NodeList[0] + ":" + NodeList[1] + "}=空\r\n";
                     }
-                    //string Node = (KEY_SQLNODE[k].Split('}'))[0];
-                    //string[] NodeList = Node.Split(':');
-                    //DataRow[] drvList = valueTable.Select("ColumnName='" + NodeList[1].Trim() + "'");
-                    //if (NodeList[0].ToUpper().Trim() == "NEW" && drvList.Length > 0)
-                    //{
-                    //    string newValue = GetColumnString(drvList[0], "ColumnValue");
-                    //    if (string.IsNullOrWhiteSpace(newValue))
-                    //    {
-                    //        newValue = GetColumnString(drvList[0], "ColumnText");
-                    //    }                
-                    //    //string newValue = GetColumnString(drvList[0], "ColumnText");
-                    //    newValue = newValue.Replace("'", "''");
-                    //    InString = InString.Replace("{" + NodeList[0] + ":" + NodeList[1] + "}", newValue);
-                    //    temp += "有NEW{" + NodeList[0] + ":" + NodeList[1] + "}=" + newValue + "\r\n";
-                    //}
-                    //else
-                    //{
-                    //    InString = InString.Replace("{" + NodeList[0] + ":" + NodeList[1] + "}", "");
-                    //    temp += "没NEW{" + NodeList[0] + ":" + NodeList[1] + "}=空\r\n";
-                    //}
                 }
             }
             Tracer.Debug("待办消息替换过程:\r\n"+temp);

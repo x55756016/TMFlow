@@ -45,6 +45,15 @@ namespace SMT.FlowWFService.NewFlow
         {
             try
             {
+                string SystemCode = string.Empty;
+                string modeCode = string.Empty;
+                string modeName = string.Empty;
+                string strEntityKey = string.Empty;
+                string msgOpen = string.Empty;
+                string strBusiness = submitData.XML;
+                SetFileFromBusinessXml(strBusiness, ref SystemCode, ref modeCode, ref modeName, ref strEntityKey, ref msgOpen);
+
+
                 Tracer.Debug("在填写我的单据时候的参数CHECKSTATE:" + state + "||模块名称：" + user.ModelName);
                 T_PF_PERSONALRECORD model = new T_PF_PERSONALRECORD();
                 model.SYSTYPE = user.SysCode;               
@@ -86,7 +95,7 @@ namespace SMT.FlowWFService.NewFlow
                 }
                 model.CHECKSTATE = state;
                 model.CREATEDATE = DateTime.Now;
-                model.CONFIGINFO = ConvertXML(submitData);
+                model.CONFIGINFO = msgOpen;// ConvertXML(submitData);
                 if (!string.IsNullOrWhiteSpace(model.CONFIGINFO))
                 {
                     EnginFlowDAL dal = new EnginFlowDAL();
@@ -113,42 +122,42 @@ namespace SMT.FlowWFService.NewFlow
             }
         }
 
-        private static string ConvertXML(SubmitData submitData)
-        {
+        //private static string ConvertXML(SubmitData submitData)
+        //{
         
-            string XmlTemplete = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + "\r\n" +
-                                "<System>" + "\r\n" +
-                                "{0}" +
-                                "</System>";
-            try
-            {
-                StringReader strRdr = new StringReader(submitData.XML);
-                XDocument xdoc = XDocument.Load(strRdr);
-                string strXml = xdoc.Document.ToString();
-                int Start = strXml.IndexOf("<MsgOpen>") + "<MsgOpen>".Length;
-                int End = strXml.IndexOf("</MsgOpen>");
-                string MsgLinkUrl = strXml.Substring(Start, End - Start);
-                Start = MsgLinkUrl.IndexOf("<ApplicationOrder>") + "<ApplicationOrder>".Length;
-                End = MsgLinkUrl.IndexOf("</ApplicationOrder>");
-                string Order = MsgLinkUrl.Substring(Start, End - Start).Replace("{", "").Replace("}", "");
-                string[] arr = Order.Split('*');
-                foreach (string arrItem in arr)
-                {
-                    MsgLinkUrl = MsgLinkUrl.Replace("{" + arrItem + "}", (from item in xdoc.Descendants("Object").Descendants("Attribute")
-                                                                          where item.Attribute("Name").Value.ToUpper() == arrItem.ToUpper()
-                                                                          select item).FirstOrDefault().Attribute("DataValue").Value);
+        //    string XmlTemplete = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + "\r\n" +
+        //                        "<System>" + "\r\n" +
+        //                        "{0}" +
+        //                        "</System>";
+        //    try
+        //    {
+        //        StringReader strRdr = new StringReader(submitData.XML);
+        //        XDocument xdoc = XDocument.Load(strRdr);
+        //        string strXml = xdoc.Document.ToString();
+        //        int Start = strXml.IndexOf("<MsgOpen>") + "<MsgOpen>".Length;
+        //        int End = strXml.IndexOf("</MsgOpen>");
+        //        string MsgLinkUrl = strXml.Substring(Start, End - Start);
+        //        Start = MsgLinkUrl.IndexOf("<ApplicationOrder>") + "<ApplicationOrder>".Length;
+        //        End = MsgLinkUrl.IndexOf("</ApplicationOrder>");
+        //        string Order = MsgLinkUrl.Substring(Start, End - Start).Replace("{", "").Replace("}", "");
+        //        string[] arr = Order.Split('*');
+        //        foreach (string arrItem in arr)
+        //        {
+        //            MsgLinkUrl = MsgLinkUrl.Replace("{" + arrItem + "}", (from item in xdoc.Descendants("Object").Descendants("Attribute")
+        //                                                                  where item.Attribute("Name").Value.ToUpper() == arrItem.ToUpper()
+        //                                                                  select item).FirstOrDefault().Attribute("DataValue").Value);
 
-                }
-                MsgLinkUrl = string.Format(XmlTemplete, MsgLinkUrl);
-                return MsgLinkUrl;
-            }
-            catch (Exception ex)
-            {
-                Tracer.Debug("我的单据保存出错，Formid="+submitData.FormID+";转换元数据XML出错："+submitData.XML);
-                //throw new Exception(ex.Message, ex);
-                return string.Empty;
-            }
-        }
+        //        }
+        //        MsgLinkUrl = string.Format(XmlTemplete, MsgLinkUrl);
+        //        return MsgLinkUrl;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Tracer.Debug("我的单据保存出错，Formid="+submitData.FormID+";转换元数据XML出错："+submitData.XML);
+        //        //throw new Exception(ex.Message, ex);
+        //        return string.Empty;
+        //    }
+        //}
         #endregion
         #region 提莫科技新增
         /// <summary>
@@ -166,17 +175,29 @@ namespace SMT.FlowWFService.NewFlow
             string strEntityType = string.Empty;//EntityType (表名)
             string strEntityKey = string.Empty;//EntityKey (主键)
             string IsTask = "1";//是否任务
+
             #region 获取 SystemCode
             string SystemCode = "";
-            Byte[] bFlow = System.Text.UTF8Encoding.UTF8.GetBytes(strFlow);
-            XElement xeFlow = XElement.Load(System.Xml.XmlReader.Create(new MemoryStream(bFlow)));
-            var strReturn = from item in xeFlow.Descendants("SystemCode")
-                               select item;
-            if (strReturn.FirstOrDefault() != null)
-            {
-                SystemCode=strReturn.FirstOrDefault().Value.Replace("\"", "");
-            }
+            //Byte[] bFlow = System.Text.UTF8Encoding.UTF8.GetBytes(strFlow);
+            //XElement xeFlow = XElement.Load(System.Xml.XmlReader.Create(new MemoryStream(bFlow)));
+            //var strReturn = from item in xeFlow.Descendants("SystemCode")
+            //                   select item;
+            //if (strReturn.FirstOrDefault() != null)
+            //{
+            //    SystemCode=strReturn.FirstOrDefault().Value.Replace("\"", "");
+            //}
+            SystemCode = string.Empty;
+            string modeCode=string.Empty;
+            string modeName=string.Empty;
+            string msgOpen= string.Empty;
+
+            SetFileFromBusinessXml(strBusiness, ref SystemCode, ref modeCode, ref modeName,ref strEntityKey, ref msgOpen);
+
+            strEntityType = modeCode;
+            entity.SYSTEMCODE = SystemCode;
+
             #endregion
+
             try
             {
                 try
@@ -188,12 +209,8 @@ namespace SMT.FlowWFService.NewFlow
                     xmlred += "FlowXML=" + strFlow+"\r\n";
                     xmlred += "AppXML=" + strBusiness + "\r\n";
                     #region 提莫科技新增
-                    #region XmlReader
-                    #region strFlow
-                    //Byte[] BytebFlow = System.Text.UTF8Encoding.UTF8.GetBytes(strFlow);
 
-                    //XmlReader xr = XmlReader.Create(new MemoryStream(BytebFlow));
-                    //StringBuilder _ConbinString = new StringBuilder();
+                    #region strFlow
                     StringReader strRdr = new StringReader(strFlow);
                     XmlReader xr = XmlReader.Create(strRdr);
                     StringBuilder _ConbinString = new StringBuilder();
@@ -254,10 +271,11 @@ namespace SMT.FlowWFService.NewFlow
                                 }
                             }
                         }
-                        entity.FLOWXML = strFlow;
-                        entity.APPXML = strBusiness;
                     }
+                    entity.FLOWXML = strFlow;
+                    entity.APPXML = strBusiness;
                     #endregion
+
                     #region strBusiness
                     if (!string.IsNullOrEmpty(strBusiness))
                     {
@@ -269,25 +287,8 @@ namespace SMT.FlowWFService.NewFlow
                             if (xdr.NodeType == XmlNodeType.Element)
                             {
                                 string elementName = xdr.Name;
-                                if (elementName == "Name")
-                                {
-                                    while (xdr.Read())
-                                    {
-                                        entity.SYSTEMCODE = xdr.Value;
-                                        break;
-                                    }
-                                }
                                 if (elementName == "Object")
                                 {
-                                    try
-                                    { //非手机的XML时没有表明和主键的
-                                        strEntityType = xdr["Name"];
-                                        strEntityKey = xdr["Key"];
-                                    }
-                                    catch
-                                    {
-                                        Tracer.Debug("异常无法取得业务数据表，单据:" + entity.ORDERID + "：表：" + strEntityType + ":主键：" + strEntityKey + "");
-                                    }
                                     while (xdr.Read())
                                     {
                                         if (xdr.Name == "Attribute")
@@ -313,7 +314,6 @@ namespace SMT.FlowWFService.NewFlow
                                                         entity.RECEIVEUSERID = xdr["DataValue"];
                                                     }
                                                 }
-
                                                 #endregion
                                             }
                                            
@@ -326,8 +326,9 @@ namespace SMT.FlowWFService.NewFlow
 
                     }
                     #endregion
-                    #endregion
-                    #endregion                  
+
+                    #endregion    
+              
                     xmlred+="FormID=" + entity.ORDERID+"  结束消息解析XML";
                     Tracer.Debug("FormID=" + entity.ORDERID + xmlred);
                 }
@@ -346,10 +347,10 @@ namespace SMT.FlowWFService.NewFlow
                 //1、先检验流程的默认消息 
                 //2、调用业务系统更新 
                 //3、自动发起流程 
-                bool IsExecute = EngineExecute( entity, IsTask,ref sUser, ref  ErroMessage);
+                bool IsExecute = SendDotask(submitData.SumbitUserName,modeName,msgOpen, entity, IsTask,ref sUser, ref ErroMessage);
                 if (IsExecute)
                 {
-                    bool isOK = CallBusinessSystem(submitData,entity, strEntityType, strEntityKey, ref ErroMessage);//调用业务系统
+                    bool isOK = CallBusinessSystem(submitData,entity, strEntityKey, ref ErroMessage);//调用业务系统
                     if (!isOK)
                     {
                         throw new Exception(ErroMessage);//把业务系统的错误信息给客户端
@@ -359,7 +360,7 @@ namespace SMT.FlowWFService.NewFlow
                 else
                 {
                     Tracer.Debug("没有默认消息，也调用业务系统更新（没有待办任务产生） FORMID=" + sUser.FormID + " 异常信息：" + ErroMessage);
-                    CallBusinessSystem(submitData,entity, strEntityType, strEntityKey, ref ErroMessage);//调用业务系统
+                    CallBusinessSystem(submitData,entity, strEntityKey, ref ErroMessage);//调用业务系统
                 }
                 return IsExecute;
             }
@@ -369,6 +370,30 @@ namespace SMT.FlowWFService.NewFlow
                 throw new Exception("命名空间:SMT.FlowWFService.EnginFlowBLL 类方法SaveFlowTriggerData()" + ex.Message);
             }
         }
+
+        private static void SetFileFromBusinessXml(string BusinessXml, ref string SystemCode, ref string modeCode, ref string modeName,ref string modeKey, ref string msgOpen)
+        {
+            XElement FlowDefine = XDocument.Parse(BusinessXml.ToLower()).Root;
+
+            var systemTypyNode = (from ent in FlowDefine.Elements()
+                                        where ent.Name.ToString().ToLower() == "name"
+                                   select ent).FirstOrDefault();
+            SystemCode = systemTypyNode.Value;
+
+
+            msgOpen = (from ent in FlowDefine.Elements()
+                           where ent.Name == "msgopen"
+                           select ent).FirstOrDefault().ToString();
+
+            var objectNode = (from ent in FlowDefine.Elements()
+                              where ent.Name == "object"
+                           select ent).FirstOrDefault();
+
+            modeCode = objectNode.Attribute("name").Value;
+            modeName = objectNode.Attribute("description").Value;
+            modeKey = objectNode.Attribute("key").Value;
+
+        }
         /// <summary>
         ///调用业务系统
         /// </summary>
@@ -376,17 +401,17 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="strEntityType"></param>
         /// <param name="strEntityKey"></param>
         /// <param name="ErroMessage"></param>
-        private bool CallBusinessSystem(SubmitData submitData, T_WF_DOTASK entity, string strEntityType, string strEntityKey, ref string ErroMessage)
+        private bool CallBusinessSystem(SubmitData submitData, T_WF_DOTASK entity, string strEntityKey, ref string ErroMessage)
         {
             bool isOK = true;
             Tracer.Debug("设置业务系统的审核状态是否需要审核 Config.IsNeedUpdateAudit=" + Config.IsNeedUpdateAudit.ToString());
             /****************更新业务系统单据审核状态***********************/
             if (Config.IsNeedUpdateAudit)//是否执行更新审核状态
             {
-                if (!string.IsNullOrEmpty(entity.SYSTEMCODE) && !string.IsNullOrEmpty(strEntityType) && !string.IsNullOrEmpty(strEntityKey))
+                if (!string.IsNullOrEmpty(entity.SYSTEMCODE) && !string.IsNullOrEmpty(strEntityKey))
                 {
                     Tracer.Debug("UpdateAuditStatus 开始 更新业务系统单据审核状态 FormID=" + entity.ORDERID);
-                    bool bol = UpdateAuditStatus(submitData,entity.SYSTEMCODE, strEntityType, strEntityKey, entity.ORDERID, entity.ORDERSTATUS.ToString(), ref ErroMessage);
+                    bool bol = UpdateAuditStatus(submitData, entity.SYSTEMCODE, entity.MODELCODE, strEntityKey, entity.ORDERID, entity.ORDERSTATUS.ToString(), ref ErroMessage);
                     Tracer.Debug("UpdateAuditStatus 结束 更新业务系统单据审核状态 FormID=" + entity.ORDERID);
                     if (!bol)
                     {
@@ -399,7 +424,7 @@ namespace SMT.FlowWFService.NewFlow
                 else
                 {
                     isOK = false;
-                   Tracer.Debug("不能更新业务系统，因为entity.SYSTEMCODE="+entity.SYSTEMCODE+" ;strEntityType="+strEntityType+" ;strEntityKey="+strEntityKey+" ;FormID=" + entity.ORDERID);
+                    Tracer.Debug("不能更新业务系统，因为entity.SYSTEMCODE=" + entity.SYSTEMCODE + " ;strEntityType=" + entity.MODELCODE + " ;strEntityKey=" + strEntityKey + " ;FormID=" + entity.ORDERID);
                 }
             }
             
@@ -412,64 +437,63 @@ namespace SMT.FlowWFService.NewFlow
         EnginFlowDAL dal;
         private FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();      
         #endregion
-       
-        private bool EngineExecute(T_WF_DOTASK Entity, string IsTask,ref FlowUser sUser, ref string ErroMessage)
+
+        private bool SendDotask(string submitUserName, string modeName, string msgOpen, T_WF_DOTASK Entity, string IsTask, ref FlowUser sUser, ref string ErroMessage)
         {
             bool result = false;
             dal = new EnginFlowDAL();
             strAppFieldValue = string.Empty;
-            sUser.TrackingMessage+="开始将数据源字段转换成数据表 FORMID="+sUser.FormID+"r\n";
-             sourceTable = FieldStringToDataTable(Entity.APPFIELDVALUE, ref strAppFieldValue);//将业务数据与流程数据转换成DataTable作为替换的源数据
-            sUser.TrackingMessage += "结束将数据源字段转换成数据表 FORMID=" + sUser.FormID + "r\n";
+            //sUser.TrackingMessage+="开始将数据源字段转换成数据表 FORMID="+sUser.FormID+"r\n";
+            //将业务数据与流程数据转换成DataTable作为替换的源数据
+            sourceTable = FieldStringToDataTable(Entity.APPFIELDVALUE, ref strAppFieldValue);
+            //sUser.TrackingMessage += "结束将数据源字段转换成数据表 FORMID=" + sUser.FormID + "r\n";
             //通过系统代号，模块代号，企业ID，流程状态查到引擎配置内容
-
-            Tracer.Debug("开始通过系统代号，模块代号，企业ID，流程状态查［消息规则］内容 FORMID=" + sUser.FormID + "");
-            dtFlowTrigger = dal.FlowTriggerTable( Entity.SYSTEMCODE, Entity.MODELCODE, Entity.ORDERSTATUS.ToString(), Entity.COMPANYID);
-            Tracer.Debug("结束通过系统代号，模块代号，企业ID，流程状态查［消息规则］内容 FORMID=" + sUser.FormID + "");
+            //Tracer.Debug("开始通过系统代号，模块代号，企业ID，流程状态查［消息规则］内容 FORMID=" + sUser.FormID + "");
+            dtFlowTrigger = dal.FlowTriggerTable(Entity.SYSTEMCODE, Entity.MODELCODE, Entity.ORDERSTATUS.ToString(), Entity.COMPANYID);
+            //Tracer.Debug("结束通过系统代号，模块代号，企业ID，流程状态查［消息规则］内容 FORMID=" + sUser.FormID + "");
             if (dtFlowTrigger == null || dtFlowTrigger.Rows.Count == 0)
             {
-                sUser.ErrorMsg += "没有找到［消息规则］内容 再次通过全局默认消息继续查找 FORMID=" + sUser.FormID + " 异常信息:" + ErroMessage + "\r\n";
-                Tracer.Debug("dtFlowTrigger=null或者dtFlowTrigger.Rows.Count == 0 　没有找到［消息规则］内容 再次通过全局默认消息继续查找　 FORMID=" + sUser.FormID + "");
-                dtFlowTrigger = dal.FlowTriggerTable( Entity.SYSTEMCODE, Entity.MODELCODE, Entity.ORDERSTATUS.ToString());
-            }                
-            if (dtFlowTrigger != null && dtFlowTrigger.Rows.Count > 0)
-            {
+                //sUser.ErrorMsg += "没有找到［消息规则］内容 再次通过全局默认消息继续查找 FORMID=" + sUser.FormID + " 异常信息:" + ErroMessage + "\r\n";
+                //Tracer.Debug("dtFlowTrigger=null或者dtFlowTrigger.Rows.Count == 0 　没有找到［消息规则］内容 再次通过全局默认消息继续查找　 FORMID=" + sUser.FormID + "");
+                dtFlowTrigger = dal.FlowTriggerTable(Entity.SYSTEMCODE, Entity.MODELCODE, Entity.ORDERSTATUS.ToString());
             }
-            else
-            {
-
-                string strMsg =  "系统代号：" + Entity.SYSTEMCODE + "\r\n" +
-                                 "模块代号：" + Entity.MODELCODE + "\r\n" +
-                                 "触发条件：" + Entity.ORDERSTATUS + "\r\n" +
-                                 "公司 ID：" + Entity.COMPANYID + "\r\n" +
-                                 "单据 ID：" + Entity.ORDERID;
-                ErroMessage = "FORMID=" + sUser.FormID + " 发送待办任务失败， 该单据所对应的［消息规则］设置未找到,请先配置公司[" + sUser.CompayName+ "("+sUser.CompayID+")] 下的模块[ " + sUser.ModelName + " ]的　［消息规则］(审核通过、审核不通过、审核中):\r\n" + strMsg;
-                sUser.ErrorMsg += "发送待办任务失败 FORMID=" + sUser.FormID + " 异常信息:" + ErroMessage + "\r\n";
-                Tracer.Debug(ErroMessage);
-                //暂是没有默认消息也可以审核通过
-               // throw new Exception("该单据所对应的引擎系统设置未找到,请先配置该模块 " + sUser.ModelName + " 引擎消息(审核通过、审核不通过、审核中)");
-            }
+            //if (dtFlowTrigger != null && dtFlowTrigger.Rows.Count > 0)
+            //{
+            //}
+            //else
+            //{
+            //    //string strMsg =  "系统代号：" + Entity.SYSTEMCODE + "\r\n" +
+            //    //                 "模块代号：" + Entity.MODELCODE + "\r\n" +
+            //    //                 "触发条件：" + Entity.ORDERSTATUS + "\r\n" +
+            //    //                 "公司 ID：" + Entity.COMPANYID + "\r\n" +
+            //    //                 "单据 ID：" + Entity.ORDERID;
+            //    //ErroMessage = "FORMID=" + sUser.FormID + " 发送待办任务失败， 该单据所对应的［消息规则］设置未找到,请先配置公司[" + sUser.CompayName+ "("+sUser.CompayID+")] 下的模块[ " + sUser.ModelName + " ]的　［消息规则］(审核通过、审核不通过、审核中):\r\n" + strMsg;
+            //    //sUser.ErrorMsg += "发送待办任务失败 FORMID=" + sUser.FormID + " 异常信息:" + ErroMessage + "\r\n";
+            //    //Tracer.Debug(ErroMessage);
+            //    //暂是没有默认消息也可以审核通过
+            //   // throw new Exception("该单据所对应的引擎系统设置未找到,请先配置该模块 " + sUser.ModelName + " 引擎消息(审核通过、审核不通过、审核中)");
+            //}
 
             #region 发送待办任务（不管有没有配置消息规则，都发送待办任务）
             DataRow[] drs = new DataRow[] { };
             if (dtFlowTrigger != null && dtFlowTrigger.Rows.Count > 0)
             {
-                dtFlowTrigger.Select("ISDEFAULTMSG=1");//不管有没有配置
+                drs = dtFlowTrigger.Select("ISDEFAULTMSG=1");//不管有没有配置
             }
             //edit by ken 2015-7-17
             //if (drs.Count() > 0)
             //{
-                sUser.ErrorMsg += "发现默认流程触发［消息规则］内容 FORMID=" + sUser.FormID + " IsTask:" + IsTask.ToString() + "\r\n";
-                Tracer.Debug("FORMID=" + sUser.FormID + " 发现默认流程触发消息规则 IsTask=" + IsTask.ToString());
-                //if (IsTask == "1")//新增待办任务
-                //{
-                    dal.AddDoTask(Entity, drs[0], sourceTable, strAppFieldValue);//新增待办任务
-                    //FlowEngine.TaskCacheReflesh(Entity.RECEIVEUSERID);
-                //}
-                //else if (IsTask == "0")//消息
-                //{
-                    //dal.AddDoTaskMessage(Entity, drs[0], sourceTable);
-                //}
+            //sUser.ErrorMsg += "发现默认流程触发［消息规则］内容 FORMID=" + sUser.FormID + " IsTask:" + IsTask.ToString() + "\r\n";
+            //Tracer.Debug("FORMID=" + sUser.FormID + " 发现默认流程触发消息规则 IsTask=" + IsTask.ToString());
+            //if (IsTask == "1")//新增待办任务
+            //{
+            dal.AddDoTask(Entity, drs, sourceTable, strAppFieldValue, submitUserName, modeName, msgOpen);//新增待办任务
+            //FlowEngine.TaskCacheReflesh(Entity.RECEIVEUSERID);
+            //}
+            //else if (IsTask == "0")//消息
+            //{
+            //dal.AddDoTaskMessage(Entity, drs[0], sourceTable);
+            //}
             //}
             //else
             //{
@@ -1207,12 +1231,6 @@ namespace SMT.FlowWFService.NewFlow
                 }
                 #endregion
 
-                //bool bResult = SMT.SaaS.BLLCommonServices.Utility.UpdateFormCheckState(strSystemCode, EntityType, EntityKey, EntityId, CheckState);
-                //if (!bResult)
-                //{
-                //    Tracer.Debug("更新审核状态失败\r\n" + strMsg);
-                //    Tracer.Debug("更新审核状态失败" + strMsg);
-                //}
                 else
                 {
 
