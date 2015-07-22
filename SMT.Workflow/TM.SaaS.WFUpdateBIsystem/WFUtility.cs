@@ -10,11 +10,14 @@ using SMT.Foundation.Log;
 using TM_SaaS_OA_EFModel;
 using SMT.SaaS.OA.BLL;
 using SMT.FB.BLL;
+using SMT.Foundation.Core;
+using System.Configuration;
 
 namespace TM.SaaS.WFUpdateBIsystem
 {
     public class WFUtility
     {
+        public static IDAO dao = DALFacoty.CreateDao(ConfigurationManager.ConnectionStrings["WorkFlowConnString"].ToString());
 
         #region 流程更新业务系统
         /// <summary>
@@ -62,26 +65,9 @@ namespace TM.SaaS.WFUpdateBIsystem
                 Tracer.Debug("表单ID名:" + EntityKey + "表单值：" + EntityId);
                 Tracer.Debug("审核状态：" + ((int)CheckState).ToString());
                 int i = 0;
-                //switch (SysType)
-                //{
-                //    case "EDM":
-                //        Tracer.Debug("调用了进销存中的：" + EntityType);
-                //    //EDMUpdateCheckStateWS.EDMUpdateCheckStateClient Client = new EDMUpdateCheckStateWS.EDMUpdateCheckStateClient();
-                //    //int i = Client.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());
-                //    //Tracer.Debug("手机版调用人力资源管理审核状态UpdateFormCheckState" + System.DateTime.Now.ToString());
-                //    //if (i > 0)
-                //    //{
-                //    //    IsResult = true;
-                //    //}
-                //    //break;
-                //}
                 if (SysType == "HR")
-                {
-                    //OrgClient = new OrganizationWS.OrganizationServiceClient();
-                    Tracer.Debug("调用了人力资源中的：" + EntityType);
-                    //int i = hrClient.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());             
+                {         
                     i = SMT.HRM.BLL.Utility.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());
-
                     if (i > 0)
                     {
                         IsResult = true;
@@ -89,9 +75,6 @@ namespace TM.SaaS.WFUpdateBIsystem
                 }
                 if (SysType == "OA")
                 {
-
-                    //OrgClient = new OrganizationWS.OrganizationServiceClient();
-                    Tracer.Debug("调用了办公系统中的：" + EntityType);
                     if (EntityType.ToUpper() == "T_OA_GIFTAPPLYMASTER")
                     {
                         //GSCommonWS.GSCommonServicesClient gsClient = new GSCommonWS.GSCommonServicesClient();
@@ -103,36 +86,21 @@ namespace TM.SaaS.WFUpdateBIsystem
                     }
                     else
                     {
-
-                        //OAUpdateCheckWS.OAUpdateCheckServicesClient oaClient = new OAUpdateCheckWS.OAUpdateCheckServicesClient();
-                        //int i = oaClient.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());
-                        // 在此处添加操作实现
-                        //Type  bb = strEntityName
                         CommBll<T_OA_AGENTSET> Combll = new CommBll<T_OA_AGENTSET>();
                         i = Combll.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());
-            
-                        //Tracer.Debug("手机版调用办公自动化审核状态UpdateFormCheckState" + System.DateTime.Now.ToString());
                         if (i > 0)
                         {
                             IsResult = true;
                         }
                     }
-
-
                 }
                 if (SysType == "FB")
                 {
                     //日常管理的状态改动
                     if (EntityType == "T_FB_BORROWAPPLYMASTER" || EntityType == "T_FB_CHARGEAPPLYMASTER" || EntityType == "T_FB_REPAYAPPLYMASTER")
                     {
-                        //FbDailyUpdateCheckStateWS.DailyUpdateCheckStateServiceClient fbaClient = new FbDailyUpdateCheckStateWS.DailyUpdateCheckStateServiceClient();
-                        //i = fbaClient.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());
-
                         SMT.FBAnalysis.BLL.CommBll<T_FB_BORROWAPPLYMASTER> Combll = new SMT.FBAnalysis.BLL.CommBll<T_FB_BORROWAPPLYMASTER>();
-                        string msg = "strEntityName：{0}，EntityKeyName：{1}，EntityKeyValue：{2}，CheckState：{3}";
-                        //Tracer.Debug(string.Format(msg, strEntityName, EntityKeyName, EntityKeyValue, CheckState));
-                        i = Combll.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());
-                        
+                        i = Combll.UpdateCheckState(EntityType, EntityKey, EntityId, ((int)CheckState).ToString());                 
                         if (i > 0)
                         {
                             IsResult = true;
@@ -141,18 +109,15 @@ namespace TM.SaaS.WFUpdateBIsystem
                     else
                     {
                         string strMsg = string.Empty;
-                        //Tracer.Debug("调用了预算中的：" + EntityType);
-                        //FBServiceWS.FBServiceClient fbClient = new FBServiceWS.FBServiceClient();
-                        //i = fbClient.UpdateCheckState(EntityType, EntityId, ((int)CheckState).ToString(), ref strMsg);
                         using (FBCommonBLL bll = new FBCommonBLL())
                         {
                             i = bll.UpdateCheckState(EntityType, EntityId, ((int)CheckState).ToString(), ref strMsg);
-                        }
-                        
+                        }                        
                         if (i > 0)
                         {
                             IsResult = true;
-                        }else
+                        }
+                        else
                         {
                             Tracer.Debug(strMsg);
                         }
@@ -224,7 +189,6 @@ namespace TM.SaaS.WFUpdateBIsystem
                 }
                 if (SysType == "TK")
                 {
-
                     //TKServicesWS.TKServicesClient tkClient = new TKServicesWS.TKServicesClient();
                     //Tracer.Debug("调用了任务系统中的：EntityType:" + EntityType + " EntityKey:" + EntityKey + "\r\n" + " EntityId:" + EntityId + " CheckState:" + CheckState + " URL:" + tkClient.Endpoint.Address + " strXmlParams:" + strXmlParams);
 
@@ -234,9 +198,19 @@ namespace TM.SaaS.WFUpdateBIsystem
                     //{
                     //    IsResult = true;
                     //}
+                }else
+                {
+                    //直接更新单据审核状态
+                    string sql = "update " + EntityType + " set checkstate='" + ((int)CheckState).ToString() + "'"
+                        + " where " + EntityKey + " ='" + EntityId + "'";
+                    i=dao.ExecuteNonQuery(sql);
+                    if (i > 0)
+                    {
+                        IsResult = true;
+                    }
                 }
 
-                SMT.Foundation.Log.Tracer.Debug("WF流程UpdateCheckState成功： strEntityName：" + EntityKey
+                SMT.Foundation.Log.Tracer.Debug("WF流程UpdateCheckState成功： strEntityName：" + EntityType
                 + " EntityKeyName:" + EntityKey + " EntityKeyValue：" + EntityId
                 + " CheckState:" + CheckState + " 受影响的记录数：" + i.ToString());
             }
