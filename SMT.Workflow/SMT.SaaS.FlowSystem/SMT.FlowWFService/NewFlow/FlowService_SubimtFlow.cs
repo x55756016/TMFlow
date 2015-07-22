@@ -28,7 +28,6 @@ using System.Data.OracleClient;
 using SMT.FLOWDAL.ADO;
 using System.Data;
 using System.Data.SqlClient;
-using SMT.SaaS.BLLCommonServices.PermissionWS;
 using SMT.Workflow.Common.Model.FlowEngine;
 using SMT.Workflow.Common.Model;
 using SMT.Foundation.Core;

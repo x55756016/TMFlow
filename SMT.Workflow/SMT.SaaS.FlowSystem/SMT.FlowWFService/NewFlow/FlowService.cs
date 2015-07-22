@@ -28,11 +28,12 @@ using System.Data.OracleClient;
 using SMT.FLOWDAL.ADO;
 using System.Data;
 using System.Data.SqlClient;
-using SMT.SaaS.BLLCommonServices.PermissionWS;
 using SMT.Workflow.Common.Model.FlowEngine;
 using SMT.Workflow.Common.Model;
 using SMT.Foundation.Core;
 using SMT.FlowWFService.XmlFlowManager;
+using TM_SaaS_OA_EFModel;
+using SMT.HRM.BLL.Permission;
 
 
 namespace SMT.FlowWFService.NewFlow
@@ -63,14 +64,14 @@ namespace SMT.FlowWFService.NewFlow
         }
 
         #region 咨询
-        public void AddConsultation( FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
+        public void AddConsultation( SMT.Workflow.Common.Model.FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
         {
             if (strIsFlowEngine.ToLower() == "true")
             {
                 try
                 {
                     #region 记录日志
-                    FLOW_CONSULTATION_T entity = flowConsultation;
+                    SMT.Workflow.Common.Model.FLOW_CONSULTATION_T entity = flowConsultation;
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("FLOW_CONSULTATION_T entity= new FLOW_CONSULTATION_T();");//
                     sb.AppendLine("entity.CONSULTATIONID = \"" + entity.CONSULTATIONID + "\";");//
@@ -194,7 +195,7 @@ namespace SMT.FlowWFService.NewFlow
 
 
         }
-        public void ReplyConsultation( FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
+        public void ReplyConsultation( SMT.Workflow.Common.Model.FLOW_CONSULTATION_T flowConsultation, SubmitData submitData)
         {
 
             if (strIsFlowEngine.ToLower() == "true")
@@ -204,7 +205,7 @@ namespace SMT.FlowWFService.NewFlow
 
 
                     #region 记录日志
-                    FLOW_CONSULTATION_T entity = flowConsultation;
+                    SMT.Workflow.Common.Model.FLOW_CONSULTATION_T entity = flowConsultation;
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("FLOW_CONSULTATION_T entity= new FLOW_CONSULTATION_T();");//
                     sb.AppendLine("entity.CONSULTATIONID = \"" + entity.CONSULTATIONID + "\";");//
@@ -780,7 +781,7 @@ namespace SMT.FlowWFService.NewFlow
         /// </summary>
         /// <param name="UserID"></param>
         /// <returns></returns>
-        public List<FLOW_FLOWRECORDMASTER_T> GetFlowDataByUserID( string UserID)
+        public List<SMT.Workflow.Common.Model.FLOW_FLOWRECORDMASTER_T> GetFlowDataByUserID( string UserID)
         {
             try
             {
@@ -821,7 +822,7 @@ namespace SMT.FlowWFService.NewFlow
                 else
                 {
                     //根据待审批流程GUID,检索待审批状态节点代码
-                    List<FLOW_FLOWRECORDDETAIL_T> FlowRecord = FlowBLL.GetFlowInfo( "", FlowGUID, "", "", "", "", "", null);
+                    List<SMT.Workflow.Common.Model.FLOW_FLOWRECORDDETAIL_T> FlowRecord = FlowBLL.GetFlowInfo( "", FlowGUID, "", "", "", "", "", null);
                     if (FlowRecord == null)
                     {
                         GetAppUserResult.Err = "没有待处理的审核";
@@ -835,7 +836,7 @@ namespace SMT.FlowWFService.NewFlow
                 WorkflowInstance instance = null;
                 Tracer.Debug("根据公司ID，模块代码获取配置的流程FlowBLL.GetFlowByModelName:OgrType='0'");
 
-                List<FLOW_MODELFLOWRELATION_T> MODELFLOWRELATION = FlowBLL.GetFlowByModelName( CompanyID, "", ModelCode, "0", ref user);
+                List<SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T> MODELFLOWRELATION = FlowBLL.GetFlowByModelName( CompanyID, "", ModelCode, "0", ref user);
 
                 if (MODELFLOWRELATION == null || MODELFLOWRELATION.Count == 0)
                 {
@@ -843,7 +844,7 @@ namespace SMT.FlowWFService.NewFlow
                     GetAppUserResult.UserInfo = null;
                     return GetAppUserResult;
                 }
-                FLOW_FLOWDEFINE_T Xoml = MODELFLOWRELATION[0].FLOW_FLOWDEFINE_T;
+                SMT.Workflow.Common.Model.FLOW_FLOWDEFINE_T Xoml = MODELFLOWRELATION[0].FLOW_FLOWDEFINE_T;
 
                 XmlReader readerxoml, readerule;
                 StringReader strXoml = new StringReader(Xoml.LAYOUT);
@@ -908,7 +909,7 @@ namespace SMT.FlowWFService.NewFlow
 
                 //ExternalEvent.OnDoFlow(instance.InstanceId, FlowData);//激发流程引擎流转到下一状态
                 System.Threading.Thread.Sleep(1000);
-                PermissionServiceClient WcfPermissionService = new PermissionServiceClient();
+                //PermissionServiceClient WcfPermissionService = new PermissionServiceClient();
                 string CurrentStateName = ""; //workflowinstance.CurrentStateName == null ? "End" : //workflowinstance.CurrentStateName; //取得当前状态
                 List<UserInfo> listUser = new List<UserInfo>();
                 if (CurrentStateName != "End")
@@ -917,11 +918,15 @@ namespace SMT.FlowWFService.NewFlow
                     {
                         CurrentStateName = CurrentStateName.Substring(5);
                     }
-                    string WFCurrentStateName = new Guid(CurrentStateName).ToString("D");
-                    T_SYS_USER[] User = WcfPermissionService.GetSysUserByRole(WFCurrentStateName); //检索本状态（角色）对应用户
-
+                    string roleID = new Guid(CurrentStateName).ToString("D");
+                    List<T_SYS_USER> User = new List<T_SYS_USER>(); //WcfPermissionService.GetSysUserByRole(WFCurrentStateName); //检索本状态（角色）对应用户
+                    using (SysUserRoleBLL bll = new SysUserRoleBLL())
+                    {
+                        IQueryable<T_SYS_USER> IQList = bll.GetSysUserByRole(roleID);
+                        User = IQList == null ? null : IQList.ToList();
+                    }
                     if (User != null)
-                        for (int i = 0; i < User.Length; i++)
+                        for (int i = 0; i < User.Count(); i++)
                         {
                             UserInfo tmp = new UserInfo();
                             tmp.UserID = User[i].EMPLOYEEID;
@@ -987,7 +992,7 @@ namespace SMT.FlowWFService.NewFlow
             return true;
         }
 
-        public string UpdateFlow( FLOW_FLOWRECORDDETAIL_T entity)
+        public string UpdateFlow( SMT.Workflow.Common.Model.FLOW_FLOWRECORDDETAIL_T entity)
         {
 
             FlowBLL bll = new FlowBLL();
@@ -1002,10 +1007,10 @@ namespace SMT.FlowWFService.NewFlow
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public List<FLOW_FLOWRECORDDETAIL_T> GetFlowInfo( string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
+        public List<SMT.Workflow.Common.Model.FLOW_FLOWRECORDDETAIL_T> GetFlowInfo( string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
         {
             Tracer.Debug("GetFlowInfo 查询审批流程 ModelCode=" + ModelCode + " FormID=" + FormID + " EditUserID=" + EditUserID);
-            List<FLOW_FLOWRECORDDETAIL_T> list = new List<FLOW_FLOWRECORDDETAIL_T>();
+            List<SMT.Workflow.Common.Model.FLOW_FLOWRECORDDETAIL_T> list = new List<SMT.Workflow.Common.Model.FLOW_FLOWRECORDDETAIL_T>();
             try
             {
                 List<FlowType> FlowTypeList = new List<FlowWFService.FlowType>();
@@ -1037,7 +1042,7 @@ namespace SMT.FlowWFService.NewFlow
             return list;
         }
 
-        public List<FLOW_FLOWRECORDMASTER_T> GetFlowRecordMaster( string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
+        public List<SMT.Workflow.Common.Model.FLOW_FLOWRECORDMASTER_T> GetFlowRecordMaster( string FormID, string FlowGUID, string CheckState, string Flag, string ModelCode, string CompanyID, string EditUserID)
         {
             Tracer.Debug("GetFlowRecordMaster 获取[流程审批实例]信息 ModelCode=" + ModelCode + " FormID=" + FormID + " EditUserID=" + EditUserID);
             try
@@ -1106,7 +1111,7 @@ namespace SMT.FlowWFService.NewFlow
         /// </summary>
         /// <param name="personalrecordid">我的单据ID</param>
         /// <returns></returns>
-        public T_WF_PERSONALRECORD GetPersonalRecordByID(string personalrecordid)
+        public SMT.Workflow.Common.Model.FlowEngine.T_WF_PERSONALRECORD GetPersonalRecordByID(string personalrecordid)
         {
             FlowBLL bll = new FlowBLL();
             //OracleConnection con = ADOHelper.GetOracleConnection();
@@ -1133,13 +1138,13 @@ namespace SMT.FlowWFService.NewFlow
         /// <param name="paras"></param>
         /// <param name="pageCount"></param>
         /// <returns></returns>
-        public List<FLOW_MODELFLOWRELATION_T> GetModelFlowRelationInfosListBySearch(int pageIndex, int pageSize, string sort, string filterString, object[] paras, ref int pageCount)
+        public List<SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T> GetModelFlowRelationInfosListBySearch(int pageIndex, int pageSize, string sort, string filterString, object[] paras, ref int pageCount)
         {
             //OracleConnection con = ADOHelper.GetOracleConnection();
             try
             {
 
-                List<FLOW_MODELFLOWRELATION_T> ents = new List<FLOW_MODELFLOWRELATION_T>();
+                List<SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T> ents = new List<SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T>();
                 string sql = " select t.MODELFLOWRELATIONID,t.COMPANYID,t.DEPARTMENTID,t.FLOWCODE,a.DESCRIPTION,t.FLAG from smtwf.FLOW_MODELFLOWRELATION_T t left join smtwf.FLOW_FLOWDEFINE_T a on t.flowcode=a.flowcode";
                 if (!string.IsNullOrEmpty(sort))
                 {
@@ -1149,7 +1154,7 @@ namespace SMT.FlowWFService.NewFlow
                 DataTable dt = dao.GetDataTable( sql);
                 foreach (DataRow row in dt.Rows)
                 {
-                    FLOW_MODELFLOWRELATION_T ent = new FLOW_MODELFLOWRELATION_T();
+                    SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T ent = new SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T();
                     ent.MODELFLOWRELATIONID = row["MODELFLOWRELATIONID"] == null ? "" : row["MODELFLOWRELATIONID"].ToString();
                     ent.MODELFLOWRELATIONID = row["COMPANYID"] == null ? "" : row["COMPANYID"].ToString();
                     ent.MODELFLOWRELATIONID = row["DEPARTMENTID"] == null ? "" : row["DEPARTMENTID"].ToString();
@@ -1160,7 +1165,7 @@ namespace SMT.FlowWFService.NewFlow
 
                 }
 
-                IQueryable<FLOW_MODELFLOWRELATION_T> listTemp = ents.AsQueryable();
+                IQueryable<SMT.Workflow.Common.Model.FLOW_MODELFLOWRELATION_T> listTemp = ents.AsQueryable();
                 int Count = ents.Count;
                 pageCount = Count / pageSize + (Count % pageSize > 0 ? 1 : 0);
                 var entList = listTemp.Skip((pageIndex - 1) * pageSize).Take(pageSize);

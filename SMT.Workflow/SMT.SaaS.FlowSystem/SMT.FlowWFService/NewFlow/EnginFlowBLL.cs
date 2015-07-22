@@ -16,18 +16,18 @@ using System.IO;
 using System.Xml.Linq;
 using System.Data;
 using SMT.FlowDAL;
-using SMT.SaaS.BLLCommonServices;
 using SMT.Workflow.Common.Model.FlowEngine;
 using System.ServiceModel;
 using System.Reflection;
 using System.Data.OracleClient;
 using System.Xml;
-
-using SMT.SaaS.BLLCommonServices.PersonnelWS;
 using EngineDataModel;
 
 using SMT.Foundation.Log;
 using SMT.Workflow.Common.Model;
+using SMT.HRM.BLL.Common;
+using TM.SaaS.WFUpdateBIsystem;
+using SMT.HRM.BLL;
 
 
 namespace SMT.FlowWFService.NewFlow
@@ -580,7 +580,7 @@ namespace SMT.FlowWFService.NewFlow
                             {
                                 //通过岗位查找用户，并且取第一个用户为发送消息的对像
 
-                                PersonnelServiceClient HRClient = new PersonnelServiceClient();
+                                //PersonnelServiceClient HRClient = new PersonnelServiceClient();
                                 if (!string.IsNullOrEmpty(dr1["OWNERPOSTID"].ToString()))
                                 {
                                     if (DRNewTrigger != null)
@@ -591,7 +591,13 @@ namespace SMT.FlowWFService.NewFlow
                                     {
                                         Tracer.Debug("DRNewTrigger=null 自动发起流程的第三方消息规则中没有设置没有消息规则,当前的模块消息规则设置中 选定岗位=" + dr1["OWNERPOSTID"].ToString() + " ;消息=" + string.Concat(dr1["MESSAGEBODY"]) + "：MODELCODE=null;AutoCallFlow() FORMID=" + sUser.FormID);
                                     }
-                                    string[] Employees = HRClient.GetEmployeeIDsByPostID(dr1["OWNERPOSTID"].ToString());
+                                    List<string> Employees = new List<string>();// HRClient.GetEmployeeIDsByPostID(dr1["OWNERPOSTID"].ToString());
+
+                                    using (EmployeeBLL bll = new EmployeeBLL())
+                                    {
+                                        var q = bll.GetEmployeeIDsByPostID(dr1["OWNERPOSTID"].ToString());
+                                        Employees= q.Count() > 0 ? q.ToList() : null;
+                                    }
                                     if (Employees != null && Employees.Count() > 0)
                                     {
                                         Entity.SYSTEMCODE = dr1["SYSTEMCODE"].ToString();//解决傅意成遇到的问题（发起员工入职手续的待办，数据库中数据存在问题，系统代号是错误的RM代号，应是HR代号）
@@ -1211,7 +1217,7 @@ namespace SMT.FlowWFService.NewFlow
                 Tracer.Debug(strMsg + ";\r\n 回调给业务系统的参数：" + sb.ToString());
 
 
-                bool bResult = Utility.UpdateFormCheckState(strSystemCode, EntityType, EntityKey, EntityId, CheckState, ref serviceErrorMsg, sb.ToString());
+                bool bResult = WFUtility.UpdateFormCheckState(strSystemCode, EntityType, EntityKey, EntityId, CheckState, ref serviceErrorMsg, sb.ToString());
                 if (!bResult)
                 {
                     Tracer.Debug("更新审核状态失败\r\n"+strMsg);

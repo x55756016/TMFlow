@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{56218535-E677-4E29-86D4-A7A72DEB8255}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TM.SaaS.WFUpdateBIsystem</RootNamespace>
+    <AssemblyName>TM.SaaS.WFUpdateBIsystem</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SMT.Foundation.Log">
+      <HintPath>..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Server\SMT.Foundation.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="WFUtility.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\FBA\SMT.FBAnalysis.BLL\SMT.FBAnalysis.BLL.csproj">
+      <Project>{3f51b547-f9dc-4028-8b84-4855f028dcb0}</Project>
+      <Name>SMT.FBAnalysis.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\FBA\SMT.FBAnalysis.CustomModel\SMT.FBAnalysis.CustomModel.csproj">
+      <Project>{84ccc052-4dd1-4153-9a04-27a43beee4f7}</Project>
+      <Name>SMT.FBAnalysis.CustomModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\FBA\SMT.FBAnalysis.DAL\SMT.FBAnalysis.DAL.csproj">
+      <Project>{f44ee046-87be-45c8-9f9c-17a8b26de720}</Project>
+      <Name>SMT.FBAnalysis.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\FB\SMT.FB.BLL\SMT.FB.BLL.csproj">
+      <Project>{08a41840-ac4a-4d1e-8cf5-881e968b44ae}</Project>
+      <Name>SMT.FB.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\FB\SMT.FB.DAL\SMT.FB.DAL.csproj">
+      <Project>{3526ee5b-5bde-4d92-8c7e-bf2db4de983c}</Project>
+      <Name>SMT.FB.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\HR\SMT.HRM.BLL\SMT.HRM.BLL.csproj">
+      <Project>{b35234a0-7bf1-49b6-bdf2-4041d0763d9b}</Project>
+      <Name>SMT.HRM.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\HR\SMT.HRM.CustomModel\SMT.HRM.CustomModel.csproj">
+      <Project>{0e45b937-670f-49e1-8ef1-a4bd312b94da}</Project>
+      <Name>SMT.HRM.CustomModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\HR\SMT.HRM.DAL\SMT.HRM.DAL.csproj">
+      <Project>{d7d1b61b-cd35-46ea-8575-3cf42d8f4f9d}</Project>
+      <Name>SMT.HRM.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\OA\SMT.SaaS.OA.BLL\SMT.SaaS.OA.BLL.csproj">
+      <Project>{3aa2d961-12fa-4b92-ab37-e4a2556ad1b4}</Project>
+      <Name>SMT.SaaS.OA.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\OA\SMT.SaaS.OA.DAL\SMT.SaaS.OA.DAL.csproj">
+      <Project>{4b906a26-7f19-4707-a3da-61482fe72ba4}</Project>
+      <Name>SMT.SaaS.OA.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\TM.SaaS.OA\TM_SaaS_OA_EFModel\TM_SaaS_OA_EFModel.csproj">
+      <Project>{7571bce6-3b80-41c1-af97-9118e7f41845}</Project>
+      <Name>TM_SaaS_OA_EFModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\OA\源码\SMT.Foundation.NewCore\SMT.Foundation.Core.csproj">
+      <Project>{9d2f51e2-9710-4c91-a66b-823eb72437fd}</Project>
+      <Name>SMT.Foundation.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

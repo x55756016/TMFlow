@@ -51,9 +51,6 @@
     <Reference Include="SMT.Foundation.Log">
       <HintPath>..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Server\SMT.Foundation.Log.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SaaS.BLLCommonServices">
-      <HintPath>..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Server\SMT.SaaS.BLLCommonServices.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.configuration" />
@@ -310,6 +307,10 @@
     <ProjectReference Include="..\..\SMT.Workflow.Engine\SMT.Workflow.Engine.BLL\SMT.Workflow.Engine.BLL.csproj">
       <Project>{069C7DF7-469D-4D57-A3FE-E4C03C1C3C16}</Project>
       <Name>SMT.Workflow.Engine.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TM.SaaS.WFUpdateBIsystem\TM.SaaS.WFUpdateBIsystem.csproj">
+      <Project>{56218535-e677-4e29-86d4-a7a72deb8255}</Project>
+      <Name>TM.SaaS.WFUpdateBIsystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\SMT.FlowDAL\SMT.FlowDAL.csproj">
       <Project>{6B61ACF2-41B8-45FA-AED3-1AC9D5950135}</Project>

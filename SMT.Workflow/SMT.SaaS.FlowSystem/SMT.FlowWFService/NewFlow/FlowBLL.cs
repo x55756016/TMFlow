@@ -27,9 +27,6 @@ using System.Data.OracleClient;
 
 using System.Data.SqlClient;
 using System.Configuration;
-using SMT.SaaS.BLLCommonServices.PermissionWS;
-using SMT.SaaS.BLLCommonServices.OrganizationWS;
-using SMT.SaaS.BLLCommonServices.PersonnelWS;
 using SMT.Workflow.Common.Model.FlowEngine;
 using System.Collections;
 using SMT.Foundation.Core;
@@ -3051,8 +3048,8 @@ namespace SMT.FlowWFService.NewFlow
                // }
 
                 #endregion
-                user.TrackingMessage += "激发流程引擎执行到一下流程完成\r\n";
-                user.TrackingMessage += "System.Threading.Thread.Sleep(1000)\r\n";
+                //user.TrackingMessage += "激发流程引擎执行到一下流程完成\r\n";
+                //user.TrackingMessage += "System.Threading.Thread.Sleep(1000)\r\n";
                 //System.Threading.Thread.Sleep(1000);//当前用到
                 dataResult.ModelFlowRelationID = flowRelation.MODELFLOWRELATIONID; //返回关联ID
                 dataResult.KPITime = KPITime;
@@ -3061,7 +3058,7 @@ namespace SMT.FlowWFService.NewFlow
                 {
                     dataResult.SubModelCode = FlowUtility.GetSubModelCode(master.ACTIVEROLE, dataResult.AppState); //返回下一子模块代码
                 }
-                user.TrackingMessage += "System.Threading.Thread.Sleep(1000)完成\r\n";
+                //user.TrackingMessage += "System.Threading.Thread.Sleep(1000)完成\r\n";
                 return dataResult;
             }
 

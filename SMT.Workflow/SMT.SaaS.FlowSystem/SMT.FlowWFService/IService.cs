@@ -5,7 +5,6 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 
-using SMT.SaaS.BLLCommonServices.PermissionWS;
 using SMT.Workflow.Common.Model.FlowEngine;
 using SMT.Workflow.Common.Model;
 
