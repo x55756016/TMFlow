@@ -95,9 +95,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SMT.FlowWFService\SMT.FlowWFService.csproj">
+    <ProjectReference Include="..\SMT.FlowWFService\SMT.FlowWF.BLL.csproj">
       <Project>{10EFAFD0-B2C8-4F13-B8F5-68FB97EB4117}</Project>
-      <Name>SMT.FlowWFService</Name>
+      <Name>SMT.FlowWF.BLL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

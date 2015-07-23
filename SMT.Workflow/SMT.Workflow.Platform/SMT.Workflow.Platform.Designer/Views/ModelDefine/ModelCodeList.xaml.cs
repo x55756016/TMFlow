@@ -16,7 +16,6 @@ using SMT.Workflow.Platform.Designer.Class;
 using SMT.Workflow.Platform.Designer.Common;
 using SMT.SaaS.FrameworkUI.ChildWidow;
 using SMT.Workflow.Platform.Designer.Utils;
-using Telerik.Windows.Controls;
 
 namespace SMT.Workflow.Platform.Designer.Views.ModelDefine
 {

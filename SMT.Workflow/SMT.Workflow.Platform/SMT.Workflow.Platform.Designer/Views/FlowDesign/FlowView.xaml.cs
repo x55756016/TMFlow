@@ -57,9 +57,7 @@ namespace SMT.Workflow.Platform.Designer.Views.FlowDesign
             modelClient = new Flow_ModelDefineClient(); //实例化流程模块            
             RegisterEvents(); 
             tvFlow.OnSelectionChanged += new TreeControl.SelectionChanged(tvFlow_SelectionChanged);  //树形选择事件
-
-
-          
+                      
         }
 
         /// <summary>

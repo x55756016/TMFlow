@@ -43,7 +43,7 @@ namespace SMT.FlowWFService.NewFlow
     {
         public static IDAO dao = DALFacoty.CreateDao(ConfigurationManager.ConnectionStrings["WorkFlowConnString"].ToString());
 
-        FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();      
+        //FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();      
         EnginFlowBLL einginBll = new EnginFlowBLL();
         public FlowUser SUser;
         private static string _strIsFlowEngine;
@@ -142,7 +142,7 @@ namespace SMT.FlowWFService.NewFlow
 
                     flowConsultation.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T =
                         FlowBLL.GetFLOW_FLOWRECORDMASTER_T( flowConsultation.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T.FLOWRECORDMASTERID);
-                    FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();
+                    //FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();
                     //FlowEngineService.CustomUserMsg[] cs = new FlowEngineService.CustomUserMsg[1];
                     //FlowEngineService.CustomUserMsg cu = new FlowEngineService.CustomUserMsg();                               
                     //cu.FormID = flowConsultation.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T.FORMID;

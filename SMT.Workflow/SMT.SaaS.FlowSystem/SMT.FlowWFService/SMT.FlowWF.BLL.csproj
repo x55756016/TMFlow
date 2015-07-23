@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{10EFAFD0-B2C8-4F13-B8F5-68FB97EB4117}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SMT.FlowWF.BLL</RootNamespace>
+    <AssemblyName>SMT.FlowWF.BLL</AssemblyName>
+    <ProjectTypeGuids>{3D9AD99F-2412-4246-B90B-4EAA41C64699};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <StartArguments>/client:"WcfTestClient.exe"</StartArguments>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Oracle.DataAccess, Version=4.112.2.30, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\Oracle.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="SMT.Foundation.Log">
+      <HintPath>..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Server\SMT.Foundation.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="NewFlow\FlowService_SubimtFlow.cs" />
+    <Compile Include="NewFlow\EnginFlowBLL.cs" />
+    <Compile Include="NewFlow\FlowBLL.cs" />
+    <Compile Include="NewFlow\FlowMonitor.cs" />
+    <Compile Include="NewFlow\FlowService.cs" />
+    <Compile Include="NewFlow\SMTWorkFlowManage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewFlow\SubmitUser.cs" />
+    <Compile Include="PublicClass\Utility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Service.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SMTType.cs" />
+    <Compile Include="IService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlFlowManager\WF21_WorkFlowActivitysActivityCountersigns.cs" />
+    <Compile Include="XmlFlowManager\WF211_WorkFlowActivitysActivityCountersignsCountersign.cs" />
+    <Compile Include="XmlFlowManager\WF3_WorkFlowRulesRule.cs" />
+    <Compile Include="XmlFlowManager\WF31_WorkFlowRulesRuleConditions.cs" />
+    <Compile Include="XmlFlowManager\WF311_WorkFlowRulesRuleConditionsCondition.cs" />
+    <Compile Include="XmlFlowManager\WF2_WorkFlowActivitysActivity.cs" />
+    <Compile Include="XmlFlowManager\WF1_WorkFlow.cs" />
+    <Compile Include="XmlFlowManager\WFCondition.cs" />
+    <Compile Include="XmlFlowManager\WorkflowInstance.cs" />
+    <Compile Include="XmlFlowManager\WorkflowRuntime.cs" />
+    <Compile Include="XmlFlowManager\XmlFlowManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OA\TM.SaaS.OA\HR\SMT.HRM.BLL\SMT.HRM.BLL.csproj">
+      <Project>{b35234a0-7bf1-49b6-bdf2-4041d0763d9b}</Project>
+      <Name>SMT.HRM.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\OA\TM.SaaS.OA\HR\SMT.HRM.CustomModel\SMT.HRM.CustomModel.csproj">
+      <Project>{0e45b937-670f-49e1-8ef1-a4bd312b94da}</Project>
+      <Name>SMT.HRM.CustomModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\OA\TM.SaaS.OA\TM_SaaS_OA_EFModel\TM_SaaS_OA_EFModel.csproj">
+      <Project>{7571bce6-3b80-41c1-af97-9118e7f41845}</Project>
+      <Name>TM_SaaS_OA_EFModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\OA\源码\SMT.Foundation.NewCore\SMT.Foundation.Core.csproj">
+      <Project>{9d2f51e2-9710-4c91-a66b-823eb72437fd}</Project>
+      <Name>SMT.Foundation.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SMT.Workflow.Common\SMT.Workflow.Common.Model\SMT.Workflow.Common.Model.csproj">
+      <Project>{AA1B3B25-A276-4B58-A255-79B71B01B048}</Project>
+      <Name>SMT.Workflow.Common.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SMT.Workflow.Common\SMT.Workflow.SMTCache\SMT.Workflow.SMTCache.csproj">
+      <Project>{7b000b9a-4c3d-484b-aa43-82280a5226fc}</Project>
+      <Name>SMT.Workflow.SMTCache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SMT.Workflow.Engine\SMT.Workflow.Engine.BLL\SMT.Workflow.Engine.BLL.csproj">
+      <Project>{069C7DF7-469D-4D57-A3FE-E4C03C1C3C16}</Project>
+      <Name>SMT.Workflow.Engine.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TM.SaaS.WFUpdateBIsystem\TM.SaaS.WFUpdateBIsystem.csproj">
+      <Project>{56218535-e677-4e29-86d4-a7a72deb8255}</Project>
+      <Name>TM.SaaS.WFUpdateBIsystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SMT.FlowDAL\SMT.FlowDAL.csproj">
+      <Project>{6B61ACF2-41B8-45FA-AED3-1AC9D5950135}</Project>
+      <Name>SMT.FlowDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SMT.WFLib\SMT.WFLib.csproj">
+      <Project>{39945946-45ee-418b-8b20-8bfac13ab2f8}</Project>
+      <Name>SMT.WFLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{3D9AD99F-2412-4246-B90B-4EAA41C64699}">
+        <WcfProjectProperties>
+          <AutoStart>True</AutoStart>
+        </WcfProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

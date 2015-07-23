@@ -54,7 +54,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.Foundation.Core", "..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.FlowDAL", "SMT.SaaS.FlowSystem\SMT.FlowDAL\SMT.FlowDAL.csproj", "{6B61ACF2-41B8-45FA-AED3-1AC9D5950135}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.FlowWFService", "SMT.SaaS.FlowSystem\SMT.FlowWFService\SMT.FlowWFService.csproj", "{10EFAFD0-B2C8-4F13-B8F5-68FB97EB4117}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.FlowWF.BLL", "SMT.SaaS.FlowSystem\SMT.FlowWFService\SMT.FlowWF.BLL.csproj", "{10EFAFD0-B2C8-4F13-B8F5-68FB97EB4117}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMT.FlowWFService.Host", "SMT.SaaS.FlowSystem\SMT.FlowWFService.Host\SMT.FlowWFService.Host.csproj", "{31EA4738-0BEE-4ACC-B1AA-0CC422F08078}"
 EndProject

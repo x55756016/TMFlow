@@ -12,7 +12,7 @@ using System.Windows.Shapes;
 using SMT.Workflow.Platform.Designer.Utils;
 
 
-namespace SMT.Workflow.Platform.Designer
+namespace SMT.Workflow.Platform.Designer.Views
 {
     public partial class MainPage : UserControl
     {

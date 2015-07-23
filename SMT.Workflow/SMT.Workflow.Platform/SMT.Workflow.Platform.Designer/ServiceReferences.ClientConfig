@@ -1,7 +1,7 @@
 ﻿<configuration>
     <system.serviceModel>
         <bindings>
-            <basicHttpBinding>
+            <basicHttpBinding> 
                 <binding name="BasicHttpBinding_IEngineWcfGlobalFunction" maxBufferSize="2147483647"
                     maxReceivedMessageSize="2147483647">
                     <security mode="None" />

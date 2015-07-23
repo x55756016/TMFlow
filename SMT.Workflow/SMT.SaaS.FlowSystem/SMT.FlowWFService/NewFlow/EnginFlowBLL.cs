@@ -435,7 +435,7 @@ namespace SMT.FlowWFService.NewFlow
         DataTable dtFlowTrigger;
         DataTable sourceTable;
         EnginFlowDAL dal;
-        private FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();      
+        //private FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();      
         #endregion
 
         private bool SendDotask(string submitUserName, string modeName, string msgOpen, T_WF_DOTASK Entity, string IsTask, ref FlowUser sUser, ref string ErroMessage)
@@ -602,7 +602,7 @@ namespace SMT.FlowWFService.NewFlow
                                     {
                                         Entity.SYSTEMCODE = dr1["SYSTEMCODE"].ToString();//解决傅意成遇到的问题（发起员工入职手续的待办，数据库中数据存在问题，系统代号是错误的RM代号，应是HR代号）
                                         dal.AddDoTask( Entity, dr1, sourceTable, Employees[0], NewFormID, strAppFieldValue, string.Concat(dr1["MESSAGEBODY"]), strFormTypes);//发送消息
-                                        FlowEngine.TaskCacheReflesh(Employees[0]);
+                                        //FlowEngine.TaskCacheReflesh(Employees[0]);
                                     }
                                 }
                                 else
@@ -854,14 +854,14 @@ namespace SMT.FlowWFService.NewFlow
                         {
                             //刷新缓存用户是否有新的待办 暂时没有写入缓存                        
                             dal.CloseDoTaskStatus( strSystemCode, strFormID, user);
-                            FlowEngine.TaskCacheReflesh(user);
+                            //FlowEngine.TaskCacheReflesh(user);
                         }
                     }
                     else
                     {
                         //刷新缓存用户是否有新的待办                                   
                         dal.CloseDoTaskStatus( strSystemCode, strFormID, strReceiveID);//关闭待办
-                        FlowEngine.TaskCacheReflesh(strReceiveID);
+                        //FlowEngine.TaskCacheReflesh(strReceiveID);
                     }
                 }
                 catch (Exception e)
@@ -938,7 +938,7 @@ namespace SMT.FlowWFService.NewFlow
                 string strUrl = string.Empty;
                 ReplaceUrl(ref content, ref strUrl, dtValue);               
                 dal.DoTaskCancel( strSystemCode, strModelCode, strFormID, strReceiveID, content);
-                FlowEngine.TaskCacheReflesh(strReceiveID);
+                //FlowEngine.TaskCacheReflesh(strReceiveID);
                 if (Config.IsNeedUpdateAudit)//是否执行更新审核状态
                 {
                     if (!string.IsNullOrEmpty(strSystemCode) && !string.IsNullOrEmpty(strEntityType) && !string.IsNullOrEmpty(strEntityKey))
@@ -1024,7 +1024,7 @@ namespace SMT.FlowWFService.NewFlow
                             //刷新缓存用户是否有新的待办
                             //EngineCache.TaskCache.TaskCacheReflesh(custom.UserID);                        
                             dal.FlowConsultatiMsg( custom.UserID, strSystemCode, strModelCode, custom.FormID, content, Url, BOObjectEscapeString(strAppXml), strFlowXML, strAppXml);
-                            FlowEngine.TaskCacheReflesh(custom.UserID);
+                            //FlowEngine.TaskCacheReflesh(custom.UserID);
                         }
                         return true;
                     }
@@ -1090,7 +1090,7 @@ namespace SMT.FlowWFService.NewFlow
                             //EngineCache.TaskCache.TaskCacheReflesh(user);
                             //SMTEngineBLL.CloseMsg(strSystemCode, strFormID, user);                           
                             dal.CloseConsultati( strSystemCode, strFormID, user);
-                            FlowEngine.TaskCacheReflesh(user);
+                            //FlowEngine.TaskCacheReflesh(user);
                         }
                     }
                     //SMTEngineBLL.CloseMsg(strSystemCode, strFormID, strReceiveUser);

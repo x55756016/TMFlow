@@ -3789,14 +3789,14 @@ namespace SMT.FlowWFService.NewFlow
             UserInfo AgentUser = new UserInfo();
             try
             {
-                OAWS.AgentServicesClient oa = new OAWS.AgentServicesClient();
+                //OAWS.AgentServicesClient oa = new OAWS.AgentServicesClient();
                 //OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent("TravelApplication1", "da844654-49c4-4138-ad83-e369cf03af5c");
-                OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent(UserID, ModelCode);
-                if (AGENTSET == null)
-                    return null;
+                //OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent(UserID, ModelCode);
+                //if (AGENTSET == null)
+                //    return null;
 
-                AgentUser.UserID = AGENTSET.EMPLOYEEID;//"userid0";
-                AgentUser.UserName = AGENTSET.EMPLOYEECNAME;//"testuser";
+                //AgentUser.UserID = AGENTSET.EMPLOYEEID;//"userid0";
+                //AgentUser.UserName = AGENTSET.EMPLOYEECNAME;//"testuser";
 
                 return AgentUser;
             }
@@ -3830,15 +3830,15 @@ namespace SMT.FlowWFService.NewFlow
                     users.ForEach(user =>
                     {
                         UserInfo AgentUser = new UserInfo();
-                        OAWS.AgentServicesClient oa = new OAWS.AgentServicesClient();
-                        //OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent("TravelApplication1", "da844654-49c4-4138-ad83-e369cf03af5c");
-                        OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent(user.UserID, ModelCode);
-                        if (AGENTSET != null)
-                        {
-                            AgentUser.UserID = AGENTSET.EMPLOYEEID;//"userid0";
-                            AgentUser.UserName = AGENTSET.EMPLOYEECNAME;//"testuser";
-                            dict[user] = AgentUser;
-                        }
+                        //OAWS.AgentServicesClient oa = new OAWS.AgentServicesClient();
+                        ////OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent("TravelApplication1", "da844654-49c4-4138-ad83-e369cf03af5c");
+                        //OAWS.T_HR_EMPLOYEE AGENTSET = oa.GetQueryAgent(user.UserID, ModelCode);
+                        //if (AGENTSET != null)
+                        //{
+                        //    AgentUser.UserID = AGENTSET.EMPLOYEEID;//"userid0";
+                        //    AgentUser.UserName = AGENTSET.EMPLOYEECNAME;//"testuser";
+                        //    dict[user] = AgentUser;
+                        //}
                     });
                 });
 
