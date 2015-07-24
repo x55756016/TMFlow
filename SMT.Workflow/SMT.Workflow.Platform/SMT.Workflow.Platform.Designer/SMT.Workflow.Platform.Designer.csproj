@@ -67,31 +67,28 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="SMT.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.Extensions.dll</HintPath>
+    <Reference Include="SMT.Extensions">
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.AnimationEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.AnimationEngine.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.Application">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Application.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SAAS.Application.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.Behaviors">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Behaviors.dll</HintPath>
-    </Reference>
-    <Reference Include="SMT.SAAS.ClientServices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.ClientServices.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SAAS.Behaviors.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.ClientUtility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.ClientUtility.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SAAS.CommonReportsModel">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.CommonReportsModel.dll</HintPath>
-    </Reference>
     <Reference Include="SMT.SAAS.Controls.Toolkit">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Controls.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SAAS.Controls.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.Controls.Toolkit.Windows, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Controls.Toolkit.Windows.dll</HintPath>
@@ -104,22 +101,24 @@
       <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.FrameworkUI.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SaaS.Globalization">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SaaS.Globalization.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.Images">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Images.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SAAS.Images.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SaaS.LocalData">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Assembly\SMT.SaaS.LocalData.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.LocalData.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SAAS.Main.CurrentContext">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Main.CurrentContext.dll</HintPath>
+    <Reference Include="SMT.SAAS.Main.CurrentContext, Version=1.1.1.1218, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\OA\SMT.SaaS.CommonDll\SMT\Client\SMT.SAAS.Main.CurrentContext.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SAAS.Main.CurrentContextLoadData">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Main.CurrentContextLoadData.dll</HintPath>
+    <Reference Include="SMT.SAAS.Main.CurrentContextLoadData, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\OA\SMT.SaaS.CommonDll\SMT\Client\SMT.SAAS.Main.CurrentContextLoadData.dll</HintPath>
     </Reference>
     <Reference Include="SMT.SAAS.Themes">
-      <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Themes.dll</HintPath>
+      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SAAS.Themes.dll</HintPath>
     </Reference>
     <Reference Include="SMT.Saas.Tools, Version=1.1.1.1220, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -841,4 +840,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y SMT.Workflow.Platform.Designer.xap C:\Users\ken\AppData\LocalLow\Microsoft\Silverlight\is\necvvqq1.jbe\codkc23f.wex\1\s\5t1yok1xsqaquywhtdgea1jbnzj0aa4b1vvivdwdasu2pvjgclaaafha\f\ChildSystem</PostBuildEvent>
+  </PropertyGroup>
 </Project>

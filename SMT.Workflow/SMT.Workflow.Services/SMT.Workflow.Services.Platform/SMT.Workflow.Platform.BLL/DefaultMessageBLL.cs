@@ -108,7 +108,7 @@ namespace SMT.Workflow.Platform.BLL
             List<AppSystem> List = new List<AppSystem>();
             try
             {
-                string Path = System.Web.Hosting.HostingEnvironment.MapPath("~/BOSystemList.xml");
+                string Path = System.Web.Hosting.HostingEnvironment.MapPath("~/BusinessObjects/BOSystemList.xml");
                 XDocument xdoc = XDocument.Load(Path);
                 var xmlTree = from c in xdoc.Descendants("System")
                               select c;

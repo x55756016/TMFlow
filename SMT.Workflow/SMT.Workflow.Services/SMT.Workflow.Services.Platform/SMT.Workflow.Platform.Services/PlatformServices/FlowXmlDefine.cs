@@ -17,23 +17,29 @@ namespace SMT.Workflow.Platform.Services
         public List<AppSystem> ListSystem()
         {
             List<AppSystem> List = new List<AppSystem>();
-            string Path = System.Web.Hosting.HostingEnvironment.MapPath("~/BOSystemList.xml");
-           // string Path = System.Web.HttpContext.Current.Server.MapPath("../BusinessObjects/BOSystemList.xml");
-            XDocument xdoc = XDocument.Load(Path);
-            var xmlTree = from c in xdoc.Descendants("System")
-                          select c;
-            if (xmlTree.Count() > 0)
+            try
             {
-                foreach (var v in xmlTree)
+                string Path = System.Web.Hosting.HostingEnvironment.MapPath("~/BusinessObjects/BOSystemList.xml");
+                // string Path = System.Web.HttpContext.Current.Server.MapPath("../BusinessObjects/BOSystemList.xml");
+                XDocument xdoc = XDocument.Load(Path);
+                var xmlTree = from c in xdoc.Descendants("System")
+                              select c;
+                if (xmlTree.Count() > 0)
                 {
-                    AppSystem sys = new AppSystem();
-                    sys.Name = v.Attribute("Name").Value;
-                    sys.Description = v.Attribute("Description").Value;
-                    sys.ObjectFolder = v.Attribute("ObjectFolder").Value;
-                    List.Add(sys);
+                    foreach (var v in xmlTree)
+                    {
+                        AppSystem sys = new AppSystem();
+                        sys.Name = v.Attribute("Name").Value;
+                        sys.Description = v.Attribute("Description").Value;
+                        sys.ObjectFolder = v.Attribute("ObjectFolder").Value;
+                        List.Add(sys);
+                    }
                 }
+                xdoc = null;
+            }catch(Exception ex)
+            {
+                Tracer.Debug(ex.ToString());
             }
-            xdoc = null;
             return List;
         }
         public List<AppModel> AppModel(string ObjectFolder)

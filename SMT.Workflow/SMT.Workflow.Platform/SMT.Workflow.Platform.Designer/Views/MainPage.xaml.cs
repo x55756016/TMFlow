@@ -23,28 +23,34 @@ namespace SMT.Workflow.Platform.Designer.Views
         }
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            #region 加载登录人员信息         
-            Utility.CurrentUser = new Saas.Tools.PermissionWS.T_SYS_USER();
-            Utility.CurrentUser.CREATEDATE = DateTime.Now;
-            Utility.CurrentUser.CREATEUSER = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
-            Utility.CurrentUser.EMPLOYEECODE = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeCode;
-            Utility.CurrentUser.EMPLOYEEID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
-            Utility.CurrentUser.EMPLOYEENAME = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeName;     
-            Utility.CurrentUser.OWNERCOMPANYID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts[0].CompanyID;           
-            Utility.CurrentUser.OWNERDEPARTMENTID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts[0].DepartmentID;
-            Utility.CurrentUser.OWNERID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
-            Utility.CurrentUser.OWNERPOSTID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts[0].PostID;        
-            Utility.CurrentUser.STATE = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeState;
-            Utility.CurrentUser.SYSUSERID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.SysUserID;          
-            Utility.CurrentUser.UPDATEDATE = DateTime.Now;
-            Utility.CurrentUser.UPDATEUSER = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
-            Utility.CurrentUser.USERNAME = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeName;
-            if (Application.Current.Resources["CurrentUserID"] == null)
+            try
             {
-                Application.Current.Resources.Add("CurrentUserID", SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID);
+                #region 加载登录人员信息
+                Utility.CurrentUser = new Saas.Tools.PermissionWS.T_SYS_USER();
+                Utility.CurrentUser.CREATEDATE = DateTime.Now;
+                Utility.CurrentUser.CREATEUSER = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
+                Utility.CurrentUser.EMPLOYEECODE = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeCode;
+                Utility.CurrentUser.EMPLOYEEID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
+                Utility.CurrentUser.EMPLOYEENAME = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeName;
+                Utility.CurrentUser.OWNERCOMPANYID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts[0].CompanyID;
+                Utility.CurrentUser.OWNERDEPARTMENTID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts[0].DepartmentID;
+                Utility.CurrentUser.OWNERID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
+                Utility.CurrentUser.OWNERPOSTID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts[0].PostID;
+                Utility.CurrentUser.STATE = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeState;
+                Utility.CurrentUser.SYSUSERID = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.SysUserID;
+                Utility.CurrentUser.UPDATEDATE = DateTime.Now;
+                Utility.CurrentUser.UPDATEUSER = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID;
+                Utility.CurrentUser.USERNAME = SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeName;
+                if (Application.Current.Resources["CurrentUserID"] == null)
+                {
+                    Application.Current.Resources.Add("CurrentUserID", SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.EmployeeID);
+                }
+
+                #endregion
+            }catch(Exception ex)
+            {
+                SMT.SAAS.Main.CurrentContext.AppContext.logAndShow(ex.ToString());
             }
-           
-            #endregion
             //发布时下面代码要注释
             //System.Windows.Controls.Window.Parent = windowParent;
             //System.Windows.Controls.Window.TaskBar = new StackPanel();
