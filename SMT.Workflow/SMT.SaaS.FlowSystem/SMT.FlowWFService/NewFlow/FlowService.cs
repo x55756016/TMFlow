@@ -137,7 +137,7 @@ namespace SMT.FlowWFService.NewFlow
                     sb.AppendLine("  entity.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T = eentity;");
 
                     Tracer.Debug("流程引擎的XML数据"+ "SubimtFlow入口处 进行咨询: FormID=" + submitData.FormID + ";ModelCode=" + submitData.ModelCode + " \r\n FLOW_CONSULTATION_T 实体:\r\n" + sb.ToString());
-                    WriteSubmitDate(submitData);
+                    LogSubmitData(submitData);
                     #endregion
 
                     flowConsultation.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T =
@@ -267,7 +267,7 @@ namespace SMT.FlowWFService.NewFlow
                     sb.AppendLine("  eentity.KPITIMEXML=\"" + entity.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T.KPITIMEXML + "\";");
                     sb.AppendLine("  entity.FLOW_FLOWRECORDDETAIL_T.FLOW_FLOWRECORDMASTER_T = eentity;");
                     Tracer.Debug("流程引擎的XML数据 SubimtFlow入口处 回复咨询信息: FormID=" + submitData.FormID + ";ModelCode=" + submitData.ModelCode + " \r\n FLOW_CONSULTATION_T 实体:\r\n" + sb.ToString());
-                    WriteSubmitDate(submitData);
+                    LogSubmitData(submitData);
                     #endregion
 
                     //FlowEngineService.EngineWcfGlobalFunctionClient FlowEngine = new FlowEngineService.EngineWcfGlobalFunctionClient();
@@ -334,7 +334,7 @@ namespace SMT.FlowWFService.NewFlow
         #region 流程处理
 
         #region 流程与任务审批
-        private void WriteSubmitDate(SubmitData submitData)
+        private void LogSubmitData(SubmitData submitData)
         {
             #region 提交信息
             StringBuilder sb = new StringBuilder();

@@ -28,6 +28,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +74,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AjaxWFService.svc" />
     <Content Include="EngineWcfGlobalFunction.svc" />
     <Content Include="PersonalRecordService.svc" />
     <Content Include="Web.config">
@@ -87,6 +89,9 @@
     <Content Include="WebForm1.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AjaxWFService.svc.cs">
+      <DependentUpon>AjaxWFService.svc</DependentUpon>
+    </Compile>
     <Compile Include="EngineWcfGlobalFunction.svc.cs">
       <DependentUpon>EngineWcfGlobalFunction.svc</DependentUpon>
     </Compile>
@@ -120,6 +125,9 @@
       <Project>{9C6AB590-1072-4EA7-B7DA-FC33B765EE2D}</Project>
       <Name>SMT.Workflow.Engine.Services.BLL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\eg.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

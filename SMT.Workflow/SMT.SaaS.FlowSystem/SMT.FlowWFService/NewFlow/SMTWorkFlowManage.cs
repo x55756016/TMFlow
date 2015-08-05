@@ -71,7 +71,6 @@ namespace SMT.FlowWFService.NewFlow
             {
                 throw ex;
             }
-
         }
         /// <summary>
         /// 建立虚拟流程实例

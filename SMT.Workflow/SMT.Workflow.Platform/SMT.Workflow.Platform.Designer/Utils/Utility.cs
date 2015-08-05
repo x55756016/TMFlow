@@ -52,14 +52,18 @@ namespace SMT.Workflow.Platform.Designer.Utils
         public static string GetAllOwnerCompanyId()
         {
             string strAllOwnerCompanyId = "";
-
-            foreach (UserPost usr in SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts)
+            try
             {
-                strAllOwnerCompanyId += "'" + usr.CompanyID + "',";
+                foreach (UserPost usr in SMT.SAAS.Main.CurrentContext.Common.CurrentLoginUserInfo.UserPosts)
+                {
+                    strAllOwnerCompanyId += "'" + usr.CompanyID + "',";
+                }
+
+                if (strAllOwnerCompanyId != "") strAllOwnerCompanyId = strAllOwnerCompanyId.Substring(0, strAllOwnerCompanyId.Length - 1);
+            }catch(Exception ex)
+            {
+                SMT.SAAS.Main.CurrentContext.AppContext.logAndShow(ex.ToString());
             }
-
-            if (strAllOwnerCompanyId != "") strAllOwnerCompanyId = strAllOwnerCompanyId.Substring(0, strAllOwnerCompanyId.Length - 1);
-
             return strAllOwnerCompanyId;            
         }
         /// <summary>

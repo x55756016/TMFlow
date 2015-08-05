@@ -96,10 +96,6 @@
     <Reference Include="SMT.SAAS.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\SMT.SaaS.CommonDll\Lib\SMTLib1.1V\Lib\SMT\Client_old\SMT.SAAS.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SaaS.FrameworkUI, Version=1.1.1.1218, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.FrameworkUI.dll</HintPath>
-    </Reference>
     <Reference Include="SMT.SaaS.Globalization">
       <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.Globalization.dll</HintPath>
     </Reference>
@@ -109,7 +105,7 @@
     <Reference Include="SMT.SaaS.LocalData">
       <HintPath>..\..\..\..\SmtWorkSpace\CommonDLL\Lib\SMTLib1.1V\Lib\SMT\Client\SMT.SaaS.LocalData.dll</HintPath>
     </Reference>
-    <Reference Include="SMT.SAAS.Main.CurrentContext, Version=1.1.1.1218, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SMT.SAAS.Main.CurrentContext, Version=1.1.1.1218, Culture=neutral, PublicKeyToken=7cc70637b746d9be, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\OA\SMT.SaaS.CommonDll\SMT\Client\SMT.SAAS.Main.CurrentContext.dll</HintPath>
     </Reference>
@@ -825,6 +821,12 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\PlatformService\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\OA\TM.SaaS.OA\FrameWork\SMT.SaaS.FrameWorkUI\SMT.SAAS.FrameworkUI.csproj">
+      <Project>{9a42135a-11f2-4210-a41b-3ac06ac0d835}</Project>
+      <Name>SMT.SAAS.FrameworkUI</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -841,6 +843,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y SMT.Workflow.Platform.Designer.xap C:\Users\ken\AppData\LocalLow\Microsoft\Silverlight\is\necvvqq1.jbe\codkc23f.wex\1\s\5t1yok1xsqaquywhtdgea1jbnzj0aa4b1vvivdwdasu2pvjgclaaafha\f\ChildSystem</PostBuildEvent>
+    <PostBuildEvent>xcopy /y SMT.Workflow.Platform.Designer.xap D:\</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -39,15 +39,15 @@ namespace SMT.FlowWFService.NewFlow
     {
         public DataResult SubimtFlow(SubmitData submitData)
         {
-            SMTWorkFlowManage.ColseWorkFlowRuntime(null);
-            DataSet ds = new DataSet();
-            WriteSubmitDate(submitData);
-            Tracer.Debug("***********************************************开始" + DateTime.Now.ToString() + "***********************************************");
+            //SMTWorkFlowManage.ColseWorkFlowRuntime(null);
+            //DataSet ds = new DataSet();
+            LogSubmitData(submitData);
+            Tracer.Debug("***********************************************开始***********************************************");
             string returnMsg = "";//暂时没有用,记录执行的顺序
             #region 更新个人缓存
             //临时屏蔽
             //FlowEngine.TaskCacheReflesh(submitData.ApprovalUser.UserID);
-            Tracer.Debug("FormID=" + submitData.FormID + ";更新个人缓存 完成 UserID=" + submitData.ApprovalUser.UserID);
+            //Tracer.Debug("FormID=" + submitData.FormID + ";更新个人缓存 完成 UserID=" + submitData.ApprovalUser.UserID);
             #endregion
             DateTime dtStart = DateTime.Now;
             DateTime dtEngineStart = DateTime.Now;
