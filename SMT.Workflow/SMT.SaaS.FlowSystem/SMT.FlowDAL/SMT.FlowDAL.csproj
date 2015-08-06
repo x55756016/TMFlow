@@ -95,6 +95,7 @@
     <Compile Include="ADO\OutInterface.cs" />
     <Compile Include="ADO\T_WF_PERSONALRECORDDAL.cs" />
     <Compile Include="BaseDAL.cs" />
+    <Compile Include="EnginFlowDAL_AddTask.cs" />
     <Compile Include="EnginFlowDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
