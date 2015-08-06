@@ -253,10 +253,10 @@ namespace SMT.Workflow.Platform.DAL
                 pageparm[9].ParameterValue = GetValue(define.CREATECOMPANYID);//创建公司ID
                 pageparm[10].ParameterValue = GetValue(define.CREATEDEPARTMENTID);//创建部门ID
                 pageparm[11].ParameterValue = GetValue(define.CREATEPOSTID);//创建岗位ID
-                pageparm[12].ParameterValue = GetValue(define.CREATEDATE);//创建时间
+                pageparm[12].ParameterValue = DateTime.Now;//创建时间
                 pageparm[13].ParameterValue = GetValue(define.EDITUSERID);//修改人ID
                 pageparm[14].ParameterValue = GetValue(define.EDITUSERNAME);//修改人用户名
-                pageparm[15].ParameterValue = GetValue(define.EDITDATE);//修改时间
+                pageparm[15].ParameterValue = DateTime.Now; //修改时间
                 pageparm[16].ParameterValue = GetValue(define.SYSTEMCODE);//业务系统:OA,HR,TM等
                 pageparm[17].ParameterValue = GetValue(define.BUSINESSOBJECT);//业务对象：各种申请报销单
                 pageparm[18].ParameterValue = GetValue(define.WFLAYOUT);//流程定义文件,把旧的ID换成新的ID

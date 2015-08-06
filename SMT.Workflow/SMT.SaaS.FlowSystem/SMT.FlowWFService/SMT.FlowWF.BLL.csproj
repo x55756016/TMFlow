@@ -82,11 +82,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="NewFlow\FlowBLL_1DefineFlow_1GetDefine.cs" />
+    <Compile Include="NewFlow\FlowService_2SendTask.cs" />
+    <Compile Include="NewFlow\FlowService_3MyRecord.cs" />
+    <Compile Include="NewFlow\FlowBLL_1DefineFlow_2GetFlowNextStep.cs" />
+    <Compile Include="NewFlow\FlowBLL_2FreeFlow.cs" />
+    <Compile Include="NewFlow\FlowBLL_1DefineFlow_0Start.cs" />
     <Compile Include="NewFlow\FlowService_SubimtFlow.cs" />
     <Compile Include="NewFlow\EnginFlowBLL.cs" />
     <Compile Include="NewFlow\FlowBLL.cs" />
     <Compile Include="NewFlow\FlowMonitor.cs" />
-    <Compile Include="NewFlow\FlowService.cs" />
+    <Compile Include="NewFlow\FlowService_1SubmitFlow.cs" />
     <Compile Include="NewFlow\SMTWorkFlowManage.cs">
       <SubType>Code</SubType>
     </Compile>
