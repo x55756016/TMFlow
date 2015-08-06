@@ -383,10 +383,10 @@ namespace SMT.FlowDAL
                 {
                     string insSql = @"INSERT INTO T_WF_DOTASK (DOTASKID,COMPANYID,ORDERID,ORDERUSERID,ORDERUSERNAME,ORDERSTATUS,MESSAGEBODY,
                                      APPLICATIONURL,RECEIVEUSERID,BEFOREPROCESSDATE,DOTASKTYPE,DOTASKSTATUS,MAILSTATUS,
-                                     RTXSTATUS,APPFIELDVALUE,FLOWXML,APPXML,SYSTEMCODE,MODELCODE,MODELNAME)
+                                     RTXSTATUS,APPFIELDVALUE,FLOWXML,APPXML,SYSTEMCODE,MODELCODE,MODELNAME,REMARK)
                                      VALUES (@DOTASKID,@COMPANYID,@ORDERID,@ORDERUSERID,@ORDERUSERNAME,@ORDERSTATUS,@MESSAGEBODY,@APPLICATIONURL,
                                     @RECEIVEUSERID,@BEFOREPROCESSDATE,@DOTASKTYPE,@DOTASKSTATUS,@MAILSTATUS,@RTXSTATUS,
-                                    @APPFIELDVALUE,@FLOWXML,@APPXML,@SYSTEMCODE,@MODELCODE,@MODELNAME)";
+                                    @APPFIELDVALUE,@FLOWXML,@APPXML,@SYSTEMCODE,@MODELCODE,@MODELNAME,@REMARK)";
                     Parameter[] pageparm =
                         {               
                             new Parameter("@DOTASKID",null), 
@@ -409,7 +409,7 @@ namespace SMT.FlowDAL
                             new Parameter("@SYSTEMCODE",null), 
                             new Parameter("@MODELCODE",null), 
                             new Parameter("@MODELNAME",null),                  
-
+                            new Parameter("@REMARK",null)
                         };
                     pageparm[0].ParameterValue = GetValue(Guid.NewGuid().ToString());//待办任务ID
                     pageparm[1].ParameterValue = GetValue(entity.COMPANYID);//公司ID
@@ -417,6 +417,21 @@ namespace SMT.FlowDAL
                     pageparm[3].ParameterValue = GetValue(entity.ORDERUSERID);//单据所属人ID
                     pageparm[4].ParameterValue = GetValue(entity.ORDERUSERNAME);//单据所属人名称
                     pageparm[5].ParameterValue = GetValue(entity.ORDERSTATUS);//单据状态
+                  
+                    if (SourceValueDT != null)
+                    {
+                        foreach (DataRow dr in SourceValueDT.Rows)
+                        {
+                            if (!string.IsNullOrEmpty(dr["ColumnValue"].ToString().Trim()))
+                            {
+                                if (dr["ColumnName"].ToString().ToLower() == "appusername")
+                                {
+                                    string AppUserName = dr["ColumnValue"].ToString();
+                                    pageparm[20].ParameterValue = AppUserName;//接收员工名，使用remark字段
+                                }
+                            }
+                        }
+                    }
                     #region 消息体
                     string XmlTemplete = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + "\r\n" +
                                   "<System>" + "\r\n" +
@@ -428,6 +443,7 @@ namespace SMT.FlowDAL
                     if (drs.Count() == 0)//如果没有设置消息，则构造默认消息：请审核xxx提交的"xxxx",
                     {
                         strMsgBody ="请审核["+ submitUserName + @"]提交的[" + ModeName+"]";
+                        pageparm[6].ParameterValue = strMsgBody;//消息体  
                         pageparm[7].ParameterValue = ReplaceLowerValue(strMsgUrl, SourceValueDT);//应用URL     
                     }
                     else
